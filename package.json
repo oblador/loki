@@ -1,0 +1,30 @@
+{
+  "name": "loki",
+  "version": "0.1.0",
+  "description": "Visual Regression Testing for react-storybook",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --single-quote --trailing-comma es5 --write {index,register,src/{*,*/*,*/*/*}}.js"
+  },
+  "keywords": [
+    "storybook",
+    "react-storybook",
+    "testing",
+    "visual testing",
+    "visual testing",
+    "react-native",
+    "react",
+    "mobile",
+    "ios",
+    "android",
+    "web"
+  ],
+  "author": {
+    "name": "Joel Arvidsson",
+    "email": "joel@oblador.se"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^1.5.2"
+  }
+}
