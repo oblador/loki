@@ -116,4 +116,4 @@ function test(args) {
   });
 }
 
-module.exports = test
+module.exports = test;

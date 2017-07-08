@@ -33,6 +33,7 @@
     "chrome-remote-interface": "^0.23.3",
     "debug": "^2.6.8",
     "fs-extra": "^3.0.1",
+    "gm": "^1.23.0",
     "jsdom": "^11.1.0",
     "lighthouse": "^2.2.1",
     "listr": "^0.12.0",

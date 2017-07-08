@@ -1,4 +1,6 @@
 const fs = require('fs-extra');
+const path = require('path');
+const getImageDiff = require('../../get-image-diff');
 const presets = require('./presets.json');
 
 const getStoryUrl = (baseUrl, kind, story) =>
@@ -28,11 +30,24 @@ async function testChromeStory(
   const basename = getBaseName(configurationName, kind, story);
   const filename = `${basename}.png`;
   const outputPath = `${options.outputDir}/${filename}`;
+  const referencePath = `${options.referenceDir}/${filename}`;
+  const diffPath = `${options.outputDir}/${basename}.diff.png`;
   const tab = await chrome.launchNewTab(configuration);
   await tab.loadUrl(url);
   const current = await tab.captureScreenshot(options.selector);
   await tab.close();
   await fs.outputFile(outputPath, current);
+  if (await fs.pathExists(referencePath)) {
+    const isEqual = await getImageDiff(referencePath, outputPath, diffPath);
+    if (!isEqual) {
+      throw new Error(
+        `Screenshot differs from reference, see ${path.relative(
+          path.resolve('./'),
+          diffPath
+        )}`
+      );
+    }
+  }
 }
 
 module.exports = testChromeStory;
