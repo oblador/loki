@@ -26,6 +26,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "chrome-launcher": "^0.3.0",
+    "chrome-remote-interface": "^0.23.3",
+    "debug": "^2.6.8",
     "jsdom": "^11.1.0"
   "devDependencies": {
     "eslint": "^4.1.1",
