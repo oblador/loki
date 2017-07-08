@@ -1,0 +1,10 @@
+{
+  "selector": "#root > *",
+  "configurations": {
+    "laptop": {
+      "target": "chrome",
+      "width": 1366,
+      "height": 768
+    }
+  }
+}
