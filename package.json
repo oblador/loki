@@ -4,7 +4,8 @@
   "description": "Visual Regression Testing for react-storybook",
   "main": "index.js",
   "scripts": {
-    "format": "prettier --single-quote --trailing-comma es5 --write {index,register,src/{*,*/*,*/*/*}}.js"
+    "format": "prettier --single-quote --trailing-comma es5 --write {index,register,src/{*,*/*,*/*/*}}.js",
+    "lint": "eslint *.js src"
   },
   "keywords": [
     "storybook",
@@ -25,6 +26,9 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^4.1.1",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.7.0",
     "prettier": "^1.5.2"
   }
 }
