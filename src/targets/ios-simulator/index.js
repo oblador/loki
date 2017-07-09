@@ -39,11 +39,14 @@ function createIOSSimulatorTarget(socketUri) {
     socket.send(JSON.stringify({ type, args }));
   };
 
-  const waitForLokiMessage = type => messageQueue.waitFor(`${MESSAGE_PREFIX}${type}`);
+  const waitForLokiMessage = type =>
+    messageQueue.waitFor(`${MESSAGE_PREFIX}${type}`);
 
   const sendLokiCommand = (type, ...args) => {
     send(`${MESSAGE_PREFIX}${type}`, ...args);
-    return waitForLokiMessage(`did${type.substr(0, 1).toUpperCase()}${type.substr(1)}`);
+    return waitForLokiMessage(
+      `did${type.substr(0, 1).toUpperCase()}${type.substr(1)}`
+    );
   };
 
   const connect = uri =>
