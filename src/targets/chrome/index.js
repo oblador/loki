@@ -1,15 +1,20 @@
+const fs = require('fs-extra');
 const debug = require('debug')('loki:chrome');
 const CDP = require('chrome-remote-interface');
 const chromeLauncher = require('lighthouse/chrome-launcher/chrome-launcher');
 const fetchStorybook = require('./fetch-storybook');
+const presets = require('./presets.json');
 
-function createChromeTarget(baseUrl = 'http://localhost:6006') {
+function createChromeTarget({
+  baseUrl = 'http://localhost:6006',
+  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+}) {
   let instance;
 
   async function start(options = {}) {
     const launchOptions = Object.assign(
       {
-        chromeFlags: ['--headless', '--disable-gpu', '--hide-scrollbars'],
+        chromeFlags,
         logLevel: 'silent',
       },
       options
@@ -120,15 +125,29 @@ function createChromeTarget(baseUrl = 'http://localhost:6006') {
     return fetchStorybook(baseUrl);
   }
 
-  async function getScreenshotForStory(configuration, kind, story, selector) {
+  async function captureScreenshotForStory(
+    kind,
+    story,
+    outputPath,
+    options,
+    configurationName
+  ) {
+    const configuration = options.configurations[configurationName];
+    if (configuration.preset) {
+      if (!presets[configuration.preset]) {
+        throw new Error(`Invalid preset ${configuration.preset}`);
+      }
+      Object.assign(configuration, presets[configuration.preset]);
+    }
     const tab = await launchNewTab(configuration);
     await tab.loadUrl(getStoryUrl(kind, story));
-    const screenshot = await tab.captureScreenshot(selector);
+    const screenshot = await tab.captureScreenshot(options.selector);
+    await fs.outputFile(outputPath, screenshot);
     await tab.close();
     return screenshot;
   }
 
-  return { start, stop, getStorybook, getScreenshotForStory };
+  return { start, stop, getStorybook, captureScreenshotForStory };
 }
 
 module.exports = createChromeTarget;

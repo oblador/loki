@@ -5,7 +5,7 @@ function getImageDiff(path1, path2, diffPath, options = {}) {
     gm.compare(
       path1,
       path2,
-      Object.assign({ file: diffPath, tolerance: 0.05 }, options),
+      Object.assign({ file: diffPath }, options),
       (err, isEqual) => {
         if (err) {
           reject(err);
