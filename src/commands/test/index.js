@@ -27,8 +27,8 @@ function test(args) {
       reference: './screenshots/reference',
       output: './screenshots/current',
       concurrency: 4,
-      reactPort: 6006,
-      reactNativePort: 7007,
+      'react-port': 6006,
+      'react-native-port': 7007,
     },
   });
 
@@ -71,8 +71,8 @@ function test(args) {
     {
       outputDir: path.resolve(argv.output),
       referenceDir: path.resolve(argv.reference),
-      reactUri: `http://localhost:${argv.port || argv.reactPort}`,
-      reactNativeUri: `ws://localhost:${argv.port || argv.reactNativePort}`,
+      reactUri: `http://localhost:${argv.port || argv['react-port']}`,
+      reactNativeUri: `ws://localhost:${argv.port || argv['react-native-port']}`,
       selector: argv.selector || config.selector,
     },
     config
@@ -145,7 +145,7 @@ function test(args) {
         'Chrome',
         createChromeTarget({
           baseUrl: options.reactUri,
-          chromeFlags: argv.noHeadless
+          chromeFlags: argv['no-headless']
             ? ['--hide-scrollbars']
             : ['--headless', '--disable-gpu', '--hide-scrollbars'],
         }),
