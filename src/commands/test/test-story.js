@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
-const getImageDiff = require('../../get-image-diff');
+const { getImageDiffer } = require('../../diffing');
 
 const getBaseName = (configurationName, kind, story) =>
   `${configurationName} ${kind} ${story}`.replace(/[^a-zA-Z0-9.-]/g, '_');
@@ -26,9 +26,12 @@ async function testStory(
     configurationName
   );
   if (await fs.pathExists(referencePath)) {
-    const isEqual = await getImageDiff(referencePath, outputPath, diffPath, {
-      tolerance,
-    });
+    const isEqual = await getImageDiffer(options.diffingEngine)(
+      referencePath,
+      outputPath,
+      diffPath,
+      tolerance
+    );
     if (!isEqual) {
       throw new Error(
         `Screenshot differs from reference, see ${path.relative(

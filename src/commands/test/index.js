@@ -12,7 +12,14 @@ const testStory = require('./test-story');
 function test(args) {
   const argv = minimist(args, {
     boolean: ['no-headless'],
-    string: ['filter', 'target', 'selector', 'reference', 'output'],
+    string: [
+      'filter',
+      'target',
+      'selector',
+      'reference',
+      'output',
+      'diffingEngine',
+    ],
     default: {
       reference: './screenshots/reference',
       output: './screenshots/current',
@@ -138,7 +145,7 @@ function test(args) {
         }),
         sortedConfigurations.chrome,
         argv.concurrency,
-        0.03
+        2.3
       ),
       getTargetTasks(
         'iOS Simulator',
