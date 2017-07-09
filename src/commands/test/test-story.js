@@ -5,7 +5,14 @@ const getImageDiff = require('../../get-image-diff');
 const getBaseName = (configurationName, kind, story) =>
   `${configurationName} ${kind} ${story}`.replace(/[^a-zA-Z0-9.-]/g, '_');
 
-async function testStory(target, options, tolerance, configurationName, kind, story) {
+async function testStory(
+  target,
+  options,
+  tolerance,
+  configurationName,
+  kind,
+  story
+) {
   const basename = getBaseName(configurationName, kind, story);
   const filename = `${basename}.png`;
   const outputPath = `${options.outputDir}/${filename}`;
@@ -19,7 +26,9 @@ async function testStory(target, options, tolerance, configurationName, kind, st
     configurationName
   );
   if (await fs.pathExists(referencePath)) {
-    const isEqual = await getImageDiff(referencePath, outputPath, diffPath, { tolerance });
+    const isEqual = await getImageDiff(referencePath, outputPath, diffPath, {
+      tolerance,
+    });
     if (!isEqual) {
       throw new Error(
         `Screenshot differs from reference, see ${path.relative(

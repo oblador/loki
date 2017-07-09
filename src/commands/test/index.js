@@ -67,7 +67,13 @@ function test(args) {
 
   fs.emptyDirSync(options.outputDir);
 
-  const getTargetTasks = (name, target, configurations, concurrency, tolerance) => {
+  const getTargetTasks = (
+    name,
+    target,
+    configurations,
+    concurrency,
+    tolerance
+  ) => {
     let storybook;
 
     return {
@@ -120,27 +126,30 @@ function test(args) {
     };
   };
 
-  const tasks = new Listr([
-    getTargetTasks(
-      'Chrome',
-      createChromeTarget({
-        baseUrl: options.reactUri,
-        chromeFlags: argv.noHeadless
-          ? ['--hide-scrollbars']
-          : ['--headless', '--disable-gpu', '--hide-scrollbars'],
-      }),
-      sortedConfigurations.chrome,
-      argv.concurrency,
-      0.03,
-    ),
-    getTargetTasks(
-      'iOS Simulator',
-      createIOSSimulatorTarget(options.reactNativeUri),
-      sortedConfigurations.ios,
-      1,
-      0
-    ),
-  ], { concurrent: true });
+  const tasks = new Listr(
+    [
+      getTargetTasks(
+        'Chrome',
+        createChromeTarget({
+          baseUrl: options.reactUri,
+          chromeFlags: argv.noHeadless
+            ? ['--hide-scrollbars']
+            : ['--headless', '--disable-gpu', '--hide-scrollbars'],
+        }),
+        sortedConfigurations.chrome,
+        argv.concurrency,
+        0.03
+      ),
+      getTargetTasks(
+        'iOS Simulator',
+        createIOSSimulatorTarget(options.reactNativeUri),
+        sortedConfigurations.ios,
+        1,
+        0
+      ),
+    ],
+    { concurrent: true }
+  );
 
   tasks.run().catch(() => {
     die('Visual tests failed');
