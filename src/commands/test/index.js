@@ -6,7 +6,10 @@ const Listr = require('listr');
 const minimist = require('minimist');
 const { warn, die } = require('../../console');
 const createChromeTarget = require('../../targets/chrome');
-const createIOSSimulatorTarget = require('../../targets/ios-simulator');
+const {
+  createIOSSimulatorTarget,
+  createAndroidEmulatorTarget,
+} = require('../../targets/native');
 const testStory = require('./test-story');
 
 function test(args) {
@@ -55,10 +58,13 @@ function test(args) {
   const sortedConfigurations = matchingConfigurations.reduce(
     (acc, name) => {
       const configuration = config.configurations[name];
+      if (!acc[configuration.target]) {
+        die(`Invalid target ${configuration.target}`);
+      }
       acc[configuration.target].push(name);
       return acc;
     },
-    { chrome: [], ios: [] }
+    { chrome: [], ios: [], android: [] }
   );
 
   const options = Object.assign(
@@ -154,8 +160,14 @@ function test(args) {
         1,
         0
       ),
-    ],
-    { concurrent: true }
+      getTargetTasks(
+        'Android Emulator',
+        createAndroidEmulatorTarget(options.reactNativeUri),
+        sortedConfigurations.android,
+        1,
+        0
+      ),
+    ]
   );
 
   tasks.run().catch(() => {

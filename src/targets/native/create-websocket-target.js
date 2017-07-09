@@ -1,36 +1,10 @@
-const debug = require('debug')('loki:ios-simulator');
+const debug = require('debug')('loki:websocket');
 const WebSocket = require('ws');
-const osnap = require('osnap/src/ios');
+const createMessageQueue = require('./create-message-queue');
 
 const MESSAGE_PREFIX = 'loki:';
 
-const createMessageQueue = () => {
-  const queue = [];
-
-  const waitFor = type =>
-    new Promise((resolve, reject) => {
-      queue.push({ type, resolve, reject });
-    });
-
-  const receiveMessage = (type, args) => {
-    for (let i = 0; i < queue.length; i++) {
-      if (queue[i].type === type) {
-        queue[i].resolve(args[0]);
-        queue.splice(i, 1);
-        break;
-      }
-    }
-  };
-
-  const rejectAll = err => {
-    queue.forEach(item => item.reject(err));
-    queue.splice(0, queue.length);
-  };
-
-  return { waitFor, receiveMessage, rejectAll };
-};
-
-function createIOSSimulatorTarget(socketUri) {
+function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
   let socket;
   const messageQueue = createMessageQueue();
 
@@ -40,14 +14,13 @@ function createIOSSimulatorTarget(socketUri) {
   };
 
   const waitForLokiMessage = type =>
-    messageQueue.waitFor(`${MESSAGE_PREFIX}${type}`);
-
-  const sendLokiCommand = (type, ...args) => {
-    send(`${MESSAGE_PREFIX}${type}`, ...args);
-    return waitForLokiMessage(
-      `did${type.substr(0, 1).toUpperCase()}${type.substr(1)}`
+    messageQueue.waitFor(
+      `${MESSAGE_PREFIX}${type}`,
+      data => data && data.platform === platform
     );
-  };
+
+  const sendLokiCommand = (type, params = {}) =>
+    send(`${MESSAGE_PREFIX}${type}`, Object.assign({ platform }, params));
 
   const connect = uri =>
     new Promise((resolve, reject) => {
@@ -97,11 +70,13 @@ function createIOSSimulatorTarget(socketUri) {
 
   async function start() {
     socket = await connect(socketUri);
-    await sendLokiCommand('hideStatusBar');
+    sendLokiCommand('hideStatusBar');
+    await waitForLokiMessage('didHideStatusBar');
   }
 
   async function stop() {
-    await sendLokiCommand('restoreStatusBar');
+    sendLokiCommand('restoreStatusBar');
+    await waitForLokiMessage('didRestoreStatusBar');
     socket.close();
   }
 
@@ -116,11 +91,11 @@ function createIOSSimulatorTarget(socketUri) {
     debug('getScreenshotForStory', kind, story);
     send('setCurrentStory', { kind, story });
     const data = await waitForLokiMessage('imagesLoaded');
-    await osnap.saveToFile({ filename: outputPath });
+    await saveScreenshotToFile(outputPath);
     debug(data);
   }
 
   return { start, stop, getStorybook, captureScreenshotForStory };
 }
 
-module.exports = createIOSSimulatorTarget;
+module.exports = createWebsocketTarget;

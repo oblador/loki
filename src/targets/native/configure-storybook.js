@@ -1,4 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies, import/no-unresolved, import/extensions */
+/* eslint-disable import/no-extraneous-dependencies, import/no-unresolved, global-require */
+
 const addons = require('@storybook/addons').default;
 const ReactNative = require('react-native');
 const {
@@ -19,18 +20,38 @@ function configureStorybook() {
   // Channel only available in next frame
   setTimeout(() => {
     const channel = addons.getChannel();
+    const platform = ReactNative.Platform.OS;
+
+    const on = (eventName, callback) =>
+      channel.on(`${MESSAGE_PREFIX}${eventName}`, params => {
+        if (params && params.platform === platform) {
+          callback(params);
+        }
+      });
+
+    const emit = (eventName, params = {}) =>
+      channel.emit(
+        `${MESSAGE_PREFIX}${eventName}`,
+        Object.assign({ platform }, params)
+      );
+
     const statusBarOriginallyHidden = false; // TODO: get actual value
-    channel.on(`${MESSAGE_PREFIX}hideStatusBar`, () => {
-      ReactNative.StatusBar.setHidden(true);
-      channel.emit(`${MESSAGE_PREFIX}didHideStatusBar`);
+    on('hideStatusBar', () => {
+      ReactNative.StatusBar.setHidden(true, 'none');
+      setTimeout(
+        () => emit('didHideStatusBar'),
+        platform === 'android' ? 500 : 0
+      );
     });
-    channel.on(`${MESSAGE_PREFIX}restoreStatusBar`, () => {
+
+    on('restoreStatusBar', () => {
       ReactNative.StatusBar.setHidden(statusBarOriginallyHidden);
-      channel.emit(`${MESSAGE_PREFIX}didRestoreStatusBar`);
+      emit('didRestoreStatusBar');
     });
+
     channel.on('setCurrentStory', () => {
       awaitImagesLoaded().finally(count => {
-        channel.emit(`${MESSAGE_PREFIX}imagesLoaded`, { count });
+        emit('imagesLoaded', { count });
       });
       resetLoadingImages();
     });
