@@ -19,7 +19,7 @@ async function fetchStorybook(baseUrl = 'http://localhost:6006') {
   const getStorybook = sandbox.window.loki && sandbox.window.loki.getStorybook;
   if (!getStorybook) {
     throw new Error(
-      "Loki addon not registered. Add `import 'loki/register-react'` to your config.js file."
+      "Loki addon not registered. Add `import 'loki/configure-react'` to your config.js file."
     );
   }
 
