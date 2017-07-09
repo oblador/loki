@@ -4,11 +4,14 @@
   "description": "Visual Regression Testing for react-storybook",
   "main": "index.js",
   "bin": {
-    "loki": "./bin/loki"
+    "loki": "bin/loki"
   },
   "scripts": {
-    "format": "prettier --single-quote --trailing-comma es5 --write {*,src/{*,*/*,*/*/*}}.js",
+    "format": "prettier --single-quote --trailing-comma es5 --write {,src/{,*/,*/*/}}*.js",
     "lint": "eslint *.js src"
+  },
+  "engines": {
+    "node": ">=7.6"
   },
   "keywords": [
     "storybook",
