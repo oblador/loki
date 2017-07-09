@@ -4,7 +4,7 @@
  */
 const React = require('react');
 const Image = require('react-native/Libraries/Image/Image');
-const { registerImageLoading } = require('./ready-state-emitting-image');
+const { registerImageLoading } = require('./ready-state-manager');
 
 class ReadyStateEmittingImage extends React.Component {
   constructor(props) {
