@@ -1,9 +1,9 @@
 const vm = require('vm');
-const debug = require('debug')('loki:storybook');
+const debug = require('debug')('loki:chrome:fetchStories');
 const fetchUrl = require('./fetch-url');
 const getBrowserGlobals = require('./get-browser-globals');
 
-async function fetchStories(baseUrl = 'http://localhost:6006') {
+async function fetchStorybook(baseUrl = 'http://localhost:6006') {
   debug(`Fetching iframe HTML and preview bundle JS from ${baseUrl}`);
   const [html, bundle] = await Promise.all([
     fetchUrl(`${baseUrl}/iframe.html`),
@@ -19,7 +19,7 @@ async function fetchStories(baseUrl = 'http://localhost:6006') {
   const getStorybook = sandbox.window.loki && sandbox.window.loki.getStorybook;
   if (!getStorybook) {
     throw new Error(
-      "Loki addon not registered. Add `import 'loki/register'` to your config.js file."
+      "Loki addon not registered. Add `import 'loki/register-react'` to your config.js file."
     );
   }
 
@@ -29,4 +29,4 @@ async function fetchStories(baseUrl = 'http://localhost:6006') {
   }));
 }
 
-module.exports = fetchStories;
+module.exports = fetchStorybook;

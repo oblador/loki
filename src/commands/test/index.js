@@ -5,7 +5,6 @@ const path = require('path');
 const Listr = require('listr');
 const minimist = require('minimist');
 const { warn, die } = require('../../console');
-const fetchStories = require('../../storybook/fetch-stories');
 const createChromeTarget = require('../../targets/chrome');
 const testChromeStory = require('./test-chrome-story');
 
@@ -59,24 +58,23 @@ function test(args) {
   const tasks = new Listr([
     {
       title: 'Chrome',
-      task: () =>
-        new Listr([
+      task: () => {
+        const target = createChromeTarget(options.baseUrl);
+        return new Listr([
           {
             title: 'Fetch list of stories',
             task: async ctx => {
-              ctx.stories = await fetchStories(options.baseUrl);
+              ctx.stories = await target.getStorybook();
             },
           },
           {
             title: 'Launch chrome',
-            task: async ctx => {
-              const chrome = createChromeTarget();
-              await chrome.launch({
+            task: async () => {
+              await target.start({
                 chromeFlags: argv.noHeadless
                   ? ['--hide-scrollbars']
                   : ['--headless', '--disable-gpu', '--hide-scrollbars'],
               });
-              ctx.chrome = chrome;
             },
           },
           ...configurations.map(configurationName => ({
@@ -89,9 +87,9 @@ function test(args) {
                     new Listr(
                       component.stories.map(story => ({
                         title: story,
-                        task: ({ chrome }) =>
+                        task: () =>
                           testChromeStory(
-                            chrome,
+                            target,
                             options,
                             configurationName,
                             component.kind,
@@ -105,9 +103,10 @@ function test(args) {
           })),
           {
             title: 'Kill chrome',
-            task: ctx => ctx.chrome.kill(),
+            task: () => target.stop(),
           },
-        ]),
+        ]);
+      },
     },
   ]);
 

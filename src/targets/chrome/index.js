@@ -1,11 +1,12 @@
 const debug = require('debug')('loki:chrome');
 const CDP = require('chrome-remote-interface');
 const chromeLauncher = require('lighthouse/chrome-launcher/chrome-launcher');
+const fetchStorybook = require('./fetch-storybook');
 
-function createChromeTarget() {
+function createChromeTarget(baseUrl = 'http://localhost:6006') {
   let instance;
 
-  async function launch(options = {}) {
+  async function start(options = {}) {
     const launchOptions = Object.assign(
       {
         chromeFlags: ['--headless', '--disable-gpu', '--hide-scrollbars'],
@@ -19,7 +20,7 @@ function createChromeTarget() {
     instance = await chromeLauncher.launch(launchOptions);
   }
 
-  async function kill() {
+  async function stop() {
     if (instance) {
       debug('Killing chrome');
       await instance.kill();
@@ -29,7 +30,7 @@ function createChromeTarget() {
 
   async function getInstance() {
     if (!instance) {
-      await launch();
+      await start();
     }
     return instance;
   }
@@ -110,7 +111,24 @@ function createChromeTarget() {
     return client;
   }
 
-  return { launch, kill, launchNewTab };
+  const getStoryUrl = (kind, story) =>
+    `${baseUrl}/iframe.html?selectedKind=${encodeURIComponent(
+      kind
+    )}&selectedStory=${encodeURIComponent(story)}`;
+
+  async function getStorybook() {
+    return fetchStorybook(baseUrl);
+  }
+
+  async function getScreenshotForStory(configuration, kind, story, selector) {
+    const tab = await launchNewTab(configuration);
+    await tab.loadUrl(getStoryUrl(kind, story));
+    const screenshot = await tab.captureScreenshot(selector);
+    await tab.close();
+    return screenshot;
+  }
+
+  return { start, stop, getStorybook, getScreenshotForStory };
 }
 
 module.exports = createChromeTarget;
