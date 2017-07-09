@@ -4,7 +4,7 @@
   "description": "Visual Regression Testing for react-storybook",
   "main": "index.js",
   "bin": {
-    "loki": "./src/cli.js"
+    "loki": "./bin/loki"
   },
   "scripts": {
     "format": "prettier --single-quote --trailing-comma es5 --write {register,src/{*,*/*,*/*/*}}.js",
