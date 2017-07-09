@@ -70,13 +70,13 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
 
   async function start() {
     socket = await connect(socketUri);
-    sendLokiCommand('hideStatusBar');
-    await waitForLokiMessage('didHideStatusBar');
+    sendLokiCommand('prepare');
+    await waitForLokiMessage('didPrepare');
   }
 
   async function stop() {
-    sendLokiCommand('restoreStatusBar');
-    await waitForLokiMessage('didRestoreStatusBar');
+    sendLokiCommand('restore');
+    await waitForLokiMessage('didRestore');
     socket.close();
   }
 

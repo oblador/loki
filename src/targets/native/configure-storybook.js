@@ -35,18 +35,24 @@ function configureStorybook() {
         Object.assign({ platform }, params)
       );
 
-    const statusBarOriginallyHidden = false; // TODO: get actual value
-    on('hideStatusBar', () => {
+    const originalState = {
+      statusBarHidden: false, // TODO: get actual value
+      disableYellowBox: console.disableYellowBox,
+    };
+
+    on('prepare', () => {
       ReactNative.StatusBar.setHidden(true, 'none');
+      console.disableYellowBox = true;
       setTimeout(
-        () => emit('didHideStatusBar'),
+        () => emit('didPrepare'),
         platform === 'android' ? 500 : 0
       );
     });
 
-    on('restoreStatusBar', () => {
-      ReactNative.StatusBar.setHidden(statusBarOriginallyHidden);
-      emit('didRestoreStatusBar');
+    on('restore', () => {
+      ReactNative.StatusBar.setHidden(originalState.statusBarHidden);
+      console.disableYellowBox = originalState.disableYellowBox;
+      emit('didRestore');
     });
 
     channel.on('setCurrentStory', () => {
