@@ -87,17 +87,29 @@ function createChromeTarget({
       await Page.loadEventFired();
     };
 
+    const querySelector = async selector => {
+      const { root: { nodeId: documentNodeId } } = await DOM.getDocument();
+      const selectors = selector.split(',');
+      for (let i = 0; i < selectors.length; i++) {
+        const result = await DOM.querySelector({
+          selector: selectors[i].trim(),
+          nodeId: documentNodeId,
+        });
+        if (result.nodeId) {
+          return result;
+        }
+      }
+      throw new Error(`No node found matching selector "${selector}"`);
+    };
+
     client.captureScreenshot = async (selector = 'body') => {
       const scale = deviceMetrics.deviceScaleFactor;
 
       debug(`Setting viewport to "${selector}"`);
-      const { root: { nodeId: documentNodeId } } = await DOM.getDocument();
-      const { nodeId } = await DOM.querySelector({
-        selector,
-        nodeId: documentNodeId,
-      });
+      const { nodeId } = await querySelector(selector);
       const { model } = await DOM.getBoxModel({ nodeId });
-      const [x, y] = model.border;
+      const x = Math.max(0, model.border[0]);
+      const y = Math.max(0, model.border[1]);
       const size = {
         width: model.width * scale,
         height: model.height * scale,
