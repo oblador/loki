@@ -17,7 +17,7 @@ async function testStory(
   const filename = `${basename}.png`;
   const outputPath = `${options.outputDir}/${filename}`;
   const referencePath = `${options.referenceDir}/${filename}`;
-  const diffPath = `${options.outputDir}/${basename}.diff.png`;
+  const diffPath = `${options.differenceDir}/${filename}`;
   await target.captureScreenshotForStory(
     kind,
     story,

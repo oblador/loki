@@ -29,6 +29,7 @@ async function test(args) {
       'skip',
       'reference',
       'output',
+      'difference',
       'diffingEngine',
     ],
     default: {
@@ -72,6 +73,7 @@ async function test(args) {
     {
       outputDir: path.resolve(argv.output),
       referenceDir: path.resolve(argv.reference),
+      differenceDir: path.resolve(argv.difference || `${argv.output}/diff`),
       reactUri: `http://localhost:${argv.port || argv['react-port']}`,
       reactNativeUri: `ws://localhost:${argv.port ||
         argv['react-native-port']}`,
@@ -87,6 +89,7 @@ async function test(args) {
   };
 
   await prepareOutputDir(options.outputDir);
+  await prepareOutputDir(options.differenceDir);
 
   const getTargetTasks = (
     name,
