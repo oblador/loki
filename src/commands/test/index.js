@@ -11,7 +11,15 @@ const {
 } = require('../../targets/native');
 const testStory = require('./test-story');
 
-function test(args) {
+async function prepareOutputDir(outputDir) {
+  fs.emptyDirSync(outputDir);
+  const gitignorePath = `${outputDir}/.gitignore`;
+  if (!await fs.pathExists(gitignorePath)) {
+    await fs.outputFile(gitignorePath, '*.png\n');
+  }
+}
+
+async function test(args) {
   const argv = minimist(args, {
     boolean: ['no-headless'],
     string: [
@@ -78,7 +86,7 @@ function test(args) {
     return skip && new RegExp(configuration.skip).test(`${kind} ${story}`);
   };
 
-  fs.emptyDirSync(options.outputDir);
+  await prepareOutputDir(options.outputDir);
 
   const getTargetTasks = (
     name,
