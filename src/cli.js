@@ -1,6 +1,7 @@
 const minimist = require('minimist');
 const { die, bold } = require('./console');
 const test = require('./commands/test');
+const init = require('./commands/init');
 const { version } = require('../package.json');
 
 function run() {
@@ -13,6 +14,10 @@ function run() {
     case undefined:
     case 'test': {
       test(args);
+      break;
+    }
+    case 'init': {
+      init(args);
       break;
     }
     default: {

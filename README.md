@@ -11,6 +11,7 @@
 
 ```
 yarn add loki
+yarn run loki init
 ```
 
 ## Running visual tests
@@ -18,6 +19,19 @@ yarn add loki
 ```
 yarn run loki
 ```
+
+## Commands
+
+### loki init
+
+```
+yarn run loki init path/to/storybook -- --force
+```
+
+|flag|alias|description|default|
+|---|---|---|---|
+|**--config**|-c|Path to storybook folder|`.storybook` & `storybook`|
+|**--force**|-f|Overwrite loki configuration|`false`|
 
 ## License
 
