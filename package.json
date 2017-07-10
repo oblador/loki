@@ -6,6 +6,14 @@
   "bin": {
     "loki": "bin/loki"
   },
+  "files": [
+    "README.md",
+    "LICENCE",
+    "src",
+    "bin",
+    "configure-react.js",
+    "configure-react-native.js"
+  ],
   "scripts": {
     "format": "prettier --single-quote --trailing-comma es5 --write {,src/{,*/,*/*/}}*.js",
     "lint": "eslint *.js src"
