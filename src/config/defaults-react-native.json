@@ -1,0 +1,7 @@
+{
+  "configurations": {
+    "ios.iphone7": {
+      "target": "ios"
+    }
+  }
+}

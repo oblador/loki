@@ -1,10 +1,9 @@
-/* eslint-disable global-require, import/no-dynamic-require */
-
 const fs = require('fs-extra');
 const path = require('path');
 const Listr = require('listr');
 const minimist = require('minimist');
 const { warn, die } = require('../../console');
+const getConfig = require('../../config');
 const createChromeTarget = require('../../targets/chrome');
 const {
   createIOSSimulatorTarget,
@@ -33,14 +32,7 @@ function test(args) {
     },
   });
 
-  const pkg = require(path.resolve('./package.json'));
-  if (!pkg.loki) {
-    warn(
-      'No loki configuration found in package.json, defaulting to 1366x768 laptop for chrome.'
-    );
-  }
-
-  const config = pkg.loki || require('./default-config.json');
+  const config = getConfig();
 
   const filter = argv.filter || argv._[1];
   const matchesFilter = name => !filter || new RegExp(filter).test(name);
