@@ -37,21 +37,18 @@ function configureStorybook() {
 
     const originalState = {
       statusBarHidden: false, // TODO: get actual value
-      disableYellowBox: console.disableYellowBox,
+      disableYellowBox: console.disableYellowBox, // eslint-disable-line no-console
     };
 
     on('prepare', () => {
       ReactNative.StatusBar.setHidden(true, 'none');
-      console.disableYellowBox = true;
-      setTimeout(
-        () => emit('didPrepare'),
-        platform === 'android' ? 500 : 0
-      );
+      console.disableYellowBox = true; // eslint-disable-line no-console
+      setTimeout(() => emit('didPrepare'), platform === 'android' ? 500 : 0);
     });
 
     on('restore', () => {
       ReactNative.StatusBar.setHidden(originalState.statusBarHidden);
-      console.disableYellowBox = originalState.disableYellowBox;
+      console.disableYellowBox = originalState.disableYellowBox; // eslint-disable-line no-console
       emit('didRestore');
     });
 

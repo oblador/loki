@@ -3,6 +3,8 @@
   "rules": {
     "import/extensions": [2, { "js": "never", "json": "always" }],
     "arrow-parens": ["error", "as-needed"],
+    "no-plusplus": [0],
+    "no-await-in-loop": [0],
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
