@@ -19,6 +19,7 @@ function test(args) {
       'filter',
       'target',
       'selector',
+      'skip',
       'reference',
       'output',
       'diffingEngine',
@@ -72,11 +73,18 @@ function test(args) {
       outputDir: path.resolve(argv.output),
       referenceDir: path.resolve(argv.reference),
       reactUri: `http://localhost:${argv.port || argv['react-port']}`,
-      reactNativeUri: `ws://localhost:${argv.port || argv['react-native-port']}`,
+      reactNativeUri: `ws://localhost:${argv.port ||
+        argv['react-native-port']}`,
       selector: argv.selector || config.selector,
     },
     config
   );
+
+  const shouldSkip = (configurationName, kind, story) => {
+    const configuration = options.configurations[configurationName];
+    const skip = argv.skip || configuration.skip;
+    return skip && new RegExp(configuration.skip).test(`${kind} ${story}`);
+  };
 
   fs.emptyDirSync(options.outputDir);
 
@@ -95,7 +103,7 @@ function test(args) {
       task: () =>
         new Listr([
           {
-            title: 'Starting',
+            title: 'Start',
             task: async () => {
               await target.start();
             },
@@ -110,19 +118,20 @@ function test(args) {
             title: `Test ${configurationName}`,
             task: () =>
               new Listr(
-                storybook.map(component => ({
-                  title: component.kind,
+                storybook.map(({ kind, stories }) => ({
+                  title: kind,
                   task: () =>
                     new Listr(
-                      component.stories.map(story => ({
+                      stories.map(story => ({
                         title: story,
+                        skip: () => shouldSkip(configurationName, kind, story),
                         task: () =>
                           testStory(
                             target,
                             options,
                             tolerance,
                             configurationName,
-                            component.kind,
+                            kind,
                             story
                           ),
                       }))
@@ -132,43 +141,41 @@ function test(args) {
               ),
           })),
           {
-            title: 'Stopping',
+            title: 'Stop',
             task: () => target.stop(),
           },
         ]),
     };
   };
 
-  const tasks = new Listr(
-    [
-      getTargetTasks(
-        'Chrome',
-        createChromeTarget({
-          baseUrl: options.reactUri,
-          chromeFlags: argv['no-headless']
-            ? ['--hide-scrollbars']
-            : ['--headless', '--disable-gpu', '--hide-scrollbars'],
-        }),
-        sortedConfigurations.chrome,
-        argv.concurrency,
-        2.3
-      ),
-      getTargetTasks(
-        'iOS Simulator',
-        createIOSSimulatorTarget(options.reactNativeUri),
-        sortedConfigurations.ios,
-        1,
-        0
-      ),
-      getTargetTasks(
-        'Android Emulator',
-        createAndroidEmulatorTarget(options.reactNativeUri),
-        sortedConfigurations.android,
-        1,
-        0
-      ),
-    ]
-  );
+  const tasks = new Listr([
+    getTargetTasks(
+      'Chrome',
+      createChromeTarget({
+        baseUrl: options.reactUri,
+        chromeFlags: argv['no-headless']
+          ? ['--hide-scrollbars']
+          : ['--headless', '--disable-gpu', '--hide-scrollbars'],
+      }),
+      sortedConfigurations.chrome,
+      argv.concurrency,
+      2.3
+    ),
+    getTargetTasks(
+      'iOS Simulator',
+      createIOSSimulatorTarget(options.reactNativeUri),
+      sortedConfigurations.ios,
+      1,
+      0
+    ),
+    getTargetTasks(
+      'Android Emulator',
+      createAndroidEmulatorTarget(options.reactNativeUri),
+      sortedConfigurations.android,
+      1,
+      0
+    ),
+  ]);
 
   tasks.run().catch(() => {
     die('Visual tests failed');
