@@ -14,7 +14,7 @@ function getConfig() {
       return require('./defaults-react-native.json');
     }
     warn(
-      'No loki configuration found in package.json, defaulting to 1366x768 laptop for chrome.'
+      'No loki configuration found in package.json, defaulting to 1366x768 laptop and iPhone 7 for chrome.'
     );
     return require('./defaults-react.json');
   }
