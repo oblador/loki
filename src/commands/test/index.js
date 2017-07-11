@@ -77,10 +77,12 @@ async function test(args) {
       const imageErrors = err.errors.filter(
         e => e instanceof ReferenceImageError
       );
-      if (imageErrors) {
+      if (imageErrors.length !== 0) {
         error('Visual tests failed');
         info('You can update the reference files with:');
         info(getUpdateCommand(imageErrors, argv));
+      } else {
+        error('Some visual tests failed to run');
       }
       process.exit(1);
     }
