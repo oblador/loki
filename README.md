@@ -104,6 +104,8 @@ yarn run loki
 yarn run loki test -- --port 9009
 ```
 
+If you run loki via `yarn`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly too. 
+
 |Flag|Description|Default|
 |---|---|---|
 |**`--host`**|Storybook host|`localhost`|
