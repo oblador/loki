@@ -46,7 +46,9 @@ const filterStorybook = (storybook, excludePattern, includePattern) => {
 };
 
 async function runTests(flatConfigurations, options) {
-  if (!options.updateReference) {
+  if (options.updateReference) {
+    await fs.ensureDir(options.referenceDir);
+  } else {
     await fs.emptyDirSync(options.outputDir);
     await fs.emptyDirSync(options.differenceDir);
     await placeGitignore(options.outputDir);
