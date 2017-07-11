@@ -57,7 +57,10 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       throw new Error(`No node found matching selector "${selector}"`);
     };
 
-    client.captureScreenshot = withTimeout(30000, 'captureScreenshot')(async (selector = 'body') => {
+    client.captureScreenshot = withTimeout(
+      30000,
+      'captureScreenshot'
+    )(async (selector = 'body') => {
       const scale = deviceMetrics.deviceScaleFactor;
 
       debug(`Setting viewport to "${selector}"`);

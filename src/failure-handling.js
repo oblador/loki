@@ -1,32 +1,32 @@
 const { TimeoutError } = require('./errors');
 
 const withTimeout = (timeout, operationName) => fnOrPromise => {
-  const awaitPromise = promise => new Promise(async (resolve, reject) => {
-    let cancelled = false;
-    const timer = setTimeout(() => {
-      cancelled = true;
-      reject(new TimeoutError(timeout, operationName));
-    }, timeout);
-    try {
-      const result = await promise;
-      if (!cancelled) {
-        clearTimeout(timer);
-        resolve(result);
+  const awaitPromise = promise =>
+    new Promise(async (resolve, reject) => {
+      let cancelled = false;
+      const timer = setTimeout(() => {
+        cancelled = true;
+        reject(new TimeoutError(timeout, operationName));
+      }, timeout);
+      try {
+        const result = await promise;
+        if (!cancelled) {
+          clearTimeout(timer);
+          resolve(result);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          clearTimeout(timer);
+          reject(err);
+        }
       }
-    } catch (err) {
-      if (!cancelled) {
-        clearTimeout(timer);
-        reject(err);
-      }
-    }
-  });
+    });
 
   if (typeof fnOrPromise === 'function') {
     return (...args) => awaitPromise(fnOrPromise(...args));
   }
   return awaitPromise(fnOrPromise);
 };
-
 
 const withRetries = (maxRetries = 3) => fn => async (...args) => {
   let tries = 0;
