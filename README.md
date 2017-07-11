@@ -74,7 +74,7 @@ Similar to the `--skip-stories` CLI argument, this setting is a regular expressi
 ### `configurations`
 
 |Name|Type|Description|Targets|
-|---|---|---|
+|---|---|---|---|
 |**`target`**|*string*|Target platform, possible values are `chrome.app`, `chrome.docker`, `ios.simulator`, `android.emulator`.|All|
 |**`skip-stories`**|*string*|Same as `loki.skip-stories`, but applied to only this configuration.|All|
 |**`chrome-selector`**|*string*|Same as `loki.chrome-selector`, but applied to only this configuration.|`chrome.*`|
