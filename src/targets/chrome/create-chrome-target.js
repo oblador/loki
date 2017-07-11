@@ -96,18 +96,22 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     story,
     outputPath,
     options,
-    configurationName
+    configuration
   ) {
-    const configuration = options.configurations[configurationName];
+    let tabOptions = configuration;
     if (configuration.preset) {
       if (!presets[configuration.preset]) {
         throw new Error(`Invalid preset ${configuration.preset}`);
       }
-      Object.assign(configuration, presets[configuration.preset]);
+      tabOptions = Object.assign(
+        {},
+        configuration,
+        presets[configuration.preset]
+      );
     }
-    const tab = await launchNewTab(configuration);
+    const tab = await launchNewTab(tabOptions);
     await tab.loadUrl(getStoryUrl(kind, story));
-    const screenshot = await tab.captureScreenshot(options.selector);
+    const screenshot = await tab.captureScreenshot(options.chromeSelector);
     await fs.outputFile(outputPath, screenshot);
     await tab.close();
     return screenshot;

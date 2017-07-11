@@ -1,5 +1,4 @@
 {
-  "selector": "#root > *",
   "configurations": {
     "chrome.laptop": {
       "target": "chrome.app",

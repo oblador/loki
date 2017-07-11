@@ -1,217 +1,28 @@
-const fs = require('fs-extra');
-const path = require('path');
-const Listr = require('listr');
+const pickBy = require('ramda/src/pickBy');
 const minimist = require('minimist');
-const { warn, die } = require('../../console');
+const { warn } = require('../../console');
 const getConfig = require('../../config');
-const {
-  createChromeAppTarget,
-  createChromeDockerTarget,
-} = require('../../targets/chrome');
-const {
-  createIOSSimulatorTarget,
-  createAndroidEmulatorTarget,
-} = require('../../targets/native');
-const testStory = require('./test-story');
+const parseOptions = require('./parse-options');
+const runTests = require('./run-tests');
 
-async function prepareOutputDir(outputDir) {
-  fs.emptyDirSync(outputDir);
-  const gitignorePath = `${outputDir}/.gitignore`;
-  if (!await fs.pathExists(gitignorePath)) {
-    await fs.outputFile(gitignorePath, '*.png\n');
-  }
-}
-
-async function test(args) {
-  const argv = minimist(args, {
-    boolean: ['no-headless'],
-    string: [
-      'host',
-      'filter',
-      'target',
-      'selector',
-      'skip',
-      'reference',
-      'output',
-      'difference',
-      'diffingEngine',
-    ],
-    default: {
-      reference: './screenshots/reference',
-      output: './screenshots/current',
-      concurrency: 4,
-      host: 'localhost',
-      'react-port': 6006,
-      'react-native-port': 7007,
-    },
-  });
-
+function test(args) {
+  const argv = minimist(args);
   const config = getConfig();
+  const options = parseOptions(args, config);
 
-  const filter = argv.filter || argv._[1];
-  const matchesFilter = name => !filter || new RegExp(filter).test(name);
-  const matchesTarget = name =>
-    !argv.target || config.configurations[name].target === argv.target;
+  const targetFilter = new RegExp(argv['target-filter']);
+  const configurationFilter = new RegExp(argv['configuration-filter']);
+  const matchesFilters = ({ target }, name) =>
+    targetFilter.test(target) && configurationFilter.test(name);
 
-  const matchingConfigurations = Object.keys(config.configurations)
-    .filter(matchesFilter)
-    .filter(matchesTarget);
+  const configurations = pickBy(matchesFilters, config.configurations);
 
-  if (!matchingConfigurations.length) {
+  if (Object.keys(configurations).length === 0) {
     warn('No matching configurations');
     process.exit(0);
   }
 
-  const sortedConfigurations = matchingConfigurations.reduce(
-    (acc, name) => {
-      const configuration = config.configurations[name];
-      if (!acc[configuration.target]) {
-        die(`Invalid target ${configuration.target}`);
-      }
-      acc[configuration.target].push(name);
-      return acc;
-    },
-    {
-      'chrome.app': [],
-      'chrome.docker': [],
-      'ios.simulator': [],
-      'android.emulator': [],
-    }
-  );
-
-  const options = Object.assign(
-    {
-      outputDir: path.resolve(argv.output),
-      referenceDir: path.resolve(argv.reference),
-      differenceDir: path.resolve(argv.difference || `${argv.output}/diff`),
-      reactUri: `http://${argv.host}:${argv.port || argv['react-port']}`,
-      reactNativeUri: `ws://${argv.host}:${argv.port ||
-        argv['react-native-port']}`,
-      selector: argv.selector || config.selector,
-    },
-    config
-  );
-
-  const shouldSkip = (configurationName, kind, story) => {
-    const configuration = options.configurations[configurationName];
-    const skip = argv.skip || configuration.skip;
-    return skip && new RegExp(configuration.skip).test(`${kind} ${story}`);
-  };
-
-  await prepareOutputDir(options.outputDir);
-  await prepareOutputDir(options.differenceDir);
-
-  const getTargetTasks = (
-    name,
-    target,
-    configurations,
-    concurrency,
-    tolerance
-  ) => {
-    let storybook;
-
-    return {
-      title: name,
-      enabled: () => configurations.length > 0,
-      task: () =>
-        new Listr([
-          {
-            title: 'Start',
-            task: async ({ activeTargets }) => {
-              await target.start();
-              activeTargets.push(target);
-            },
-          },
-          {
-            title: 'Fetch list of stories',
-            task: async () => {
-              storybook = await target.getStorybook();
-            },
-          },
-          ...configurations.map(configurationName => ({
-            title: `Test ${configurationName}`,
-            task: () =>
-              new Listr(
-                storybook.map(({ kind, stories }) => ({
-                  title: kind,
-                  task: () =>
-                    new Listr(
-                      stories.map(story => ({
-                        title: story,
-                        skip: () => shouldSkip(configurationName, kind, story),
-                        task: () =>
-                          testStory(
-                            target,
-                            options,
-                            tolerance,
-                            configurationName,
-                            kind,
-                            story
-                          ),
-                      }))
-                    ),
-                })),
-                { concurrent: concurrency, exitOnError: false }
-              ),
-          })),
-          {
-            title: 'Stop',
-            task: ({ activeTargets }) => {
-              target.stop();
-              const index = activeTargets.indexOf(target);
-              if (index !== -1) {
-                activeTargets.splice(index, 1);
-              }
-            },
-          },
-        ]),
-    };
-  };
-
-  const tasks = new Listr([
-    getTargetTasks(
-      'Chrome',
-      createChromeAppTarget({
-        baseUrl: options.reactUri,
-        chromeFlags: argv['no-headless']
-          ? ['--hide-scrollbars']
-          : ['--headless', '--disable-gpu', '--hide-scrollbars'],
-      }),
-      sortedConfigurations['chrome.app'],
-      argv.concurrency,
-      2.3
-    ),
-    getTargetTasks(
-      'Chrome (docker)',
-      createChromeDockerTarget({
-        baseUrl: options.reactUri,
-        chromeFlags: ['--hide-scrollbars'],
-      }),
-      sortedConfigurations['chrome.docker'],
-      argv.concurrency,
-      2.3
-    ),
-    getTargetTasks(
-      'iOS Simulator',
-      createIOSSimulatorTarget(options.reactNativeUri),
-      sortedConfigurations['ios.simulator'],
-      1,
-      0
-    ),
-    getTargetTasks(
-      'Android Emulator',
-      createAndroidEmulatorTarget(options.reactNativeUri),
-      sortedConfigurations['android.emulator'],
-      1,
-      0
-    ),
-  ]);
-
-  const context = { activeTargets: [] };
-  tasks.run(context).catch(async () => {
-    await Promise.all(context.activeTargets.map(target => target.stop()));
-    die('Visual tests failed');
-  });
+  return runTests(configurations, options);
 }
 
 module.exports = test;

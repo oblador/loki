@@ -9,6 +9,7 @@ async function testStory(
   target,
   options,
   tolerance,
+  configuration,
   configurationName,
   kind,
   story
@@ -23,7 +24,7 @@ async function testStory(
     story,
     outputPath,
     options,
-    configurationName
+    configuration
   );
   if (await fs.pathExists(referencePath)) {
     const isEqual = await getImageDiffer(options.diffingEngine)(

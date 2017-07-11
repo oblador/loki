@@ -42,7 +42,10 @@ function init(args) {
 
   const force = argv.force || argv.f;
   const storybookPath = path.resolve(
-    argv.config || argv.c || argv._[1] || (isReactNativeProject ? 'storybook' : '.storybook')
+    argv.config ||
+      argv.c ||
+      argv._[1] ||
+      (isReactNativeProject ? 'storybook' : '.storybook')
   );
 
   if (!fs.pathExistsSync(storybookPath)) {
