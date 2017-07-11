@@ -1,6 +1,6 @@
 {
   "name": "loki",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Visual Regression Testing for react-storybook",
   "main": "index.js",
   "bin": {
@@ -38,6 +38,14 @@
     "name": "Joel Arvidsson",
     "email": "joel@oblador.se"
   },
+  "homepage": "https://github.com/oblador/loki",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/oblador/loki.git"
+  },
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.0.1",
@@ -61,5 +69,26 @@
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.7.0",
     "prettier": "^1.5.2"
+  },
+  "loki": {
+    "chrome-selector": "#my-decorator > *",
+    "configurations": {
+      "chrome.laptop": {
+        "target": "chrome.app",
+        "width": 1366,
+        "height": 768
+      },
+      "chrome.iphone7": {
+        "skip-stories": "loading|MyFailingComponent",
+        "target": "chrome.app",
+        "preset": "iPhone 7"
+      },
+      "ios": {
+        "target": "ios.simulator"
+      },
+      "android": {
+        "target": "android.emulator"
+      }
+    }
   }
 }
