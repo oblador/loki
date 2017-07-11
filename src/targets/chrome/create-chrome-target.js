@@ -110,9 +110,11 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
         presets[configuration.preset]
       );
     }
+    const selector = configuration['chrome-selector'] || options.chromeSelector;
+
     const tab = await launchNewTab(tabOptions);
     await tab.loadUrl(getStoryUrl(kind, story));
-    const screenshot = await tab.captureScreenshot(options.chromeSelector);
+    const screenshot = await tab.captureScreenshot(selector);
     await fs.outputFile(outputPath, screenshot);
     await tab.close();
     return screenshot;
