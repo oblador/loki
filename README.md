@@ -42,7 +42,7 @@ yarn run loki test -- --port 9009
 ```
 
 |Flag|Description|Default|
-|---|---|---|---|
+|---|---|---|
 |**`--host`**|Storybook host|`localhost`|
 |**`--port`**|Storybook port|*None*|
 |**`--react-port`**|React Storybook port|`6006`|
@@ -65,7 +65,7 @@ yarn run loki init path/to/storybook -- --force
 ```
 
 |Flag|Description|Default|
-|---|---|---|---|
+|---|---|---|
 |**`--config`**|Path to storybook folder|`.storybook` & `storybook`|
 |**`--force`**|Overwrite loki configuration|`false`|
 
