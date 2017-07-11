@@ -5,7 +5,7 @@
 ## Prerequsites
 
 * Node 7.6 or higher
-* Chrome 59 or higher
+* Either docker or Chrome 59+
 
 ## Installation
 

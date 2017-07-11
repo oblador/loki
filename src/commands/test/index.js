@@ -4,7 +4,10 @@ const Listr = require('listr');
 const minimist = require('minimist');
 const { warn, die } = require('../../console');
 const getConfig = require('../../config');
-const createChromeTarget = require('../../targets/chrome');
+const {
+  createChromeAppTarget,
+  createChromeDockerTarget,
+} = require('../../targets/chrome');
 const {
   createIOSSimulatorTarget,
   createAndroidEmulatorTarget,
@@ -66,7 +69,12 @@ async function test(args) {
       acc[configuration.target].push(name);
       return acc;
     },
-    { chrome: [], ios: [], android: [] }
+    {
+      'chrome.app': [],
+      'chrome.docker': [],
+      'ios.simulator': [],
+      'android.emulator': [],
+    }
   );
 
   const options = Object.assign(
@@ -74,7 +82,7 @@ async function test(args) {
       outputDir: path.resolve(argv.output),
       referenceDir: path.resolve(argv.reference),
       differenceDir: path.resolve(argv.difference || `${argv.output}/diff`),
-      reactUri: `http://localhost:${argv.port || argv['react-port']}`,
+      reactUri: `http://192.168.0.7:${argv.port || argv['react-port']}`,
       reactNativeUri: `ws://localhost:${argv.port ||
         argv['react-native-port']}`,
       selector: argv.selector || config.selector,
@@ -154,27 +162,37 @@ async function test(args) {
   const tasks = new Listr([
     getTargetTasks(
       'Chrome',
-      createChromeTarget({
+      createChromeAppTarget({
         baseUrl: options.reactUri,
         chromeFlags: argv['no-headless']
           ? ['--hide-scrollbars']
           : ['--headless', '--disable-gpu', '--hide-scrollbars'],
       }),
-      sortedConfigurations.chrome,
+      sortedConfigurations['chrome.app'],
+      argv.concurrency,
+      2.3
+    ),
+    getTargetTasks(
+      'Chrome (docker)',
+      createChromeDockerTarget({
+        baseUrl: options.reactUri,
+        chromeFlags: ['--hide-scrollbars'],
+      }),
+      sortedConfigurations['chrome.docker'],
       argv.concurrency,
       2.3
     ),
     getTargetTasks(
       'iOS Simulator',
       createIOSSimulatorTarget(options.reactNativeUri),
-      sortedConfigurations.ios,
+      sortedConfigurations['ios.simulator'],
       1,
       0
     ),
     getTargetTasks(
       'Android Emulator',
       createAndroidEmulatorTarget(options.reactNativeUri),
-      sortedConfigurations.android,
+      sortedConfigurations['android.emulator'],
       1,
       0
     ),

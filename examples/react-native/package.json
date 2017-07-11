@@ -26,10 +26,10 @@
   "loki": {
     "configurations": {
       "ios.iphone7": {
-        "target": "ios"
+        "target": "ios.simulator"
       },
       "android.pixel": {
-        "target": "android"
+        "target": "android.emulator"
       }
     }
   }

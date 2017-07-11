@@ -1,7 +1,7 @@
 {
   "configurations": {
     "ios.iphone7": {
-      "target": "ios"
+      "target": "ios.simulator"
     }
   }
 }
