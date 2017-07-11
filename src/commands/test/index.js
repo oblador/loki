@@ -11,7 +11,7 @@ function test(args) {
   const options = parseOptions(args, config);
 
   const targetFilter = new RegExp(argv['target-filter']);
-  const configurationFilter = new RegExp(argv['configuration-filter']);
+  const configurationFilter = new RegExp(argv['configuration-filter'] || argv._[1]);
   const matchesFilters = ({ target }, name) =>
     targetFilter.test(target) && configurationFilter.test(name);
 
