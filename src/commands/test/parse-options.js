@@ -1,25 +1,13 @@
 const path = require('path');
 const minimist = require('minimist');
+const defaults = require('./default-options');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
     boolean: ['update-reference', 'require-reference'],
-    default: {
-      'chrome-concurrency': '4',
-      'chrome-flags': '--headless --disable-gpu --hide-scrollbars',
-      'chrome-load-timeout': '60000',
-      'chrome-selector': '#root > *',
-      'chrome-tolerance': '2.3',
-      'diffing-engine': 'looks-same',
-      host: 'localhost',
-      output: './screenshots/current',
-      reference: './screenshots/reference',
-      'react-port': '6006',
-      'react-native-port': '7007',
-    },
   });
 
-  const $ = key => argv[key] || config[key];
+  const $ = key => argv[key] || config[key] || defaults[key];
 
   return {
     outputDir: path.resolve($('output')),
