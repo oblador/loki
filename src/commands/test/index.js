@@ -1,4 +1,5 @@
 const pickBy = require('ramda/src/pickBy');
+const uniq = require('ramda/src/uniq');
 const minimist = require('minimist');
 const { warn, error, info } = require('../../console');
 const getConfig = require('../../config');
@@ -6,13 +7,13 @@ const parseOptions = require('./parse-options');
 const runTests = require('./run-tests');
 const { ReferenceImageError } = require('../../errors');
 
-const escapeRegExp = str =>
-  str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
+const escapeRegExp = str => str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
 
 const escapeShell = str => `"${str.replace(/(["\t\n\r$`\\])/g, '\\$1')}"`;
 
 const argObjectToString = args =>
   Object.keys(args)
+    .filter(arg => args[arg] !== false)
     .map(arg => {
       const flag = arg.length === 1 ? `-${arg}` : `--${arg}`;
       if (typeof args[arg] === 'boolean') {
@@ -23,6 +24,9 @@ const argObjectToString = args =>
     .join(' ');
 
 const getUpdateCommand = (errors, argv) => {
+  const stories = uniq(errors.map(e => `${e.kind} ${e.story}`));
+  const tooManyToFilter = stories.length > 10;
+
   const args = Object.assign(
     {
       'configuration-filter': argv._[1],
@@ -30,10 +34,12 @@ const getUpdateCommand = (errors, argv) => {
     pickBy((value, key) => {
       switch (key) {
         case '_':
-        case 'filter-stories':
-        case 'skip-stories':
         case 'require-reference': {
           return false;
+        }
+        case 'filter-stories':
+        case 'skip-stories': {
+          return tooManyToFilter;
         }
         default: {
           return true;
@@ -41,10 +47,9 @@ const getUpdateCommand = (errors, argv) => {
       }
     }, argv),
     {
-      'filter-stories': `^${errors
-        .map(e => `${e.kind} ${e.story}`)
-        .map(escapeRegExp)
-        .join('|')}$`,
+      'filter-stories': tooManyToFilter
+        ? false
+        : `^${stories.map(escapeRegExp).join('|')}$`,
       'update-reference': true,
     }
   );
