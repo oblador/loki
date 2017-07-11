@@ -8,8 +8,15 @@ function ReferenceImageError(message, kind, story) {
   this.story = story;
 }
 
-util.inherits(ReferenceImageError, Error);
+function TimeoutError(duration, operationName = 'Operation') {
+  Error.captureStackTrace(this, this.constructor);
+  this.name = this.constructor.name;
+  this.message = `${operationName} timed out after ${duration}ms`;
+}
+
+util.inherits(TimeoutError, Error);
 
 module.exports = {
   ReferenceImageError,
+  TimeoutError,
 };

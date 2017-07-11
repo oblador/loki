@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const debug = require('debug')('loki:chrome');
 const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
-const { withTimeout } = require('../../failure-handling');
+const { withTimeout, TimeoutError } = require('../../failure-handling');
 
 function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
   function getDeviceMetrics(options) {
@@ -35,12 +35,12 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     await Page.enable();
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
 
-    client.loadUrl = withTimeout(30000)(async url => {
+    client.loadUrl = async url => {
       debug(`Navigating to ${url}`);
       await Page.navigate({ url });
       debug('Awaiting load event');
       await Page.loadEventFired();
-    });
+    };
 
     const querySelector = async selector => {
       const { root: { nodeId: documentNodeId } } = await DOM.getDocument();
@@ -57,7 +57,7 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       throw new Error(`No node found matching selector "${selector}"`);
     };
 
-    client.captureScreenshot = withTimeout(5000)(async (selector = 'body') => {
+    client.captureScreenshot = withTimeout(30000, 'captureScreenshot')(async (selector = 'body') => {
       const scale = deviceMetrics.deviceScaleFactor;
 
       debug(`Setting viewport to "${selector}"`);
@@ -111,9 +111,18 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       );
     }
     const selector = configuration['chrome-selector'] || options.chromeSelector;
+    const url = getStoryUrl(kind, story);
 
     const tab = await launchNewTab(tabOptions);
-    await tab.loadUrl(getStoryUrl(kind, story));
+    try {
+      await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
+    } catch (err) {
+      if (err instanceof TimeoutError) {
+        debug(`Timed out waiting for "${url}" to load`);
+      } else {
+        throw err;
+      }
+    }
     const screenshot = await tab.captureScreenshot(selector);
     await fs.outputFile(outputPath, screenshot);
     await tab.close();
