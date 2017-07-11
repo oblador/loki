@@ -18,7 +18,8 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
     messageQueue.waitFor(
       `${MESSAGE_PREFIX}${type}`,
       data => data && data.platform === platform
-    ));
+    )
+  );
 
   const sendLokiCommand = (type, params = {}) =>
     send(`${MESSAGE_PREFIX}${type}`, Object.assign({ platform }, params));
@@ -78,12 +79,16 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
     try {
       socket = await connect(socketUri);
     } catch (err) {
-      throw new Error('Failed connecting to storybook server. Start it with `yarn storybook` and review --react-native-port and --host arguments.');
+      throw new Error(
+        'Failed connecting to storybook server. Start it with `yarn storybook` and review --react-native-port and --host arguments.'
+      );
     }
     try {
       await prepare();
     } catch (err) {
-      throw new Error('Failed preparing for loki. Make sure the app is configured and running in storybook mode.');
+      throw new Error(
+        'Failed preparing for loki. Make sure the app is configured and running in storybook mode.'
+      );
     }
   }
 

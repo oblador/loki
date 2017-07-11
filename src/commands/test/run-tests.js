@@ -46,9 +46,11 @@ const filterStorybook = (storybook, excludePattern, includePattern) => {
 };
 
 async function runTests(flatConfigurations, options) {
-  await fs.emptyDirSync(options.outputDir);
-  await fs.emptyDirSync(options.differenceDir);
-  await placeGitignore(options.outputDir);
+  if (!options.updateReference) {
+    await fs.emptyDirSync(options.outputDir);
+    await fs.emptyDirSync(options.differenceDir);
+    await placeGitignore(options.outputDir);
+  }
 
   const getTargetTasks = (
     name,
@@ -179,12 +181,12 @@ async function runTests(flatConfigurations, options) {
   );
 
   const context = { activeTargets: [] };
-  tasks.run(context).catch(async () => {
+  try {
+    await tasks.run(context);
+  } catch (err) {
     await Promise.all(context.activeTargets.map(target => target.stop()));
-    die('Visual tests failed');
-  });
-
-  return tasks;
+    throw err;
+  }
 }
 
 module.exports = runTests;

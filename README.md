@@ -128,6 +128,8 @@ If you run loki via `yarn`, you need to make sure to prepend your argument list 
 |**`--stories-filter`**|Opposite of `--skip-stories`.|*None*|
 |**`--configuration-filter`**|Regular expression for targets that should be tested.|*None*|
 |**`--target-filter`**|Regular expression for targets that should be tested.|*None*|
+|**`--update-reference`**|Update reference files instead of testing.|*No*|
+|**`--require-reference`**|Fail stories without reference image, useful for CI.|*No*|
 
 ### loki init
 

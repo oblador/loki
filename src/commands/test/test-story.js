@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const { ReferenceImageError } = require('../../errors');
 const { getImageDiffer } = require('../../diffing');
 
 const getBaseName = (configurationName, kind, story) =>
@@ -22,10 +23,13 @@ async function testStory(
   await target.captureScreenshotForStory(
     kind,
     story,
-    outputPath,
+    options.updateReference ? referencePath : outputPath,
     options,
     configuration
   );
+  if (options.updateReference) {
+    return;
+  }
   if (await fs.pathExists(referencePath)) {
     const isEqual = await getImageDiffer(options.diffingEngine)(
       referencePath,
@@ -34,13 +38,17 @@ async function testStory(
       tolerance
     );
     if (!isEqual) {
-      throw new Error(
+      throw new ReferenceImageError(
         `Screenshot differs from reference, see ${path.relative(
           path.resolve('./'),
           diffPath
-        )}`
+        )}`,
+        kind,
+        story
       );
     }
+  } else if (options.requireReference) {
+    throw new ReferenceImageError('No reference image found', kind, story);
   }
 }
 

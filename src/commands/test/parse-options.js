@@ -3,7 +3,7 @@ const minimist = require('minimist');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: ['no-headless-chrome'],
+    boolean: ['update-reference', 'require-reference'],
     default: {
       reference: './screenshots/reference',
       output: './screenshots/current',
@@ -31,6 +31,8 @@ function parseOptions(args, config) {
     skipStoriesPattern: argv['skip-stories'] || config['skip-stories'],
     filterStoriesPattern: argv['filter-stories'] || config['filter-stories'],
     diffingEngine: argv['diffing-engine'] || 'looks-same',
+    requireReference: argv['require-reference'],
+    updateReference: argv['update-reference'],
   };
 }
 
