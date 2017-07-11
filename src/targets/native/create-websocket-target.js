@@ -14,12 +14,19 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
     socket.send(JSON.stringify({ type, args }));
   };
 
-  const waitForLokiMessage = withTimeout(5000)(type =>
-    messageQueue.waitFor(
-      `${MESSAGE_PREFIX}${type}`,
-      data => data && data.platform === platform
-    )
-  );
+  const waitForLokiMessage = async (type, timeout = 2000) => {
+    const prefixedType = `${MESSAGE_PREFIX}${type}`;
+    const matchesPlatform = data => data && data.platform === platform;
+    try {
+      const message = await withTimeout(timeout)(
+        messageQueue.waitFor(prefixedType, matchesPlatform)
+      );
+      return message;
+    } catch (err) {
+      messageQueue.rejectAllOfType(prefixedType);
+      throw err;
+    }
+  };
 
   const sendLokiCommand = (type, params = {}) =>
     send(`${MESSAGE_PREFIX}${type}`, Object.assign({ platform }, params));
@@ -70,7 +77,7 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
       ws.on('error', onError);
     });
 
-  const prepare = withRetries(3)(async () => {
+  const prepare = withRetries(5)(async () => {
     sendLokiCommand('prepare');
     await waitForLokiMessage('didPrepare');
   });
@@ -106,11 +113,11 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
   }
 
   async function captureScreenshotForStory(kind, story, outputPath) {
-    debug('getScreenshotForStory', kind, story);
+    debug('captureScreenshotForStory', kind, story);
     send('setCurrentStory', { kind, story });
-    const data = await waitForLokiMessage('imagesLoaded');
-    await saveScreenshotToFile(outputPath);
-    debug(data);
+    const data = await waitForLokiMessage('imagesLoaded', 30000);
+    debug('imagesLoaded', data);
+    await withTimeout(10000)(saveScreenshotToFile(outputPath));
   }
 
   return { start, stop, getStorybook, captureScreenshotForStory };

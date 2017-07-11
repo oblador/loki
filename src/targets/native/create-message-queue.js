@@ -22,7 +22,15 @@ const createMessageQueue = () => {
     queue.splice(0, queue.length);
   };
 
-  return { waitFor, receiveMessage, rejectAll };
+  const rejectAllOfType = (type, err) => {
+    for (let i = queue.length - 1; i >= 0; i--) {
+      const item = queue[i];
+      item.reject(err);
+      queue.splice(i, 1);
+    }
+  };
+
+  return { waitFor, receiveMessage, rejectAll, rejectAllOfType };
 };
 
 module.exports = createMessageQueue;
