@@ -2,6 +2,16 @@
 
 # Visual Regression Testing for Storybook
 
+<img src="https://user-images.githubusercontent.com/378279/28074070-f0052fac-6657-11e7-8a9d-398a12d2d6a8.png" width="672" height="494" alt="Loki" />
+
+## Supported platforms
+
+* Chrome
+  * Local computer
+  * Docker
+* iOS simulator
+* Android emulator
+
 ## Prerequsites
 
 * Node 7.6 or higher
