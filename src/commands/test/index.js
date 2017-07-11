@@ -117,8 +117,9 @@ async function test(args) {
         new Listr([
           {
             title: 'Start',
-            task: async () => {
+            task: async ({ activeTargets }) => {
               await target.start();
+              activeTargets.push(target);
             },
           },
           {
@@ -155,7 +156,13 @@ async function test(args) {
           })),
           {
             title: 'Stop',
-            task: () => target.stop(),
+            task: ({ activeTargets }) => {
+              target.stop();
+              const index = activeTargets.indexOf(target);
+              if (index !== -1) {
+                activeTargets.splice(index, 1);
+              }
+            },
           },
         ]),
     };
@@ -200,7 +207,9 @@ async function test(args) {
     ),
   ]);
 
-  tasks.run().catch(() => {
+  const context = { activeTargets: [] };
+  tasks.run(context).catch(async () => {
+    await Promise.all(context.activeTargets.map(target => target.stop()));
     die('Visual tests failed');
   });
 }
