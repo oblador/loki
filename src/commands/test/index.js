@@ -26,6 +26,7 @@ async function test(args) {
   const argv = minimist(args, {
     boolean: ['no-headless'],
     string: [
+      'host',
       'filter',
       'target',
       'selector',
@@ -39,6 +40,7 @@ async function test(args) {
       reference: './screenshots/reference',
       output: './screenshots/current',
       concurrency: 4,
+      host: 'localhost',
       'react-port': 6006,
       'react-native-port': 7007,
     },
@@ -82,8 +84,8 @@ async function test(args) {
       outputDir: path.resolve(argv.output),
       referenceDir: path.resolve(argv.reference),
       differenceDir: path.resolve(argv.difference || `${argv.output}/diff`),
-      reactUri: `http://192.168.0.7:${argv.port || argv['react-port']}`,
-      reactNativeUri: `ws://localhost:${argv.port ||
+      reactUri: `http://${argv.host}:${argv.port || argv['react-port']}`,
+      reactNativeUri: `ws://${argv.host}:${argv.port ||
         argv['react-native-port']}`,
       selector: argv.selector || config.selector,
     },

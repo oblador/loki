@@ -6,6 +6,18 @@ const CDP = require('chrome-remote-interface');
 const { getRandomPort } = require('lighthouse/chrome-launcher/random-port');
 const createChromeTarget = require('./create-chrome-target');
 
+const getLocalIPAddress = () => {
+  const interfaces = os.networkInterfaces();
+  const ips = Object.keys(interfaces)
+    .map(key =>
+      interfaces[key]
+        .filter(({ family, internal }) => family === 'IPv4' && !internal)
+        .map(({ address }) => address)
+    )
+    .reduce((acc, current) => acc.concat(current), []);
+  return ips[0];
+};
+
 const waitOnCDPAvailable = port =>
   new Promise((resolve, reject) => {
     waitOn(
@@ -94,9 +106,9 @@ function createChromeDockerTarget({
   }
 
   let url = baseUrl;
-  if (os.platform() === 'darwin') {
-    // Workaround for some networking issues on mac
-    url = url.replace('://localhost', '://docker.for.mac.localhost');
+  if (url.indexOf('http://localhost') === 0) {
+    const ip = getLocalIPAddress();
+    url = url.replace('localhost', ip);
   }
 
   return createChromeTarget(start, stop, createNewDebuggerInstance, url);
