@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const debug = require('debug')('loki:chrome');
 const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
+const { withTimeout } = require('../../failure-handling');
 
 function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
   function getDeviceMetrics(options) {
@@ -34,12 +35,12 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     await Page.enable();
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
 
-    client.loadUrl = async url => {
+    client.loadUrl = withTimeout(30000)(async url => {
       debug(`Navigating to ${url}`);
       await Page.navigate({ url });
       debug('Awaiting load event');
       await Page.loadEventFired();
-    };
+    });
 
     const querySelector = async selector => {
       const { root: { nodeId: documentNodeId } } = await DOM.getDocument();
@@ -56,7 +57,7 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       throw new Error(`No node found matching selector "${selector}"`);
     };
 
-    client.captureScreenshot = async (selector = 'body') => {
+    client.captureScreenshot = withTimeout(5000)(async (selector = 'body') => {
       const scale = deviceMetrics.deviceScaleFactor;
 
       debug(`Setting viewport to "${selector}"`);
@@ -77,7 +78,7 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       const buffer = new Buffer(screenshot.data, 'base64');
 
       return buffer;
-    };
+    });
 
     return client;
   }

@@ -1,6 +1,7 @@
 const debug = require('debug')('loki:websocket');
 const WebSocket = require('ws');
 const createMessageQueue = require('./create-message-queue');
+const { withTimeout, withRetries } = require('../../failure-handling');
 
 const MESSAGE_PREFIX = 'loki:';
 
@@ -13,11 +14,11 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
     socket.send(JSON.stringify({ type, args }));
   };
 
-  const waitForLokiMessage = type =>
+  const waitForLokiMessage = withTimeout(5000)(type =>
     messageQueue.waitFor(
       `${MESSAGE_PREFIX}${type}`,
       data => data && data.platform === platform
-    );
+    ));
 
   const sendLokiCommand = (type, params = {}) =>
     send(`${MESSAGE_PREFIX}${type}`, Object.assign({ platform }, params));
@@ -68,10 +69,22 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
       ws.on('error', onError);
     });
 
-  async function start() {
-    socket = await connect(socketUri);
+  const prepare = withRetries(3)(async () => {
     sendLokiCommand('prepare');
     await waitForLokiMessage('didPrepare');
+  });
+
+  async function start() {
+    try {
+      socket = await connect(socketUri);
+    } catch (err) {
+      throw new Error('Failed connecting to storybook server. Start it with `yarn storybook` and review --react-native-port and --host arguments.');
+    }
+    try {
+      await prepare();
+    } catch (err) {
+      throw new Error('Failed preparing for loki. Make sure the app is configured and running in storybook mode.');
+    }
   }
 
   async function stop() {
