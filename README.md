@@ -6,6 +6,7 @@
 
 * Node 7.6 or higher
 * Either docker or Chrome 59+
+* Optionally [GraphicsMagick](http://www.graphicsmagick.org)
 
 ## Installation
 
@@ -22,16 +23,41 @@ yarn run loki
 
 ## Commands
 
+### loki test
+
+Make sure your storybook server is running, and any simulator/emulator if you target them, before running this command.
+
+```
+yarn run loki test -- --port 9009
+```
+
+|Flag|Description|Default|
+|---|---|---|---|
+|**`--host`**|Storybook host|`localhost`|
+|**`--port`**|Storybook port|*None*|
+|**`--react-port`**|React Storybook port|`6006`|
+|**`--react-native-port`**|React Native Storybook port|`7007`|
+|**`--reference`**|Path to screenshot reference folder|`./screenshots/reference`|
+|**`--output`**|Path to screenshot output folder|`./screenshots/current`|
+|**`--difference`**|Path to image diff folder|`${outputFolder}/diff`|
+|**`--diffing-engine`**|What diffing engine to use, currently supported are `looks-same` and `gm`|`looks-same`|
+|**`--chrome-concurrency`**|How many stories to test in paralell when using chrome|`4`|
+|**`--chrome-selector`**|CSS selector to the part of the DOM to screenshot. Useful you have decorators that should be excluded.|`#root > *`|
+|**`--chrome-flags`**|Custom chrome flags.|`--headless --disable-gpu --hide-scrollbars`|
+|**`--skip-stories`**|Regular expression for stories that should not be tested.|*None*|
+|**`--configuration-filter`**|Regular expression for targets that should be tested.|*None*|
+|**`--target-filter`**|Regular expression for targets that should be tested.|*None*|
+
 ### loki init
 
 ```
 yarn run loki init path/to/storybook -- --force
 ```
 
-|flag|alias|description|default|
+|Flag|Description|Default|
 |---|---|---|---|
-|**--config**|-c|Path to storybook folder|`.storybook` & `storybook`|
-|**--force**|-f|Overwrite loki configuration|`false`|
+|**`--config`**|Path to storybook folder|`.storybook` & `storybook`|
+|**`--force`**|Overwrite loki configuration|`false`|
 
 ## License
 
