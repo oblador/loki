@@ -69,7 +69,11 @@ Similar to the `--chrome-selector` CLI argument, this setting is a CSS selector 
 
 ### `skip-stories`
 
-Similar to the `--skip-stories` CLI argument, this setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case sensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out. 
+Similar to the `--skip-stories` CLI argument, this setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out. 
+
+### `filter-stories`
+
+Opposite to `skip-stories`. 
 
 ### `configurations`
 
@@ -77,6 +81,7 @@ Similar to the `--skip-stories` CLI argument, this setting is a regular expressi
 |---|---|---|---|
 |**`target`**|*string*|Target platform, possible values are `chrome.app`, `chrome.docker`, `ios.simulator`, `android.emulator`.|All|
 |**`skip-stories`**|*string*|Same as `loki.skip-stories`, but applied to only this configuration.|All|
+|**`filter-stories`**|*string*|Same as `loki.filter-stories`, but applied to only this configuration.|All|
 |**`chrome-selector`**|*string*|Same as `loki.chrome-selector`, but applied to only this configuration.|`chrome.*`|
 |**`preset`**|*string*|Predefined bundled configuration, possible values are `Retina Macbook Pro 15`, `iPhone 7`, `iPhone 5` and `Google Pixel`.|`chrome.*`|
 |**`userAgent`**|*string*|Custom user agent.|`chrome.*`|
@@ -120,6 +125,7 @@ If you run loki via `yarn`, you need to make sure to prepend your argument list 
 |**`--chrome-selector`**|CSS selector to the part of the DOM to screenshot. Useful you have decorators that should be excluded.|`#root > *`|
 |**`--chrome-flags`**|Custom chrome flags.|`--headless --disable-gpu --hide-scrollbars`|
 |**`--skip-stories`**|Regular expression for stories that should not be tested, it will be tested against a string with the format `${kind} ${story}`.|*None*|
+|**`--stories-filter`**|Opposite of `--skip-stories`.|*None*|
 |**`--configuration-filter`**|Regular expression for targets that should be tested.|*None*|
 |**`--target-filter`**|Regular expression for targets that should be tested.|*None*|
 

@@ -29,6 +29,7 @@ function parseOptions(args, config) {
     chromeConcurrency: parseInt(argv['chrome-concurrency'], 10),
     chromeTolerance: parseFloat(argv['chrome-tolerance'], 10),
     skipStoriesPattern: argv['skip-stories'] || config['skip-stories'],
+    filterStoriesPattern: argv['filter-stories'] || config['filter-stories'],
     diffingEngine: argv['diffing-engine'] || 'looks-same',
   };
 }

@@ -27,20 +27,28 @@ const groupByTarget = configurations =>
     groupBy(([, { target }]) => target, toPairs(configurations))
   );
 
+const filterStorybook = (storybook, excludePattern, includePattern) => {
+  const filterStory = kind => story => {
+    const fullStoryName = `${kind} ${story}`;
+    const exclude =
+      excludePattern && new RegExp(excludePattern, 'i').test(fullStoryName);
+    const include =
+      !includePattern || new RegExp(includePattern, 'i').test(fullStoryName);
+    return !exclude && include;
+  };
+
+  return storybook
+    .map(({ kind, stories }) => ({
+      kind,
+      stories: stories.filter(filterStory(kind)),
+    }))
+    .filter(({ stories }) => stories.length !== 0);
+};
+
 async function runTests(flatConfigurations, options) {
   await fs.emptyDirSync(options.outputDir);
   await fs.emptyDirSync(options.differenceDir);
   await placeGitignore(options.outputDir);
-
-  const createSkipFilter = (configuration, kind, story) => {
-    const skipPattern =
-      options.skipStoriesPattern || configuration['skip-stories'];
-    if (!skipPattern) {
-      return () => false;
-    }
-    const regexp = RegExp(skipPattern);
-    return () => regexp.test(`${kind} ${story}`);
-  };
 
   const getTargetTasks = (
     name,
@@ -74,13 +82,18 @@ async function runTests(flatConfigurations, options) {
                 title: `Test ${configurationName}`,
                 task: () =>
                   new Listr(
-                    storybook.map(({ kind, stories }) => ({
+                    filterStorybook(
+                      storybook,
+                      options.skipStoriesPattern ||
+                        configuration['skip-stories'],
+                      options.filterStoriesPattern ||
+                        configuration['filter-stories']
+                    ).map(({ kind, stories }) => ({
                       title: kind,
                       task: () =>
                         new Listr(
                           stories.map(story => ({
                             title: story,
-                            skip: createSkipFilter(configuration, kind, story),
                             task: () =>
                               testStory(
                                 target,
