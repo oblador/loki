@@ -12,8 +12,8 @@
       "url": "https://github.com/oblador/loki/"
     },
     "theme-gestalt": {
-      "logo": "/logo.svg",
-      "favicon": "/favicon.png",
+      "logo": "logo.svg",
+      "favicon": "favicon.png",
       "excludeDefaultStyles": false
     }
   },
