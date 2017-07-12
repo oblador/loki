@@ -13,13 +13,13 @@ const escapeShell = str => `"${str.replace(/(["\t\n\r$`\\])/g, '\\$1')}"`;
 
 const argObjectToString = args =>
   Object.keys(args)
-    .filter(arg => args[arg] !== false)
+    .filter(arg => args[arg] !== false && typeof args[arg] !== 'undefined')
     .map(arg => {
       const flag = arg.length === 1 ? `-${arg}` : `--${arg}`;
       if (typeof args[arg] === 'boolean') {
         return flag;
       }
-      return `${flag}=${escapeShell(args[arg])}`;
+      return `${flag}=${escapeShell(String(args[arg]))}`;
     })
     .join(' ');
 
