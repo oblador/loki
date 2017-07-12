@@ -1,8 +1,18 @@
+const fs = require('fs-extra');
 const looksSame = require('looks-same');
 
 function getImageDiff(path1, path2, diffPath, tolerance) {
-  return new Promise((resolve, reject) => {
-    looksSame(path1, path2, (err, isSame) => {
+  return new Promise(async (resolve, reject) => {
+    const [reference, current] = (await Promise.all([
+      fs.readFile(path1),
+      fs.readFile(path2),
+    ])).map(Buffer.from);
+
+    if (current.equals(reference)) {
+      return resolve(true);
+    }
+
+    return looksSame(reference, current, (err, isSame) => {
       if (err) {
         reject(err);
       } else if (isSame) {
@@ -10,8 +20,8 @@ function getImageDiff(path1, path2, diffPath, tolerance) {
       } else {
         looksSame.createDiff(
           {
-            reference: path1,
-            current: path2,
+            reference,
+            current,
             diff: diffPath,
             tolerance,
             highlightColor: '#ff00ff',
