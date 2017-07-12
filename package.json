@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "serve-docs": "gitbook serve",
+    "publish-docs": "./bin/publish-docs",
     "format": "prettier --single-quote --trailing-comma es5 --write {,src/{,*/,*/*/}}*.js",
     "lint": "eslint *.js src"
   },
