@@ -1,6 +1,6 @@
 # Configuration
 
-The init command will add a `loki` section to your `package.json`, but you can edit it to your wishes. 
+The init command will add a `loki` section to your `package.json`, but you can edit it to your wishes. *NOTE*: Any command line argument that `loki test` accepts can also be added to the `loki` config object.
 
 Example `package.json`: 
 
@@ -9,7 +9,7 @@ Example `package.json`:
   "name": "my-project",
   "version": "1.0.0",
   "loki": {
-    "chrome-selector": "#my-decorator > *",
+    "chromeSelector": "#my-decorator > *",
     "configurations": {
       "chrome.laptop": {
         "target": "chrome.app",
@@ -32,26 +32,26 @@ Example `package.json`:
 }
 ```
 
-## `chrome-selector`
+## `chromeSelector`
 
-Similar to the `--chrome-selector` CLI argument, this setting is a CSS selector to the part of the page you want screenshots of. This is useful if you have decorators that's not really part of the component itself. Note that it doesn't screenshot the DOM element itself but rather the crops the screenshot to those dimensions, so if you have any elements absolutely positioned above they will be included.
+Similar to the `--chromeSelector` CLI argument, this setting is a CSS selector to the part of the page you want screenshots of. This is useful if you have decorators that's not really part of the component itself. Note that it doesn't screenshot the DOM element itself but rather the crops the screenshot to those dimensions, so if you have any elements absolutely positioned above they will be included.
 
-## `skip-stories`
+## `skipStories`
 
-Similar to the `--skip-stories` CLI argument, this setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out. 
+Similar to the `--skipStories` CLI argument, this setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out. 
 
-## `filter-stories`
+## `filterStories`
 
-Opposite to `skip-stories`. 
+Opposite to `skipStories`. 
 
 ## `configurations`
 
 |Name|Type|Description|Targets|
 |---|---|---|---|
 |**`target`**|*string*|Target platform, possible values are `chrome.app`, `chrome.docker`, `ios.simulator`, `android.emulator`.|All|
-|**`skip-stories`**|*string*|Same as `loki.skip-stories`, but applied to only this configuration.|All|
-|**`filter-stories`**|*string*|Same as `loki.filter-stories`, but applied to only this configuration.|All|
-|**`chrome-selector`**|*string*|Same as `loki.chrome-selector`, but applied to only this configuration.|`chrome.*`|
+|**`skipStories`**|*string*|Same as `loki.skipStories`, but applied to only this configuration.|All|
+|**`filterStories`**|*string*|Same as `loki.filterStories`, but applied to only this configuration.|All|
+|**`chromeSelector`**|*string*|Same as `loki.chromeSelector`, but applied to only this configuration.|`chrome.*`|
 |**`preset`**|*string*|Predefined bundled configuration, possible values are `Retina Macbook Pro 15`, `iPhone 7`, `iPhone 5` and `Google Pixel`.|`chrome.*`|
 |**`userAgent`**|*string*|Custom user agent.|`chrome.*`|
 |**`width`**|*integer*|Browser viewport width.|`chrome.*`|

@@ -6,27 +6,13 @@
 
 ## Rationale
 
-There's a few visual regression tools for the web, but most use phantomjs which is deprecated and a browser nobody is _actually_ using, and they usually require you to maintain fixtures. Also with react-native it's now possible to target multiple platforms with a single code base and there's no tool supporting all to my knowledge.
+There's a few visual regression tools for the web, but most either cannot be run headless or use phantomjs which is deprecated and a browser nobody is _actually_ using. They usually also require you to maintain fixtures. With react-native it's now possible to target multiple platforms with a single code base, but there's no single tool to test all to my knowledge. 
+
+Loki aims to have easy setup, no to low maintenance cost, reproducible tests independent of which OS they are run on, runnable on CI and support all platforms storybook does.
 
 ## Supported platforms
 
-* Chrome
-  * Local computer
-  * Docker
+* Chrome in docker (recommended)
+* Local Chrome application
 * iOS simulator
 * Android emulator
-
-## Workflow
-
-Loki will not start any servers for you, so ensure storybook and any simulator/emulator is up and running before running tests.
-
-1.  Start storybook server
-    `yarn storybook`
-2.  Add first set of reference files
-    `yarn loki update`
-3.  Do some changes to your components
-4.  Test against references
-    `yarn loki test`
-4.  Review changes in diff folder
-5.  Approve changes and update references
-    `yarn loki update`
