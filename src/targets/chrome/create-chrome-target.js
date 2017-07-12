@@ -68,11 +68,15 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       const { model } = await DOM.getBoxModel({ nodeId });
       const x = Math.max(0, model.border[0]);
       const y = Math.max(0, model.border[1]);
-      const width = Math.max(1, model.width * scale);
-      const height = Math.max(1, model.height * scale);
+      const width = model.width * scale;
+      const height = model.height * scale;
 
-      await Emulation.setVisibleSize({ width, height });
-      await Emulation.forceViewport({ x, y, scale });
+      if (width === 0 || height === 0) {
+        debug('Got empty dimensions, capturing whole screen instead');
+      } else {
+        await Emulation.setVisibleSize({ width, height });
+        await Emulation.forceViewport({ x, y, scale });
+      }
 
       debug('Capturing screenshot');
       const screenshot = await Page.captureScreenshot({ format: 'png' });
