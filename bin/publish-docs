@@ -3,7 +3,7 @@
 # From https://gist.github.com/SangsooNam/aa73c3e1ff88d30433e4020f1275242a
 
 # install the plugins and build the static site
-gitbook install && \
+gitbook install
 npm rebuild node-sass && \
 gitbook install && \
 gitbook build && \
