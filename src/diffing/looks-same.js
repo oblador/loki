@@ -11,6 +11,12 @@ function getImageDiff(path1, path2, diffPath, tolerance) {
     if (current.equals(reference)) {
       return resolve(true);
     }
+    if (reference.length === 0) {
+      return reject(new Error('Reference image is empty'));
+    }
+    if (current.length === 0) {
+      return reject(new Error('Current image is empty'));
+    }
 
     return looksSame(reference, current, (err, isSame) => {
       if (err) {
