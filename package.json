@@ -15,6 +15,7 @@
     "configure-react-native.js"
   ],
   "scripts": {
+    "serve-docs": "gitbook serve",
     "format": "prettier --single-quote --trailing-comma es5 --write {,src/{,*/,*/*/}}*.js",
     "lint": "eslint *.js src"
   },
