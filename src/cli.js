@@ -27,13 +27,17 @@ async function run() {
   const executor = getExecutorForCommand(command);
 
   bold(`loki ${command} v${version}`);
+
   try {
     await executor(args);
   } catch (err) {
     if (err instanceof MissingDependencyError) {
       die(err.message, err.installationInstructions);
     }
-    if (err.cmd && err.stderr && err.message.indexOf('Command failed: ') === 0) {
+
+    const childProcessFailed =
+      err.cmd && err.stderr && err.message.indexOf('Command failed: ') === 0;
+    if (childProcessFailed) {
       die(err.stderr);
     }
     die(err);
