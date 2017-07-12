@@ -115,7 +115,7 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
         presets[configuration.preset]
       );
     }
-    const selector = configuration['chrome-selector'] || options.chromeSelector;
+    const selector = configuration.chromeSelector || options.chromeSelector;
     const url = getStoryUrl(kind, story);
 
     const tab = await launchNewTab(tabOptions);

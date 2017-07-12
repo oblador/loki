@@ -30,16 +30,16 @@ const getUpdateCommand = (errors, argv) => {
 
   const args = Object.assign(
     {
-      'configuration-filter': argv._[1],
+      configurationFilter: argv._[1],
     },
     pickBy((value, key) => {
       switch (key) {
         case '_':
-        case 'require-reference': {
+        case 'requireReference': {
           return false;
         }
-        case 'filter-stories':
-        case 'skip-stories': {
+        case 'filterStories':
+        case 'skipStories': {
           return tooManyToFilter;
         }
         default: {
@@ -50,7 +50,7 @@ const getUpdateCommand = (errors, argv) => {
     tooManyToFilter
       ? {}
       : {
-          'filter-stories': `^${stories.map(escapeRegExp).join('|')}$`,
+          filterStories: `^${stories.map(escapeRegExp).join('|')}$`,
         }
   );
   return `yarn loki update -- ${argObjectToString(args)}`;
@@ -65,9 +65,9 @@ async function test(args) {
     ensureInstalled('gm');
   }
 
-  const targetFilter = new RegExp(argv['target-filter']);
+  const targetFilter = new RegExp(argv.targetFilter);
   const configurationFilter = new RegExp(
-    argv['configuration-filter'] || argv._[1]
+    argv.configurationFilter || argv._[1]
   );
   const matchesFilters = ({ target }, name) =>
     targetFilter.test(target) && configurationFilter.test(name);

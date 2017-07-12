@@ -1,13 +1,13 @@
 {
-  "chrome-concurrency": "4",
-  "chrome-flags": "--headless --disable-gpu --hide-scrollbars",
-  "chrome-load-timeout": "60000",
-  "chrome-selector": "#root > *",
-  "chrome-tolerance": "2.3",
-  "diffing-engine": "looks-same",
+  "chromeConcurrency": "4",
+  "chromeFlags": "--headless --disable-gpu --hide-scrollbars",
+  "chromeLoadTimeout": "60000",
+  "chromeSelector": "#root > *",
+  "chromeTolerance": "2.3",
+  "diffingEngine": "looks-same",
   "host": "localhost",
   "output": "./screenshots/current",
   "reference": "./screenshots/reference",
-  "react-port": "6006",
-  "react-native-port": "7007"
+  "reactPort": "6006",
+  "reactNativePort": "7007"
 }

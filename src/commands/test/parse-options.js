@@ -4,7 +4,7 @@ const defaults = require('./default-options');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: ['require-reference'],
+    boolean: ['requireReference'],
   });
 
   const $ = key => argv[key] || config[key] || defaults[key];
@@ -13,17 +13,17 @@ function parseOptions(args, config) {
     outputDir: path.resolve($('output')),
     referenceDir: path.resolve($('reference')),
     differenceDir: path.resolve($('difference') || `${$('output')}/diff`),
-    reactUri: `http://${$('host')}:${argv.port || $('react-port')}`,
-    reactNativeUri: `ws://${$('host')}:${argv.port || $('react-native-port')}`,
-    chromeConcurrency: parseInt($('chrome-concurrency'), 10),
-    chromeFlags: $('chrome-flags').split(' '),
-    chromeLoadTimeout: parseInt($('chrome-load-timeout'), 10),
-    chromeSelector: $('chrome-selector'),
-    chromeTolerance: parseFloat($('chrome-tolerance'), 10),
-    skipStoriesPattern: $('skip-stories'),
-    filterStoriesPattern: $('filter-stories'),
-    diffingEngine: $('diffing-engine'),
-    requireReference: argv['require-reference'],
+    reactUri: `http://${$('host')}:${argv.port || $('reactPort')}`,
+    reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
+    chromeConcurrency: parseInt($('chromeConcurrency'), 10),
+    chromeFlags: $('chromeFlags').split(' '),
+    chromeLoadTimeout: parseInt($('chromeLoadTimeout'), 10),
+    chromeSelector: $('chromeSelector'),
+    chromeTolerance: parseFloat($('chromeTolerance'), 10),
+    skipStoriesPattern: $('skipStories'),
+    filterStoriesPattern: $('filterStories'),
+    diffingEngine: $('diffingEngine'),
+    requireReference: $('requireReference'),
     updateReference: argv._[0] === 'update',
   };
 }
