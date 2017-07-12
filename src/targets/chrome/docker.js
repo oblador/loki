@@ -4,6 +4,7 @@ const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
 const { getRandomPort } = require('lighthouse/chrome-launcher/random-port');
+const ensureInstalled = require('../../ensure-installed');
 const createChromeTarget = require('./create-chrome-target');
 
 const getLocalIPAddress = () => {
@@ -47,8 +48,7 @@ function createChromeDockerTarget({
   async function start() {
     port = await getRandomPort();
 
-    // TODO: might want to do some extra checking here
-    // but seems to work fine
+    ensureInstalled('docker');
     const dockerPath = 'docker';
     const args = [
       'run',

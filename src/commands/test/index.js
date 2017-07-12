@@ -5,6 +5,7 @@ const { warn, error, info } = require('../../console');
 const getConfig = require('../../config');
 const parseOptions = require('./parse-options');
 const runTests = require('./run-tests');
+const ensureInstalled = require('../../ensure-installed');
 const { ReferenceImageError } = require('../../errors');
 
 const escapeRegExp = str => str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
@@ -59,6 +60,10 @@ async function test(args) {
   const argv = minimist(args);
   const config = getConfig();
   const options = parseOptions(args, config);
+
+  if (options.diffingEngine === 'gm') {
+    ensureInstalled('gm');
+  }
 
   const targetFilter = new RegExp(argv['target-filter']);
   const configurationFilter = new RegExp(
