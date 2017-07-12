@@ -19,8 +19,11 @@ There's a few visual regression tools for the web, but most use phantomjs which 
 ## Prerequsites
 
 * Node 7.6 or higher
-* Either docker or Chrome 59+
-* Optionally [GraphicsMagick](http://www.graphicsmagick.org)
+
+### Optional dependencies
+* [GraphicsMagick](http://www.graphicsmagick.org) for gm diffing engine, `brew install graphicsmagick`
+* [Docker](https://www.docker.com/community-edition#/download) for the `chrome.docker` target.
+* [Chrome 59+](https://www.google.se/chrome/browser/desktop/) for the `chrome.app` target, `brew cask install google-chrome-canary`. 
 
 ## Installation
 
