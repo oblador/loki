@@ -26,8 +26,23 @@ There's a few visual regression tools for the web, but most use phantomjs which 
 
 ```
 yarn add loki --dev
-yarn run loki init
+yarn loki init
 ```
+
+## Workflow
+
+Loki will not start any servers for you, so ensure storybook and any simulator/emulator is up and running before running tests.
+
+1.  Start storybook server
+    `yarn storybook`
+2.  Add first set of reference files
+    `yarn loki update`
+3.  Do some changes to your components
+4.  Test against references
+    `yarn loki test`
+4.  Review changes in diff folder
+5.  Approve changes and update references
+    `yarn loki update`
 
 ## Configuration
 
@@ -91,25 +106,17 @@ Opposite to `skip-stories`.
 |**`mobile`**|*boolean*|Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.|`chrome.*`|
 |**`fitWindow`**|*boolean*|Whether a view that exceeds the available browser window area should be scaled down to fit.|`chrome.*`|
 
-
-## Running visual tests
-
-Make sure your storybook server is running, and any simulator/emulator if you target them, before running this command.
-
-```
-yarn run storybook
-yarn run loki
-```
-
 ## Commands
+
+If you run loki via `yarn`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly too. 
 
 ### loki test
 
-```
-yarn run loki test -- --port 9009
-```
+Capture screenshots and compare them against the reference files. 
 
-If you run loki via `yarn`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly too. 
+```
+yarn loki test -- --port 9009
+```
 
 |Flag|Description|Default|
 |---|---|---|
@@ -130,8 +137,13 @@ If you run loki via `yarn`, you need to make sure to prepend your argument list 
 |**`--stories-filter`**|Opposite of `--skip-stories`.|*None*|
 |**`--configuration-filter`**|Regular expression for targets that should be tested.|*None*|
 |**`--target-filter`**|Regular expression for targets that should be tested.|*None*|
-|**`--update-reference`**|Update reference files instead of testing.|*No*|
 |**`--require-reference`**|Fail stories without reference image, useful for CI.|*No*|
+
+### loki update
+
+Capture screenshots and update the reference files. 
+
+Takes same arguments as `loki test`.
 
 ### loki init
 

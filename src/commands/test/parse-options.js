@@ -4,7 +4,7 @@ const defaults = require('./default-options');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: ['update-reference', 'require-reference'],
+    boolean: ['require-reference'],
   });
 
   const $ = key => argv[key] || config[key] || defaults[key];
@@ -24,7 +24,7 @@ function parseOptions(args, config) {
     filterStoriesPattern: $('filter-stories'),
     diffingEngine: $('diffing-engine'),
     requireReference: argv['require-reference'],
-    updateReference: argv['update-reference'],
+    updateReference: argv._[0] === 'update',
   };
 }
 

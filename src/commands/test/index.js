@@ -46,14 +46,13 @@ const getUpdateCommand = (errors, argv) => {
         }
       }
     }, argv),
-    {
-      'filter-stories': tooManyToFilter
-        ? false
-        : `^${stories.map(escapeRegExp).join('|')}$`,
-      'update-reference': true,
-    }
+    tooManyToFilter
+      ? {}
+      : {
+          'filter-stories': `^${stories.map(escapeRegExp).join('|')}$`,
+        }
   );
-  return `yarn loki test -- ${argObjectToString(args)}`;
+  return `yarn loki update -- ${argObjectToString(args)}`;
 };
 
 async function test(args) {

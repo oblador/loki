@@ -1,30 +1,33 @@
+/* eslint-disable global-require */
+
 const minimist = require('minimist');
 const { die, bold } = require('./console');
-const test = require('./commands/test');
-const init = require('./commands/init');
 const { version } = require('../package.json');
+
+const getExecutorForCommand = command => {
+  switch (command) {
+    case 'update':
+    case 'test': {
+      return require('./commands/test');
+    }
+    case 'init': {
+      return require('./commands/init');
+    }
+    default: {
+      return die(`Invalid command ${command}`);
+    }
+  }
+};
 
 async function run() {
   const args = process.argv.slice(2);
   const argv = minimist(args);
-  const command = argv._[0];
-  bold(`loki v${version}`);
+  const command = argv._[0] || 'test';
+  const executor = getExecutorForCommand(command);
+
+  bold(`loki ${command} v${version}`);
   try {
-    switch (command) {
-      case undefined:
-      case 'test': {
-        await test(args);
-        break;
-      }
-      case 'init': {
-        await init(args);
-        break;
-      }
-      default: {
-        die(`Invalid command ${command}`);
-        break;
-      }
-    }
+    await executor(args);
   } catch (err) {
     die(err);
   }
