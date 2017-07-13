@@ -7,29 +7,17 @@ const parseOptions = require('./parse-options');
 const runTests = require('./run-tests');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const { ReferenceImageError } = require('../../errors');
+const buildCommand = require('../../build-command');
 
 const escapeRegExp = str => str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
 
-const escapeShell = str => `"${str.replace(/(["\t\n\r$`\\])/g, '\\$1')}"`;
-
-const argObjectToString = args =>
-  Object.keys(args)
-    .filter(arg => args[arg] !== false && typeof args[arg] !== 'undefined')
-    .map(arg => {
-      const flag = arg.length === 1 ? `-${arg}` : `--${arg}`;
-      if (typeof args[arg] === 'boolean') {
-        return flag;
-      }
-      return `${flag}=${escapeShell(String(args[arg]))}`;
-    })
-    .join(' ');
-
-const getUpdateCommand = (errors, argv) => {
+const getUpdateCommand = (errors, args) => {
+  const argv = minimist(args);
   const stories = uniq(errors.map(e => `${e.kind} ${e.story}`));
   const storiesFilter = `^${stories.map(escapeRegExp).join('|')}$`;
   const tooManyToFilter = stories.length > 10;
 
-  const args = Object.assign(
+  const argObject = Object.assign(
     {
       configurationFilter: argv._[1],
       storiesFilter: !tooManyToFilter && storiesFilter,
@@ -50,11 +38,11 @@ const getUpdateCommand = (errors, argv) => {
       }
     }, argv)
   );
-  return `yarn loki update -- ${argObjectToString(args)}`;
+
+  return buildCommand('update', argObject);
 };
 
 async function test(args) {
-  const argv = minimist(args);
   const config = getConfig();
   const options = parseOptions(args, config);
 
@@ -84,7 +72,7 @@ async function test(args) {
       if (imageErrors.length !== 0) {
         error('Visual tests failed');
         info('You can update the reference files with:');
-        info(getUpdateCommand(imageErrors, argv));
+        info(getUpdateCommand(imageErrors, args));
       } else {
         error('Some visual tests failed to run');
       }
