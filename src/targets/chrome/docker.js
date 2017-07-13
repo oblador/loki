@@ -4,7 +4,7 @@ const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
 const { getRandomPort } = require('lighthouse/chrome-launcher/random-port');
-const ensureInstalled = require('../../ensure-installed');
+const { ensureDependencyAvailable } = require('../../dependency-detection');
 const createChromeTarget = require('./create-chrome-target');
 
 const getLocalIPAddress = () => {
@@ -48,7 +48,7 @@ function createChromeDockerTarget({
   async function start() {
     port = await getRandomPort();
 
-    ensureInstalled('docker');
+    ensureDependencyAvailable('docker');
     const dockerPath = 'docker';
     const args = [
       'run',
@@ -109,7 +109,9 @@ function createChromeDockerTarget({
   if (url.indexOf('http://localhost') === 0) {
     const ip = getLocalIPAddress();
     if (!ip) {
-      throw new Error('Unable to detect local IP address, try passing --host argument');
+      throw new Error(
+        'Unable to detect local IP address, try passing --host argument'
+      );
     }
     url = url.replace('localhost', ip);
   }

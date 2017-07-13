@@ -12,8 +12,12 @@ const DEPENDENCIES = {
   },
 };
 
-function ensureInstalled(dependency) {
-  if (!shell.which(dependency)) {
+function dependencyAvailable(dependency) {
+  return !!shell.which(dependency);
+}
+
+function ensureDependencyAvailable(dependency) {
+  if (!dependencyAvailable(dependency)) {
     const dependencyInfo = DEPENDENCIES[dependency];
     if (!dependencyInfo) {
       throw new MissingDependencyError(dependency);
@@ -25,4 +29,7 @@ function ensureInstalled(dependency) {
   }
 }
 
-module.exports = ensureInstalled;
+module.exports = {
+  dependencyAvailable,
+  ensureDependencyAvailable,
+};

@@ -4,8 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const minimist = require('minimist');
 const { warn, die, info } = require('../../console');
-const reactDefaults = require('../../config/defaults-react.json');
-const reactNativeDefaults = require('../../config/defaults-react-native.json');
+const getDefaults = require('../../config/get-defaults');
 
 const insertAfter = (
   content,
@@ -63,13 +62,8 @@ function init(args) {
   }
 
   info('Adding loki defaults to package.json');
-  fs.outputJsonSync(
-    pkgPath,
-    Object.assign({}, pkg, {
-      loki: isReactNativeProject ? reactNativeDefaults : reactDefaults,
-    }),
-    { spaces: 2 }
-  );
+  const modifiedPkg = Object.assign({}, pkg, { loki: getDefaults() });
+  fs.outputJsonSync(pkgPath, modifiedPkg, { spaces: 2 });
 
   if (isReactNativeProject) {
     const storybookjsPath = `${storybookPath}/storybook.js`;

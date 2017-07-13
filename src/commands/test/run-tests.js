@@ -88,8 +88,7 @@ async function runTests(flatConfigurations, options) {
                   new Listr(
                     filterStorybook(
                       storybook,
-                      options.skipStoriesPattern ||
-                        configuration.skipStories,
+                      options.skipStoriesPattern || configuration.skipStories,
                       options.filterStoriesPattern ||
                         configuration.filterStories
                     ).map(({ kind, stories }) => ({
