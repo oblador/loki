@@ -16,9 +16,9 @@ yarn loki test -- --port 9009
 |**`--port`**|Storybook port|*None*|
 |**`--reactPort`**|React Storybook port|`6006`|
 |**`--reactNativePort`**|React Native Storybook port|`7007`|
-|**`--reference`**|Path to screenshot reference folder|`./screenshots/reference`|
-|**`--output`**|Path to screenshot output folder|`./screenshots/current`|
-|**`--difference`**|Path to image diff folder|`${outputFolder}/diff`|
+|**`--reference`**|Path to screenshot reference folder|`./loki/reference`|
+|**`--output`**|Path to screenshot output folder|`./loki/current`|
+|**`--difference`**|Path to image diff folder|`./loki/difference`|
 |**`--diffingEngine`**|What diffing engine to use, currently supported are `looks-same` and `gm`|`gm` if available|
 |**`--chromeConcurrency`**|How many stories to test in paralell when using chrome|`4`|
 |**`--chromeFlags`**|Custom chrome flags.|`--headless --disable-gpu --hide-scrollbars`|
