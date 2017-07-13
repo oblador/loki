@@ -21,10 +21,12 @@ function parseOptions(args, config) {
     chromeSelector: $('chromeSelector'),
     chromeTolerance: parseFloat($('chromeTolerance'), 10),
     skipStoriesPattern: $('skipStories'),
-    filterStoriesPattern: $('filterStories'),
+    storiesFilter: $('storiesFilter'),
     diffingEngine: $('diffingEngine'),
     requireReference: $('requireReference'),
     updateReference: argv._[0] === 'update',
+    targetFilter: argv.targetFilter,
+    configurationFilter: argv.configurationFilter || argv._[1],
   };
 }
 

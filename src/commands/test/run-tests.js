@@ -89,8 +89,7 @@ async function runTests(flatConfigurations, options) {
                     filterStorybook(
                       storybook,
                       options.skipStoriesPattern || configuration.skipStories,
-                      options.filterStoriesPattern ||
-                        configuration.filterStories
+                      options.storiesFilter || configuration.storiesFilter
                     ).map(({ kind, stories }) => ({
                       title: kind,
                       task: () =>

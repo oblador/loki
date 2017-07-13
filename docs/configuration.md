@@ -40,7 +40,7 @@ Similar to the `--chromeSelector` CLI argument, this setting is a CSS selector t
 
 Similar to the `--skipStories` CLI argument, this setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out. 
 
-## `filterStories`
+## `storiesFilter`
 
 Opposite to `skipStories`. 
 
@@ -50,7 +50,7 @@ Opposite to `skipStories`.
 |---|---|---|---|
 |**`target`**|*string*|Target platform, possible values are `chrome.app`, `chrome.docker`, `ios.simulator`, `android.emulator`.|All|
 |**`skipStories`**|*string*|Same as `loki.skipStories`, but applied to only this configuration.|All|
-|**`filterStories`**|*string*|Same as `loki.filterStories`, but applied to only this configuration.|All|
+|**`storiesFilter`**|*string*|Same as `loki.storiesFilter`, but applied to only this configuration.|All|
 |**`chromeSelector`**|*string*|Same as `loki.chromeSelector`, but applied to only this configuration.|`chrome.*`|
 |**`preset`**|*string*|Predefined bundled configuration, possible values are `Retina Macbook Pro 15`, `iPhone 7`, `iPhone 5` and `Google Pixel`.|`chrome.*`|
 |**`userAgent`**|*string*|Custom user agent.|`chrome.*`|
