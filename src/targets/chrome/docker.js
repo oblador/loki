@@ -108,6 +108,9 @@ function createChromeDockerTarget({
   let url = baseUrl;
   if (url.indexOf('http://localhost') === 0) {
     const ip = getLocalIPAddress();
+    if (!ip) {
+      throw new Error('Unable to detect local IP address, try passing --host argument');
+    }
     url = url.replace('localhost', ip);
   }
 
