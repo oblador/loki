@@ -34,11 +34,29 @@ Example `package.json`:
 
 ## `chromeSelector`
 
-Similar to the `--chromeSelector` CLI argument, this setting is a CSS selector to the part of the page you want screenshots of. This is useful if you have decorators that's not really part of the component itself. Note that it doesn't screenshot the DOM element itself but rather the crops the screenshot to those dimensions, so if you have any elements absolutely positioned above they will be included.
+This setting is a CSS selector to the part of the page you want screenshots of. This is useful if you have decorators that's not really part of the component itself. Note that it doesn't screenshot the DOM element itself but rather the crops the screenshot to those dimensions, so if you have any elements absolutely positioned above they will be included.
+
+## `diffingEngine`
+
+There are two currently available options to choose from when comparing images in loki: 
+
+### `gm`
+
+Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. This is default if available.
+
+### `looks-same`
+
+A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. 
+
+||`gm`|`looks-same`|
+|-|---|------------|
+|**Dependency**|[GraphicsMagick](http://www.graphicsmagick.org)|None| 
+|**Speed**|🏃Fast|🚶Slower| 
+|**Output**|![](gm-diff.png)|![](looks-same-diff.png)| 
 
 ## `skipStories`
 
-Similar to the `--skipStories` CLI argument, this setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out. 
+This setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out. 
 
 ## `storiesFilter`
 
