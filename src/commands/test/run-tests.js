@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path');
 const Listr = require('listr');
 const map = require('ramda/src/map');
 const groupBy = require('ramda/src/groupBy');
@@ -14,10 +15,18 @@ const {
 } = require('../../targets');
 const testStory = require('./test-story');
 
-async function placeGitignore(outputDir) {
-  const gitignorePath = `${outputDir}/.gitignore`;
+async function placeGitignore(pathsToIgnore) {
+  const parentDir = path.dirname(pathsToIgnore[0]);
+  const gitignorePath = `${parentDir}/.gitignore`;
   if (!await fs.pathExists(gitignorePath)) {
-    await fs.outputFile(gitignorePath, '*.png\n');
+    const relativeToParent = p => path.relative(parentDir, p);
+    const isDecendant = p => p.indexOf('..') !== 0;
+    const gitignore = pathsToIgnore
+      .map(relativeToParent)
+      .filter(isDecendant)
+      .concat(['']) // For last empty newline
+      .join('\n');
+    await fs.outputFile(gitignorePath, gitignore);
   }
 }
 
@@ -51,7 +60,7 @@ async function runTests(flatConfigurations, options) {
   } else {
     await fs.emptyDirSync(options.outputDir);
     await fs.emptyDirSync(options.differenceDir);
-    await placeGitignore(options.outputDir);
+    await placeGitignore([options.outputDir, options.differenceDir]);
   }
 
   const getTargetTasks = (
