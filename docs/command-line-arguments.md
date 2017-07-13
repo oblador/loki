@@ -37,6 +37,15 @@ Capture screenshots and update the reference files.
 
 Takes same arguments as `loki test`.
 
+## `loki approve`
+
+Prunes old and updates reference files with the images generated in the last run. 
+
+|Flag|Description|Default|
+|---|---|---|
+|**`--reference`**|Path to screenshot reference folder|`./loki/reference`|
+|**`--output`**|Path to screenshot output folder|`./loki/current`|
+
 ## `loki init`
 
 ```

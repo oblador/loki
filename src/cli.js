@@ -7,12 +7,15 @@ const { MissingDependencyError } = require('./errors');
 
 const getExecutorForCommand = command => {
   switch (command) {
+    case 'init': {
+      return require('./commands/init');
+    }
     case 'update':
     case 'test': {
       return require('./commands/test');
     }
-    case 'init': {
-      return require('./commands/init');
+    case 'approve': {
+      return require('./commands/approve');
     }
     default: {
       return die(`Invalid command ${command}`);
