@@ -1,6 +1,6 @@
 # Command line arguments
 
-If you run loki via `yarn`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly too. 
+If you run loki via `yarn` or `npm`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can also add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly. 
 
 ## `loki test`
 
@@ -19,7 +19,7 @@ yarn loki test -- --port 9009
 |**`--reference`**|Path to screenshot reference folder|`./screenshots/reference`|
 |**`--output`**|Path to screenshot output folder|`./screenshots/current`|
 |**`--difference`**|Path to image diff folder|`${outputFolder}/diff`|
-|**`--diffingEngine`**|What diffing engine to use, currently supported are `looks-same` and `gm`|`looks-same`|
+|**`--diffingEngine`**|What diffing engine to use, currently supported are `looks-same` and `gm`|`gm` if available|
 |**`--chromeConcurrency`**|How many stories to test in paralell when using chrome|`4`|
 |**`--chromeFlags`**|Custom chrome flags.|`--headless --disable-gpu --hide-scrollbars`|
 |**`--chromeLoadTimeout`**|How many miliseconds loki will wait for the page to load before taking as screnshot.|`60000`|

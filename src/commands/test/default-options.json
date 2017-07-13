@@ -4,7 +4,6 @@
   "chromeLoadTimeout": "60000",
   "chromeSelector": "#root > *",
   "chromeTolerance": "2.3",
-  "diffingEngine": "looks-same",
   "host": "localhost",
   "output": "./screenshots/current",
   "reference": "./screenshots/reference",

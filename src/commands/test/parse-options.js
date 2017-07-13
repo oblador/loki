@@ -1,6 +1,7 @@
 const path = require('path');
 const minimist = require('minimist');
 const defaults = require('./default-options');
+const { dependencyAvailable } = require('../../dependency-detection');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
@@ -22,7 +23,8 @@ function parseOptions(args, config) {
     chromeTolerance: parseFloat($('chromeTolerance'), 10),
     skipStoriesPattern: $('skipStories'),
     storiesFilter: $('storiesFilter'),
-    diffingEngine: $('diffingEngine'),
+    diffingEngine:
+      $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
     requireReference: $('requireReference'),
     updateReference: argv._[0] === 'update',
     targetFilter: argv.targetFilter,
