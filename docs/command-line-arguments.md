@@ -21,6 +21,7 @@ yarn loki test -- --port 9009
 |**`--difference`**|Path to image diff folder|`./loki/difference`|
 |**`--diffingEngine`**|What diffing engine to use, currently supported are `looks-same` and `gm`|`gm` if available|
 |**`--chromeConcurrency`**|How many stories to test in paralell when using chrome|`4`|
+|**`--chromeEnableAnimations`**|Enable CSS transitions and animations.|`false`|
 |**`--chromeFlags`**|Custom chrome flags.|`--headless --disable-gpu --hide-scrollbars`|
 |**`--chromeLoadTimeout`**|How many miliseconds loki will wait for the page to load before taking as screnshot.|`60000`|
 |**`--chromeSelector`**|CSS selector to the part of the DOM to screenshot. Useful you have decorators that should be excluded.|`#root > *`|

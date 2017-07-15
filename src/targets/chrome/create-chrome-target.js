@@ -19,10 +19,12 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     const client = await createNewDebuggerInstance();
     const deviceMetrics = getDeviceMetrics(options);
 
-    const { Runtime, Page, Emulation, DOM, Network } = client;
+    const { Runtime, Page, Emulation, DOM, CSS, Network } = client;
 
     await Runtime.enable();
     await Network.enable();
+    await DOM.enable();
+    await Page.enable();
     if (options.userAgent) {
       await Network.setUserAgentOverride({
         userAgent: options.userAgent,
@@ -31,15 +33,26 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     if (options.clearBrowserCookies) {
       await Network.clearBrowserCookies();
     }
-    await DOM.enable();
-    await Page.enable();
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
 
     client.loadUrl = async url => {
       debug(`Navigating to ${url}`);
-      await Page.navigate({ url });
+      const { frameId } = await Page.navigate({ url });
       debug('Awaiting load event');
       await Page.loadEventFired();
+      if (!options.chromeEnableAnimations) {
+        await CSS.enable();
+        const { styleSheetId } = await CSS.createStyleSheet({ frameId });
+        await CSS.setStyleSheetText({
+          styleSheetId,
+          text: `* {
+            -webkit-transition: none !important;
+            transition: none !important;
+            -webkit-animation: none !important;
+            animation: none !important;
+          }`,
+        });
+      }
     };
 
     const querySelector = async selector => {
@@ -75,7 +88,11 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
         debug('Got empty dimensions, capturing whole screen instead');
       } else {
         await Emulation.setVisibleSize({ width, height });
-        await Emulation.forceViewport({ x, y, scale });
+        try {
+          await Emulation.forceViewport({ x, y, scale });
+        } catch (err) {
+          debug('Failed setting viewport');
+        }
       }
 
       debug('Capturing screenshot');

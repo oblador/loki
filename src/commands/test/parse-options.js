@@ -5,7 +5,7 @@ const { dependencyAvailable } = require('../../dependency-detection');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: ['requireReference'],
+    boolean: ['requireReference', 'chromeEnableAnimations'],
   });
 
   const $ = key => argv[key] || config[key] || defaults[key];
@@ -17,6 +17,7 @@ function parseOptions(args, config) {
     reactUri: `http://${$('host')}:${argv.port || $('reactPort')}`,
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
     chromeConcurrency: parseInt($('chromeConcurrency'), 10),
+    chromeEnableAnimations: $('chromeEnableAnimations'),
     chromeFlags: $('chromeFlags').split(' '),
     chromeLoadTimeout: parseInt($('chromeLoadTimeout'), 10),
     chromeSelector: $('chromeSelector'),
