@@ -99,7 +99,7 @@ function createChromeDockerTarget({
 
     client.close = () => {
       debug('New closing tab');
-      CDP.Close({ port, id: target.id });
+      return CDP.Close({ port, id: target.id });
     };
 
     return client;
