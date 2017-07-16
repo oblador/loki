@@ -14,7 +14,10 @@ function approve(args) {
 
   const files = fs.readdirSync(outputDir).filter(isPNG);
   if (!files.length) {
-    die('No images found to approve', 'Run update command to generate reference files instead');
+    die(
+      'No images found to approve',
+      'Run update command to generate reference files instead'
+    );
   }
   fs.emptyDirSync(referenceDir);
   fs.ensureDirSync(referenceDir);
