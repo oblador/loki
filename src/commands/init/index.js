@@ -1,10 +1,13 @@
-/* eslint-disable global-require, import/no-dynamic-require */
-
 const fs = require('fs-extra');
 const path = require('path');
 const minimist = require('minimist');
 const { warn, die, info } = require('../../console');
 const getDefaults = require('../../config/get-defaults');
+const {
+  getProjectPackagePath,
+  getProjectPackage,
+  hasReactNativeDependency,
+} = require('../../config/project-package');
 
 const insertAfter = (
   content,
@@ -27,9 +30,8 @@ const insertAfter = (
 };
 
 function init(args) {
-  const pkgPath = path.resolve('./package.json');
-  const pkg = require(pkgPath);
-  const isReactNativeProject = !!pkg.dependencies['react-native'];
+  const pkg = getProjectPackage();
+  const isReactNativeProject = hasReactNativeDependency(pkg);
 
   const relative = to => path.relative('.', to);
 
@@ -63,7 +65,7 @@ function init(args) {
 
   info('Adding loki defaults to package.json');
   const modifiedPkg = Object.assign({}, pkg, { loki: getDefaults() });
-  fs.outputJsonSync(pkgPath, modifiedPkg, { spaces: 2 });
+  fs.outputJsonSync(getProjectPackagePath(), modifiedPkg, { spaces: 2 });
 
   if (isReactNativeProject) {
     const storybookjsPath = `${storybookPath}/storybook.js`;

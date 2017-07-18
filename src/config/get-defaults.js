@@ -1,7 +1,7 @@
 /* eslint-disable global-require, import/no-dynamic-require */
-const path = require('path');
 const map = require('ramda/src/map');
 const { dependencyAvailable } = require('../dependency-detection');
+const { isReactNativeProject } = require('./project-package');
 
 const mapChromeAppToDocker = map(config =>
   Object.assign({}, config, {
@@ -10,9 +10,7 @@ const mapChromeAppToDocker = map(config =>
 );
 
 function getDefaults() {
-  const pkg = require(path.resolve('./package.json'));
-  const isReactNativeProject = !!pkg.dependencies['react-native'];
-  if (isReactNativeProject) {
+  if (isReactNativeProject()) {
     return require('./defaults-react-native.json');
   }
   const defaults = require('./defaults-react.json');
