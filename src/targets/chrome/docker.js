@@ -1,5 +1,6 @@
 const debug = require('debug')('loki:chrome:docker');
 const os = require('os');
+const { execSync } = require('child_process');
 const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
@@ -44,12 +45,12 @@ function createChromeDockerTarget({
 }) {
   let port;
   let dockerId;
+  const dockerPath = 'docker';
 
   async function start() {
     port = await getRandomPort();
 
     ensureDependencyAvailable('docker');
-    const dockerPath = 'docker';
     const args = [
       'run',
       '--rm',
@@ -85,7 +86,7 @@ function createChromeDockerTarget({
   async function stop() {
     if (dockerId) {
       debug(`Killing chrome docker instance with id ${dockerId}`);
-      await execa('docker', ['stop', dockerId]);
+      await execa('docker', ['kill', dockerId]);
     } else {
       debug('No chrome docker instance to kill');
     }
@@ -115,6 +116,12 @@ function createChromeDockerTarget({
     }
     url = url.replace('localhost', ip);
   }
+
+  process.on('SIGINT', () => {
+    if (dockerId) {
+      execSync(`${dockerPath} kill ${dockerId}`);
+    }
+  });
 
   return createChromeTarget(start, stop, createNewDebuggerInstance, url);
 }
