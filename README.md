@@ -46,7 +46,7 @@ Loki will not start any servers for you, so ensure storybook and any simulator/e
     `yarn loki test`
 4.  Review changes in diff folder
 5.  Approve changes and update references
-    `yarn loki update`
+    `yarn loki approve`
 
 ## Documentation
 
