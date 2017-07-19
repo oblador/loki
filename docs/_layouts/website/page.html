@@ -1,0 +1,21 @@
+{% extends template.self %}
+
+{% block book_sidebar %}
+    <div class="book-logo">
+        {% if config.pluginsConfig["github"].url %}
+        <a href="{{ config.pluginsConfig["github"].url }}">
+        {% endif %}
+        {% if config.pluginsConfig["theme-gestalt"].logo %}
+        <img src="{{ config.pluginsConfig["theme-gestalt"].logo }}"/>
+        {% endif %}
+        {% if config.pluginsConfig["github"].url %}
+        </a>
+        {% endif %}
+    </div>
+    {% block search_input %}{% endblock %}
+    {% block book_summary %}
+        <nav role="navigation">
+        {% include "website/summary.html" %}
+        </nav>
+    {% endblock %}
+{% endblock %}
