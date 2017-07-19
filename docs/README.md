@@ -4,6 +4,8 @@
 
 <img src="https://user-images.githubusercontent.com/378279/28074070-f0052fac-6657-11e7-8a9d-398a12d2d6a8.png" width="672" height="494" class="center" alt="" />
 
+[![github](https://img.shields.io/npm/v/loki.svg?style=flat-square)](https://www.npmjs.com/package/loki) [![github](https://img.shields.io/github/stars/oblador/loki.svg?style=social&label=Star)](https://github.com/oblador/loki)
+
 ## Rationale
 
 There's a few visual regression tools for the web, but most either cannot be run headless or use phantomjs which is deprecated and a browser nobody is _actually_ using. They generally also require you to maintain fixtures and/or only support one platform. 
