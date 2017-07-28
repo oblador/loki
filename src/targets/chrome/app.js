@@ -26,14 +26,7 @@ function createChromeAppTarget({
   async function stop() {
     if (instance) {
       debug('Killing chrome');
-      // Do this woodoo to avoid some output that borks listr
-      setTimeout(async () => {
-        try {
-          await instance.kill();
-        } catch (err) {
-          debug('Failed killing chrome', err);
-        }
-      }, 100);
+      await instance.kill();
     } else {
       debug('No chrome instance to kill');
     }
