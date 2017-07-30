@@ -3,8 +3,8 @@
 
 function configureStorybook() {
   if (typeof window === 'object') {
-    const { getStorybook } = require('@storybook/react');
-    window.loki = { getStorybook };
+    const storybook = require('@storybook/react');
+    window.loki = { getStorybook: storybook.getStorybook };
   }
 }
 
