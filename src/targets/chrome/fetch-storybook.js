@@ -4,15 +4,34 @@ const fetchUrl = require('./fetch-url');
 const getBrowserGlobals = require('./get-browser-globals');
 const { ServerError } = require('../../errors');
 
-async function fetchStorybook(baseUrl = 'http://localhost:6006') {
+async function createStorybookSandbox(baseUrl) {
   debug(`Fetching iframe HTML and preview bundle JS from ${baseUrl}`);
-  let html;
-  let bundle;
+  const html = await fetchUrl(`${baseUrl}/iframe.html`);
+  const browser = getBrowserGlobals(html);
+  const scripts = browser.document.querySelectorAll('script[src]');
+  const previewSrc = Array.from(scripts)
+    .map(node => node.attributes.src.nodeValue)
+    .filter(src => src.match(/preview\.([a-f0-9]+\.)?bundle\.js/) !== -1)[0];
+
+  if (!previewSrc) {
+    throw new Error('Unable to locate preview bundle');
+  }
+
+  const bundle = await fetchUrl(`${baseUrl}/${previewSrc}`);
+
+  debug('Creating js sandbox');
+  const sandbox = vm.createContext(browser);
+
+  debug('Executing storybook preview bundle');
+  vm.runInNewContext(bundle, sandbox);
+
+  return sandbox;
+}
+
+async function fetchStorybook(baseUrl = 'http://localhost:6006') {
+  let sandbox;
   try {
-    [html, bundle] = await Promise.all([
-      fetchUrl(`${baseUrl}/iframe.html`),
-      fetchUrl(`${baseUrl}/static/preview.bundle.js`),
-    ]);
+    sandbox = await createStorybookSandbox(baseUrl);
   } catch (err) {
     if (err.message.indexOf('ECONNREFUSED')) {
       throw new ServerError(
@@ -22,12 +41,6 @@ async function fetchStorybook(baseUrl = 'http://localhost:6006') {
     }
     throw err;
   }
-
-  debug('Applying browser polyfills');
-  const sandbox = vm.createContext(getBrowserGlobals(html));
-
-  debug('Executing storybook preview bundle');
-  vm.runInNewContext(bundle, sandbox);
 
   const getStorybook = sandbox.window.loki && sandbox.window.loki.getStorybook;
   if (!getStorybook) {
