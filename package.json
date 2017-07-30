@@ -17,7 +17,7 @@
   "scripts": {
     "serve-docs": "gitbook serve",
     "publish-docs": "./bin/publish-docs",
-    "format": "prettier --single-quote --trailing-comma es5 --write {,src/{,*/,*/*/}}*.js",
+    "format": "npm run lint -- --fix",
     "lint": "eslint *.js src"
   },
   "engines": {
@@ -68,9 +68,14 @@
     "ws": "^3.0.0"
   },
   "devDependencies": {
-    "eslint": "^4.1.1",
-    "eslint-config-airbnb-base": "^11.2.0",
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.3.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-import": "^2.7.0",
-    "prettier": "^1.5.2"
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-prettier": "^2.1.2",
+    "eslint-plugin-react": "^7.1.0",
+    "prettier": "^1.5.3"
   }
 }

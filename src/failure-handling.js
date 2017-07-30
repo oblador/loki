@@ -30,19 +30,19 @@ const withTimeout = (timeout, operationName) => fnOrPromise => {
 
 const withRetries = (maxRetries = 3) => fn => async (...args) => {
   let tries = 0;
-  while (true) {
+  let lastError;
+  while (tries <= maxRetries) {
     tries++;
     try {
       const result = await fn(...args);
       return result;
     } catch (err) {
-      if (tries > maxRetries) {
-        const error = new Error(`Failed with "${err}" after ${tries} tries`);
-        error.originalError = err;
-        throw error;
-      }
+      lastError = err;
     }
   }
+  const error = new Error(`Failed with "${lastError}" after ${tries} tries`);
+  error.originalError = lastError;
+  throw error;
 };
 
 module.exports = { withTimeout, withRetries, TimeoutError };

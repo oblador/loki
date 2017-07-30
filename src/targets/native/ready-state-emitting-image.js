@@ -13,7 +13,7 @@ class ReadyStateEmittingImage extends React.Component {
     let resolver = null;
     if (props.source) {
       registerImageLoading(
-        new Promise((resolve, reject) => {
+        new Promise(resolve => {
           resolver = resolve;
         })
       );

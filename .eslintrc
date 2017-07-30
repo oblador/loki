@@ -1,7 +1,18 @@
 {
-  "extends": "airbnb-base",
+  "extends": [
+    "airbnb",
+    "prettier",
+    "prettier/react"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "parser": "babel-eslint",
   "rules": {
     "import/extensions": [2, { "js": "never", "json": "always" }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/no-extraneous-dependencies": [0],
+    "import/no-unresolved": [2, { ignore: ['^react(-native)?$'] }],
     "arrow-parens": ["error", "as-needed"],
     "no-plusplus": [0],
     "no-await-in-loop": [0],
@@ -11,6 +22,10 @@
       "imports": "always-multiline",
       "exports": "always-multiline",
       "functions": "ignore",
+    }],
+    "prettier/prettier": ["error", {
+      "trailingComma": "es5",
+      "singleQuote": true
     }]
   }
 }
