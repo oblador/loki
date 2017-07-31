@@ -23,3 +23,9 @@ There's a few visual regression tools for the web, but most either cannot be run
 * Local Chrome application
 * iOS simulator
 * Android emulator
+
+## Supported frameworks
+
+* React
+* React Native
+* Vue

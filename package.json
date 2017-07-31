@@ -12,7 +12,8 @@
     "src",
     "bin",
     "configure-react.js",
-    "configure-react-native.js"
+    "configure-react-native.js",
+    "configure-vue.js"
   ],
   "scripts": {
     "serve-docs": "gitbook serve",
