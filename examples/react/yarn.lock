@@ -5046,9 +5046,9 @@ log-update@^1.0.2:
     ansi-escapes "^1.0.0"
     cli-cursor "^1.0.2"
 
-loki@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/loki/-/loki-0.5.2.tgz#3378ce4d537d89dce23d93e71887f5e1814721e8"
+loki@*:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/loki/-/loki-0.5.3.tgz#f8a0d805bc516e592de470d35ce41e50af6b0f1a"
   dependencies:
     chalk "^2.0.1"
     chrome-remote-interface "^0.23.3"

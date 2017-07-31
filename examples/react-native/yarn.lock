@@ -4217,7 +4217,7 @@ log-update@^1.0.2:
     ansi-escapes "^1.0.0"
     cli-cursor "^1.0.2"
 
-loki@^0.5.3:
+loki@*:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/loki/-/loki-0.5.3.tgz#f8a0d805bc516e592de470d35ce41e50af6b0f1a"
   dependencies:

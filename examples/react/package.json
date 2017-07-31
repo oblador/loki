@@ -13,12 +13,13 @@
     "test": "loki",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save && rm $LOKI_FILE"
   },
   "devDependencies": {
     "@storybook/cli": "^3.1.6",
     "@storybook/react": "^3.1.7",
-    "loki": "^0.5.3"
+    "loki": "*"
   },
   "loki": {
     "configurations": {

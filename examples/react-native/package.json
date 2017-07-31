@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "storybook": "storybook start -p 7007"
+    "storybook": "storybook start -p 7007",
+    "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save && rm $LOKI_FILE"
   },
   "dependencies": {
     "react": "16.0.0-alpha.12",
@@ -16,7 +17,7 @@
     "babel-jest": "20.0.3",
     "babel-preset-react-native": "2.1.0",
     "jest": "20.0.4",
-    "loki": "^0.5.3",
+    "loki": "*",
     "react-dom": "16.0.0-alpha.12",
     "react-test-renderer": "16.0.0-alpha.12"
   },
