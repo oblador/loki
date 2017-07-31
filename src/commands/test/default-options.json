@@ -5,9 +5,9 @@
   "chromeSelector": "#root > *",
   "chromeTolerance": "2.3",
   "host": "localhost",
-  "output": "./loki/current",
-  "difference": "./loki/difference",
-  "reference": "./loki/reference",
+  "output": "./.loki/current",
+  "difference": "./.loki/difference",
+  "reference": "./.loki/reference",
   "reactPort": "6006",
   "reactNativePort": "7007"
 }
