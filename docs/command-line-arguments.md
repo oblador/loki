@@ -14,6 +14,7 @@ yarn loki test -- --port 9009
 |---|---|---|
 |**`--host`**|Storybook host|`localhost`|
 |**`--port`**|Storybook port|*None*|
+|**`--reactUri`**|URI to base of React Storybook. For static build use `file:./storybook-static`.|*None*|
 |**`--reactPort`**|React Storybook port|`6006`|
 |**`--reactNativePort`**|React Native Storybook port|`7007`|
 |**`--reference`**|Path to screenshot reference folder|`./.loki/reference`|

@@ -4,7 +4,13 @@ const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
 const { withTimeout, TimeoutError } = require('../../failure-handling');
 
-function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
+function createChromeTarget(
+  start,
+  stop,
+  createNewDebuggerInstance,
+  baseUrl,
+  storybookUrl
+) {
   function getDeviceMetrics(options) {
     return {
       width: options.width,
@@ -111,7 +117,7 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     )}&selectedStory=${encodeURIComponent(story)}`;
 
   async function getStorybook() {
-    return fetchStorybook(baseUrl);
+    return fetchStorybook(storybookUrl || baseUrl);
   }
 
   async function captureScreenshotForStory(

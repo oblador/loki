@@ -14,7 +14,8 @@ function parseOptions(args, config) {
     outputDir: path.resolve($('output')),
     referenceDir: path.resolve($('reference')),
     differenceDir: path.resolve($('difference')),
-    reactUri: `http://${$('host')}:${argv.port || $('reactPort')}`,
+    reactUri:
+      $('reactUri') || `http://${$('host')}:${argv.port || $('reactPort')}`,
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
     chromeConcurrency: parseInt($('chromeConcurrency'), 10),
     chromeEnableAnimations: $('chromeEnableAnimations'),

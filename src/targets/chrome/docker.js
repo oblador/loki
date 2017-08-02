@@ -1,5 +1,6 @@
 const debug = require('debug')('loki:chrome:docker');
 const os = require('os');
+const path = require('path');
 const { execSync } = require('child_process');
 const execa = require('execa');
 const waitOn = require('wait-on');
@@ -45,28 +46,50 @@ function createChromeDockerTarget({
 }) {
   let port;
   let dockerId;
+  let dockerUrl = baseUrl;
+  const storybookUrl = baseUrl;
   const dockerPath = 'docker';
+  const runArgs = [
+    'run',
+    '--rm',
+    '-d',
+    '--security-opt',
+    `seccomp=${__dirname}/docker-seccomp.json`,
+    '-P',
+  ];
+
+  if (baseUrl.indexOf('http://localhost') === 0) {
+    const ip = getLocalIPAddress();
+    if (!ip) {
+      throw new Error(
+        'Unable to detect local IP address, try passing --host argument'
+      );
+    }
+    dockerUrl = baseUrl.replace('localhost', ip);
+  } else if (baseUrl.indexOf('file:') === 0) {
+    const staticPath = path.resolve(baseUrl.substr('file:'.length));
+    const staticMountPath = '/var/loki';
+    runArgs.push('-v');
+    runArgs.push(`${staticPath}:${staticMountPath}`);
+    dockerUrl = `file://${staticMountPath}`;
+  }
 
   async function start() {
     port = await getRandomPort();
 
     ensureDependencyAvailable('docker');
-    const args = [
-      'run',
-      '--rm',
-      '-d',
-      '--security-opt',
-      `seccomp=${__dirname}/docker-seccomp.json`,
-      '-P',
-      '-p',
-      `${port}:${port}`,
-      'armbues/chrome-headless',
-      '--disable-datasaver-prompt',
-      '--no-first-run',
-      '--disable-extensions',
-      '--remote-debugging-address=0.0.0.0',
-      `--remote-debugging-port=${port}`,
-    ].concat(chromeFlags);
+    const args = runArgs
+      .concat([
+        '-p',
+        `${port}:${port}`,
+        'armbues/chrome-headless',
+        '--disable-datasaver-prompt',
+        '--no-first-run',
+        '--disable-extensions',
+        '--remote-debugging-address=0.0.0.0',
+        `--remote-debugging-port=${port}`,
+      ])
+      .concat(chromeFlags);
 
     debug(
       `Launching chrome in docker with command "${dockerPath} ${args.join(
@@ -106,24 +129,19 @@ function createChromeDockerTarget({
     return client;
   }
 
-  let url = baseUrl;
-  if (url.indexOf('http://localhost') === 0) {
-    const ip = getLocalIPAddress();
-    if (!ip) {
-      throw new Error(
-        'Unable to detect local IP address, try passing --host argument'
-      );
-    }
-    url = url.replace('localhost', ip);
-  }
-
   process.on('SIGINT', () => {
     if (dockerId) {
       execSync(`${dockerPath} kill ${dockerId}`);
     }
   });
 
-  return createChromeTarget(start, stop, createNewDebuggerInstance, url);
+  return createChromeTarget(
+    start,
+    stop,
+    createNewDebuggerInstance,
+    dockerUrl,
+    storybookUrl
+  );
 }
 
 module.exports = createChromeDockerTarget;
