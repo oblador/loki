@@ -33,7 +33,7 @@ async function fetchStorybook(baseUrl = 'http://localhost:6006') {
   try {
     sandbox = await createStorybookSandbox(baseUrl);
   } catch (err) {
-    if (err.message.indexOf('ECONNREFUSED')) {
+    if (err.message && err.message.indexOf('ECONNREFUSED') !== -1) {
       throw new ServerError(
         'Failed fetching stories because the server is down',
         `Try starting it with "yarn storybook" or pass the --port or --host arguments if it's not running at ${baseUrl}`
