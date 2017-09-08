@@ -51,9 +51,9 @@ Loki will not start any servers for you, so ensure storybook and any simulator/e
 ## Documentation
 
 * [Introduction](https://loki.js.org/)
-* [Getting started](https://loki.js.org/getting-started.md)
-* [Configuration](https://loki.js.org/configuration.md)
-* [Command line arguments](https://loki.js.org/command-line-arguments.md)
+* [Getting started](https://loki.js.org/getting-started.html)
+* [Configuration](https://loki.js.org/configuration.html)
+* [Command line arguments](https://loki.js.org/command-line-arguments.html)
 
 ## Examples
 
