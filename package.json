@@ -1,6 +1,6 @@
 {
   "name": "loki",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Visual Regression Testing for react-storybook",
   "main": "index.js",
   "bin": {
