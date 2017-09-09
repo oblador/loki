@@ -66,6 +66,7 @@
     "osnap": "^1.1.0",
     "ramda": "^0.24.1",
     "shelljs": "^0.7.8",
+    "transliteration": "^1.6.2",
     "wait-on": "^2.0.2",
     "ws": "^3.0.0"
   },

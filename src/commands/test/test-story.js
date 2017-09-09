@@ -2,9 +2,15 @@ const fs = require('fs-extra');
 const path = require('path');
 const { ReferenceImageError } = require('../../errors');
 const { getImageDiffer } = require('../../diffing');
+const { slugify } = require('transliteration');
+
+const SLUGIFY_OPTIONS = {
+  lowercase: false,
+  separator: '_',
+};
 
 const getBaseName = (configurationName, kind, story) =>
-  `${configurationName} ${kind} ${story}`.replace(/[^a-zA-Z0-9.-]/g, '_');
+  slugify(`${configurationName} ${kind} ${story}`, SLUGIFY_OPTIONS);
 
 async function testStory(
   target,
