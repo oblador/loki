@@ -29,20 +29,20 @@ function getBrowserGlobals(html) {
 
   const matchMedia = () => ({ matches: true });
 
-  window.EventSource = EventSource;
-
   const globals = Object.assign({}, window, {
     navigator,
     localStorage,
     matchMedia,
     EventSource,
-    setInterval: noop,
+    requestAnimationFrame: noop,
+    requestIdleCallback: noop,
     console: {
       log: noop,
       warn: noop,
       error: noop,
     },
   });
+  globals.window = globals;
   globals.global = globals;
 
   return globals;
