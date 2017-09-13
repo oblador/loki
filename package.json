@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "serve-docs": "gitbook serve",
+    "build-docs": "(gitbook install || (npm rebuild node-sass && gitbook install)) && gitbook build",
     "publish-docs": "./bin/publish-docs",
     "format": "npm run lint -- --fix",
     "lint": "eslint *.js src",
@@ -57,6 +58,11 @@
     "debug": "^2.6.8",
     "execa": "^0.7.0",
     "fs-extra": "^3.0.1",
+    "gitbook-plugin-anchorjs": "^1.1.1",
+    "gitbook-plugin-edit-link": "^2.0.2",
+    "gitbook-plugin-github": "^2.0.0",
+    "gitbook-plugin-prism": "^2.3.0",
+    "gitbook-plugin-theme-gestalt": "^1.0.2",
     "gm": "^1.23.0",
     "jsdom": "^11.1.0",
     "lighthouse": "^2.2.1",
@@ -81,6 +87,7 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-prettier": "^2.1.2",
     "eslint-plugin-react": "^7.1.0",
+    "gitbook-cli": "^2.3.2",
     "jest": "^20.0.4",
     "prettier": "^1.5.3"
   },
