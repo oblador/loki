@@ -17,7 +17,7 @@ Example `package.json`:
         "height": 768
       },
       "chrome.iphone7": {
-        "skip-stories": "loading|MyFailingComponent",
+        "skipStories": "loading|MyFailingComponent",
         "target": "chrome.app",
         "preset": "iPhone 7"
       },
