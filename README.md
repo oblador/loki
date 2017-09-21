@@ -6,7 +6,7 @@
 
 ## Rationale
 
-There's a few visual regression tools for the web, but most either cannot be run headless or use phantomjs which is deprecated and a browser nobody is _actually_ using. They usually also require you to maintain fixtures. With react-native it's now possible to target multiple platforms with a single code base, but there's no single tool to test all to my knowledge. 
+There are a few visual regression tools for the web, but most either cannot be run headless or use phantomjs which is deprecated and a browser nobody is _actually_ using. They usually also require you to maintain fixtures. With react-native it's now possible to target multiple platforms with a single code base, but there's no single tool to test all to my knowledge. 
 
 Loki aims to have easy setup, no to low maintenance cost, reproducible tests independent of which OS they are run on, runnable on CI and support all platforms storybook does.
 
