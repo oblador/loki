@@ -11,6 +11,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "loki",
+    "pretest-ci": "npm run update-loki",
+    "test-ci": "build-storybook && loki --reactUri file:./storybook-static",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",

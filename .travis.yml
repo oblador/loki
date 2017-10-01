@@ -1,9 +1,15 @@
+sudo: required
 language: node_js
 node_js:
 - '8'
+services:
+- docker
+before_install:
+- cd examples/react && yarn && cd ../..
 script:
 - npm run lint
 - npm run test
+- cd examples/react && npm run test-ci && cd ../..
 before_deploy: "npm run build-docs"
 deploy:
 - provider: npm
