@@ -8,4 +8,5 @@
   * [loki update](command-line-arguments.md#loki-update)
   * [loki approve](command-line-arguments.md#loki-approve)
   * [loki init](command-line-arguments.md#loki-init)
+* [Continuous integration](continuous-integration.md)
 
