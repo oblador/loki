@@ -1,17 +1,23 @@
+general:
+  build_dir: examples/react-native
+
 machine:
-  node:
-    version: 8.0.0
+  xcode:
+    version: 9.0
+  #pre:
+  #  - xcrun simctl shutdown booted && (killall Simulator || true) && xcrun simctl boot 41CBD1F0-2818-49DC-8480-44912A1FD8D8 && open `xcode-select -p`/Applications/Simulator.app
+  #post:
+  #  - 'cd loki/examples/react-native && npm install && npm run storybook &':
+  #    background: true
 
 dependencies:
   pre:
-    - which yarn || brew install yarn
-
-  override:
-    - yarn
-
-  cache_directories:
-    - node_modules
+  #  - brew install node@8
+    - node --version && npm --version
+  #  - which node || brew install node
+  post:
+    - npm run update-loki
 
 test:
   override:
-    - yarn test
+    - npm run test-ci
