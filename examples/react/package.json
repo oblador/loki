@@ -12,7 +12,7 @@
     "build": "react-scripts build",
     "test": "loki",
     "pretest-ci": "npm run update-loki",
-    "test-ci": "build-storybook && loki --reactUri file:./storybook-static",
+    "test-ci": "build-storybook && loki --requireReference --reactUri file:./storybook-static",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
@@ -24,6 +24,7 @@
     "loki": "*"
   },
   "loki": {
+    "diffingEngine": "looks-same",
     "configurations": {
       "chrome.laptop": {
         "target": "chrome.docker",
