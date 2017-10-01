@@ -49,14 +49,10 @@ function createChromeDockerTarget({
   let dockerUrl = baseUrl;
   const storybookUrl = baseUrl;
   const dockerPath = 'docker';
-  const runArgs = [
-    'run',
-    '--rm',
-    '-d',
-    '--security-opt',
-    `seccomp=${__dirname}/docker-seccomp.json`,
-    '-P',
-  ];
+  const runArgs = ['run', '--rm', '-d', '-P'];
+  if (os.platform() === 'darwin') {
+    runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
+  }
 
   if (baseUrl.indexOf('http://localhost') === 0) {
     const ip = getLocalIPAddress();
