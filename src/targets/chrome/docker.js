@@ -79,7 +79,7 @@ function createChromeDockerTarget({
       .concat([
         '-p',
         `${port}:${port}`,
-        'armbues/chrome-headless',
+        'yukinying/chrome-headless-browser:63.0.3223.8',
         '--disable-datasaver-prompt',
         '--no-first-run',
         '--disable-extensions',
