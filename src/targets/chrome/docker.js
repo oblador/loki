@@ -50,7 +50,8 @@ function createChromeDockerTarget({
   const storybookUrl = baseUrl;
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
-  if (os.platform() === 'darwin') {
+
+  if (!process.env.CI) {
     runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
   }
 
