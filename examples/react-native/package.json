@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "loki",
-    "pretest-ci": "npm run storybook & && node node_modules/react-native/local-cli/cli.js run-ios",
+    "pretest-ci": "sh -c 'npm run storybook &' && node node_modules/react-native/local-cli/cli.js run-ios",
     "test-ci": "loki test ios",
     "storybook": "storybook start -p 7007",
     "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save && rm $LOKI_FILE"
