@@ -14,6 +14,7 @@ dependencies:
   pre:
   #  - brew install node@8
     - node --version && npm --version
+    - which watchman || brew install watchman
   #  - which node || brew install node
   post:
     - npm run update-loki
