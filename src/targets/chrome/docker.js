@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
-const { getRandomPort } = require('lighthouse/chrome-launcher/random-port');
+const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const createChromeTarget = require('./create-chrome-target');
 
