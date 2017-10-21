@@ -10,6 +10,7 @@ import { linkTo } from '@storybook/addon-links';
 import Button from './Button';
 import CenterView from './CenterView';
 import Welcome from './Welcome';
+import ErrorThrowingComponent from './ErrorThrowingComponent';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -25,3 +26,10 @@ storiesOf('Button', module)
       <Text>😀 😎 👍 💯</Text>
     </Button>
   );
+
+storiesOf('Error Handling', module)
+  .add('with ErrorThrowingComponent', () => <ErrorThrowingComponent />)
+  .add('with console.warn', () => {
+    console.warn('This warning should not show up in the screenshot');
+    return <Text>This story emits a console.warn</Text>;
+  });
