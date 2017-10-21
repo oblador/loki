@@ -1,13 +1,15 @@
 const debug = require('debug')('loki:websocket');
 const WebSocket = require('ws');
 const createMessageQueue = require('./create-message-queue');
+const { NativeError } = require('../../errors');
 const { withTimeout, withRetries } = require('../../failure-handling');
 
 const MESSAGE_PREFIX = 'loki:';
+const NATIVE_ERROR_TYPE = `${MESSAGE_PREFIX}error`;
 
 function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
   let socket;
-  const messageQueue = createMessageQueue();
+  const messageQueue = createMessageQueue(NATIVE_ERROR_TYPE);
 
   const send = (type, ...args) => {
     debug(`Sending message ${type} with args ${JSON.stringify(args, null, 2)}`);
@@ -112,11 +114,26 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
     return stories;
   }
 
+  let lastStoryCrashed = false;
   async function captureScreenshotForStory(kind, story, outputPath) {
+    if (lastStoryCrashed) {
+      // Try to recover from previous crash. App should automatically restart after 1000 ms
+      await messageQueue.waitFor('setStories');
+      await prepare();
+      lastStoryCrashed = false;
+    }
     debug('captureScreenshotForStory', kind, story);
     send('setCurrentStory', { kind, story });
-    const data = await waitForLokiMessage('imagesLoaded', 30000);
-    debug('imagesLoaded', data);
+    try {
+      const data = await waitForLokiMessage('imagesLoaded', 30000);
+      debug('imagesLoaded', data);
+    } catch (error) {
+      if (error instanceof NativeError) {
+        lastStoryCrashed = true;
+      }
+      throw error;
+    }
+
     await withTimeout(10000)(saveScreenshotToFile(outputPath));
   }
 
