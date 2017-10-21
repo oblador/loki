@@ -1,4 +1,6 @@
-const createMessageQueue = () => {
+const { NativeError } = require('../../errors');
+
+const createMessageQueue = nativeErrorType => {
   const queue = [];
 
   const waitFor = (type, condition) =>
@@ -7,10 +9,19 @@ const createMessageQueue = () => {
     });
 
   const receiveMessage = (type, args) => {
+    const isError = type === nativeErrorType;
     for (let i = 0; i < queue.length; i++) {
       const item = queue[i];
-      if (item.type === type && (!item.condition || item.condition(...args))) {
-        item.resolve(args[0]);
+      if (
+        (isError || item.type === type) &&
+        (!item.condition || item.condition(...args))
+      ) {
+        if (isError) {
+          const error = args[0].error;
+          item.reject(new NativeError(error.message, error.stack));
+        } else {
+          item.resolve(args[0]);
+        }
         queue.splice(i, 1);
         break;
       }
