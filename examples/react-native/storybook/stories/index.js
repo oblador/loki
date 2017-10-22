@@ -10,6 +10,7 @@ import { linkTo } from '@storybook/addon-links';
 import Button from './Button';
 import CenterView from './CenterView';
 import Welcome from './Welcome';
+import Logo from './Logo';
 import ErrorThrowingComponent from './ErrorThrowingComponent';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
@@ -26,6 +27,10 @@ storiesOf('Button', module)
       <Text>😀 😎 👍 💯</Text>
     </Button>
   );
+
+storiesOf('Logo', module)
+  .add('without delay', () => <Logo />)
+  .add('with 15s delay', () => <Logo delay={15000} />);
 
 storiesOf('Error Handling', module)
   .add('with ErrorThrowingComponent', () => <ErrorThrowingComponent />)
