@@ -1,7 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies, import/no-unresolved, import/extensions */
 
-import React, { PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View, Text } from 'react-native';
 
 export default class Welcome extends React.Component {
   styles = {
