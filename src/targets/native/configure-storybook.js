@@ -1,14 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies, import/no-unresolved, global-require */
 
-// eslint-disable-next-line no-underscore-dangle
-global.__fbDisableExceptionsManager = true;
-
 const addons = require('@storybook/addons').default;
 const ReactNative = require('react-native');
 
 const DevSettings = ReactNative.NativeModules.DevSettings;
 const ExceptionsManager = require('react-native/Libraries/Core/ExceptionsManager');
-const ErrorUtils = require('react-native/Libraries/Core/ErrorUtils');
 const {
   resetLoadingImages,
   awaitImagesLoaded,
@@ -18,10 +14,15 @@ const MESSAGE_PREFIX = 'loki:';
 
 let customErrorHandler;
 
-function genericErrorHandler(e, isFatal) {
-  if (customErrorHandler) {
-    customErrorHandler(e, isFatal);
-  } else {
+function injectLokiGlobalErrorHandler() {
+  if (!global.ErrorUtils) {
+    return;
+  }
+
+  function genericErrorHandler(e, isFatal) {
+    if (customErrorHandler) {
+      customErrorHandler(e, isFatal);
+    }
     try {
       ExceptionsManager.handleException(e, isFatal);
     } catch (ee) {
@@ -30,23 +31,24 @@ function genericErrorHandler(e, isFatal) {
       throw e;
     }
   }
+
+  global.ErrorUtils.setGlobalHandler(genericErrorHandler);
 }
 
-ErrorUtils.setGlobalHandler(genericErrorHandler);
-
 async function getPrettyError(error) {
+  const message = String(error.message).split('\n')[0];
   if (ReactNative.NativeModules.ExceptionsManager) {
     const parseErrorStack = require('react-native/Libraries/Core/Devtools/parseErrorStack');
     const symbolicateStackTrace = require('react-native/Libraries/Core/Devtools/symbolicateStackTrace');
     const stack = parseErrorStack(error);
     const prettyStack = await symbolicateStackTrace(stack);
     return {
-      message: error.message,
+      message,
       stack: prettyStack,
     };
   }
   return {
-    message: error.message,
+    message,
   };
 }
 
@@ -73,6 +75,8 @@ function getAddonsChannel() {
 }
 
 async function configureStorybook() {
+  injectLokiGlobalErrorHandler();
+
   // Monkey patch `Image`
   Object.defineProperty(ReactNative, 'Image', {
     configurable: true,
