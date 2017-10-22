@@ -17,8 +17,8 @@ const createMessageQueue = nativeErrorType => {
         (!item.condition || item.condition(...args))
       ) {
         if (isError) {
-          const error = args[0].error;
-          item.reject(new NativeError(error.message, error.stack));
+          const { error, isFatal } = args[0];
+          item.reject(new NativeError(error.message, error.stack, isFatal));
         } else {
           item.resolve(args[0]);
         }

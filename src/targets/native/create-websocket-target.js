@@ -129,7 +129,7 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
       debug('imagesLoaded', data);
     } catch (error) {
       if (error instanceof NativeError) {
-        lastStoryCrashed = true;
+        lastStoryCrashed = error.isFatal;
       }
       throw error;
     }

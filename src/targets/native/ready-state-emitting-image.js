@@ -10,28 +10,42 @@ class ReadyStateEmittingImage extends React.Component {
   constructor(props) {
     super(props);
 
-    let resolver = null;
     if (props.source) {
       registerImageLoading(
         new Promise(resolve => {
-          resolver = resolve;
-        })
+          this.resolve = resolve;
+        }),
+        props.source
       );
     }
-
-    this.handleLoadEnd = e => {
-      if (resolver) {
-        resolver();
-        resolver = null;
-      }
-      if (this.props.onLoadEnd) {
-        this.props.onLoadEnd(e);
-      }
-    };
   }
 
+  setNativeProps = (...args) => {
+    this.ref.setNativeProps(...args);
+  };
+
+  handleRef = ref => {
+    this.ref = ref;
+  };
+
+  handleLoadEnd = e => {
+    if (this.resolve) {
+      this.resolve();
+      this.resolve = null;
+    }
+    if (this.props.onLoadEnd) {
+      this.props.onLoadEnd(e);
+    }
+  };
+
   render() {
-    return <Image {...this.props} onLoadEnd={this.handleLoadEnd} />;
+    return (
+      <Image
+        {...this.props}
+        ref={this.handleRef}
+        onLoadEnd={this.handleLoadEnd}
+      />
+    );
   }
 }
 

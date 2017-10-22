@@ -36,11 +36,12 @@ function formatStackTraceLine({ file, methodName, lineNumber, column }) {
   )}:${lineNumber}:${column})`;
 }
 
-function NativeError(message, stack) {
+function NativeError(message, stack, isFatal = true) {
   this.name = this.constructor.name;
   this.message = message;
   this.rawStack = stack;
   this.stack = stack && stack.map(formatStackTraceLine).join('\n');
+  this.isFatal = isFatal;
 }
 
 util.inherits(ReferenceImageError, Error);

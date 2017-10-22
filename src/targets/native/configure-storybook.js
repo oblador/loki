@@ -117,6 +117,7 @@ async function configureStorybook() {
       if (isFatal) {
         emit('error', {
           error: await getPrettyError(error),
+          isFatal,
         });
         restore();
         setTimeout(() => {
@@ -140,10 +141,18 @@ async function configureStorybook() {
     emit('didRestore');
   });
 
-  channel.on('setCurrentStory', () => {
-    awaitImagesLoaded().finally(count => {
+  channel.on('setCurrentStory', async () => {
+    try {
+      const count = await awaitImagesLoaded();
       emit('imagesLoaded', { count });
-    });
+    } catch (error) {
+      emit('error', {
+        error: {
+          message: error.message,
+        },
+        isFatal: false,
+      });
+    }
     resetLoadingImages();
   });
 }
