@@ -18,7 +18,7 @@ function getImageDiff(path1, path2, diffPath, tolerance) {
       return reject(new Error('Current image is empty'));
     }
 
-    return looksSame(reference, current, (err, isSame) => {
+    return looksSame(reference, current, { tolerance }, (err, isSame) => {
       if (err) {
         reject(err);
       } else if (isSame) {
