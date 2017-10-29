@@ -2,15 +2,16 @@
 
 const addons = require('@storybook/addons').default;
 const ReactNative = require('react-native');
-
-const DevSettings = ReactNative.NativeModules.DevSettings;
 const ExceptionsManager = require('react-native/Libraries/Core/ExceptionsManager');
 const {
   resetLoadingImages,
   awaitImagesLoaded,
 } = require('./ready-state-manager');
 
+const DevSettings = ReactNative.NativeModules.DevSettings;
+
 const MESSAGE_PREFIX = 'loki:';
+const hasDevSettings = !!DevSettings && !!DevSettings.reload;
 
 let customErrorHandler;
 
@@ -118,14 +119,19 @@ async function configureStorybook() {
         emit('error', {
           error: await getPrettyError(error),
           isFatal,
+          canHeal: hasDevSettings,
         });
         restore();
-        setTimeout(() => {
-          DevSettings.reload();
-        }, 1000);
+        if (hasDevSettings) {
+          setTimeout(() => {
+            DevSettings.reload();
+          }, 1000);
+        }
       }
     };
-    DevSettings.setHotLoadingEnabled(false);
+    if (hasDevSettings) {
+      DevSettings.setHotLoadingEnabled(false);
+    }
     ReactNative.StatusBar.setHidden(true, 'none');
     // eslint-disable-next-line no-console
     console.disableYellowBox = true;
