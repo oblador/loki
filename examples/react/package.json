@@ -5,6 +5,7 @@
   "dependencies": {
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-motion": "^0.5.2",
     "react-scripts": "1.0.10"
   },
   "scripts": {
