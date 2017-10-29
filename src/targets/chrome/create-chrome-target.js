@@ -41,11 +41,44 @@ function createChromeTarget(
     }
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
 
+    const awaitRequestsFinished = async () => {
+      const requestURLMap = {};
+      const failedURLs = [];
+
+      const requestFailed = requestId => {
+        failedURLs.push(requestURLMap[requestId]);
+      };
+
+      Network.requestWillBeSent(({ requestId, request }) => {
+        requestURLMap[requestId] = request.url;
+      });
+
+      Network.responseReceived(({ requestId, response }) => {
+        if (response.status >= 400) {
+          requestFailed(requestId);
+        }
+      });
+
+      Network.loadingFailed(({ requestId }) => {
+        requestFailed(requestId);
+      });
+
+      await Page.loadEventFired();
+
+      if (failedURLs.length !== 0) {
+        const noun = failedURLs.length === 1 ? 'request' : 'requests';
+        const errorMessage = `${failedURLs.length} ${noun} failed to load; ${failedURLs.join(
+          ', '
+        )}`;
+        throw new Error(errorMessage);
+      }
+    };
+
     client.loadUrl = async url => {
       debug(`Navigating to ${url}`);
       const { frameId } = await Page.navigate({ url });
-      debug('Awaiting load event');
-      await Page.loadEventFired();
+      debug('Awaiting requests loaded');
+      await awaitRequestsFinished();
       if (!options.chromeEnableAnimations) {
         await CSS.enable();
         const { styleSheetId } = await CSS.createStyleSheet({ frameId });
