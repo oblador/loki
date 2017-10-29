@@ -43,6 +43,7 @@ class ReadyStateEmittingImage extends React.Component {
       <Image
         {...this.props}
         ref={this.handleRef}
+        fadeDuration={0}
         onLoadEnd={this.handleLoadEnd}
       />
     );
