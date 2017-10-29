@@ -158,6 +158,7 @@ async function runTests(flatConfigurations, options) {
           'Chrome (docker)',
           createChromeDockerTarget({
             baseUrl: options.reactUri,
+            chromeDockerImage: options.chromeDockerImage,
             chromeFlags: options.chromeFlags,
           }),
           configurations,
