@@ -8,6 +8,7 @@
 * [GraphicsMagick](http://www.graphicsmagick.org) for gm diffing engine, `brew install graphicsmagick`
 * [Docker](https://www.docker.com/community-edition#/download) for the `chrome.docker` target.
 * [Chrome 59+](https://www.google.se/chrome/browser/desktop/) for the `chrome.app` target, `brew cask install google-chrome-canary`. 
+* [react-native-devsettings-android](https://github.com/jhen0409/react-native-devsettings-android) for self-healing crashes on android. 
 
 ## Installation
 

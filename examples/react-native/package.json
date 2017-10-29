@@ -11,7 +11,8 @@
   "dependencies": {
     "prop-types": "^15.6.0",
     "react": "16.0.0-beta.5",
-    "react-native": "0.49.3"
+    "react-native": "0.49.5",
+    "react-native-devsettings-android": "^0.1.5"
   },
   "devDependencies": {
     "@storybook/react-native": "^3.2.13",

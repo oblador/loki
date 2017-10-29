@@ -1,3 +1,5 @@
 rootProject.name = 'Loki'
+include ':react-native-devsettings-android'
+project(':react-native-devsettings-android').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-devsettings-android/android')
 
 include ':app'
