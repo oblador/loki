@@ -4,6 +4,25 @@ const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
 const { withTimeout, TimeoutError } = require('../../failure-handling');
 
+const DISABLE_CSS_ANIMATIONS_STYLE = `
+* {
+  -webkit-transition: none !important;
+  transition: none !important;
+  -webkit-animation: none !important;
+  animation: none !important;
+}
+`;
+
+const DISABLE_ANIMATIONS_SCRIPT = `
+window.requestAnimationFrame = () => {};
+document.addEventListener('DOMContentLoaded', () => {
+  const styleElement = document.createElement('style');
+  const rule = ${JSON.stringify(DISABLE_CSS_ANIMATIONS_STYLE)};
+  document.documentElement.appendChild(styleElement);
+  styleElement.sheet.insertRule(rule);
+});
+`;
+
 function createChromeTarget(
   start,
   stop,
@@ -25,7 +44,7 @@ function createChromeTarget(
     const client = await createNewDebuggerInstance();
     const deviceMetrics = getDeviceMetrics(options);
 
-    const { Runtime, Page, Emulation, DOM, CSS, Network } = client;
+    const { Runtime, Page, Emulation, DOM, Network } = client;
 
     await Runtime.enable();
     await Network.enable();
@@ -74,24 +93,25 @@ function createChromeTarget(
       }
     };
 
+    const evaluateOnNewDocument = scriptSource => {
+      if (Page.addScriptToEvaluateOnLoad) {
+        // For backwards support
+        return Page.addScriptToEvaluateOnLoad({ scriptSource });
+      }
+      return Page.addScriptToEvaluateOnNewDocument({ scriptSource });
+    };
+
     client.loadUrl = async url => {
+      if (!options.chromeEnableAnimations) {
+        debug('Disabling animations');
+        await evaluateOnNewDocument(DISABLE_ANIMATIONS_SCRIPT);
+      }
+
       debug(`Navigating to ${url}`);
-      const { frameId } = await Page.navigate({ url });
+      await Page.navigate({ url });
+
       debug('Awaiting requests loaded');
       await awaitRequestsFinished();
-      if (!options.chromeEnableAnimations) {
-        await CSS.enable();
-        const { styleSheetId } = await CSS.createStyleSheet({ frameId });
-        await CSS.setStyleSheetText({
-          styleSheetId,
-          text: `* {
-            -webkit-transition: none !important;
-            transition: none !important;
-            -webkit-animation: none !important;
-            animation: none !important;
-          }`,
-        });
-      }
     };
 
     const getPositionInViewport = async selector => {
