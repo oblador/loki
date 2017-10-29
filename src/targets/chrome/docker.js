@@ -42,6 +42,7 @@ const waitOnCDPAvailable = port =>
 
 function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
+  chromeDockerImage = 'armbues/chrome-headless',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
 }) {
   let port;
@@ -79,7 +80,7 @@ function createChromeDockerTarget({
       .concat([
         '-p',
         `${port}:${port}`,
-        'armbues/chrome-headless',
+        chromeDockerImage,
         '--disable-datasaver-prompt',
         '--no-first-run',
         '--disable-extensions',
