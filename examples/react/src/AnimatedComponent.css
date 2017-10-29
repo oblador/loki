@@ -1,0 +1,28 @@
+.AnimatedComponent {
+  width: 100px;
+  height: 100px;
+  margin: 50px;
+  background-color: green;
+}
+
+.CSSTransition {
+  transition: transform 1s;
+  transform: rotate(0deg);
+}
+
+.CSSTransition-on {
+  transform: rotate(360deg);
+}
+
+.CSSAnimation {
+  animation: 1.5s AnimatedComponent-spin infinite normal linear;
+}
+
+@keyframes AnimatedComponent-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
