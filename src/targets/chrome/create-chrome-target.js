@@ -184,6 +184,13 @@ function createChromeTarget(
         throw err;
       }
     }
+
+    const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+    const waited = (configuration.waitBeforeCapture || []).find(x => new RegExp(x.story).test(story));
+    if (waited) {
+        await sleep(waited.millSec);
+    }
+
     const screenshot = await tab.captureScreenshot(selector);
     await fs.outputFile(outputPath, screenshot);
     await tab.close();
