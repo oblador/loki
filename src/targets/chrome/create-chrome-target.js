@@ -186,9 +186,10 @@ function createChromeTarget(
     }
 
     const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
-    const waited = (configuration.waitBeforeCapture || []).find(
-      x => new RegExp(x.kind).test(kind) && new RegExp(x.story).test(story)
-    );
+    const waited = (configuration.waitBeforeCapture || [])
+      .find(
+        x => new RegExp(x.kind).test(kind) && new RegExp(x.story).test(story)
+      );
     if (waited) {
       await sleep(waited.millSec);
     }
