@@ -1,6 +1,6 @@
 {
   "chromeConcurrency": "4",
-  "chromeDockerImage": "armbues/chrome-headless",
+  "chromeDockerImage": "yukinying/chrome-headless:63.0.3230.2",
   "chromeFlags": "--headless --disable-gpu --hide-scrollbars",
   "chromeLoadTimeout": "60000",
   "chromeSelector": "#root > *",

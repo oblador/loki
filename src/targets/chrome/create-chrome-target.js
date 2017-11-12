@@ -94,48 +94,43 @@ function createChromeTarget(
       }
     };
 
-    const querySelector = async selector => {
-      const { root: { nodeId: documentNodeId } } = await DOM.getDocument();
-      const selectors = selector.split(',');
-      for (let i = 0; i < selectors.length; i++) {
-        const result = await DOM.querySelector({
-          selector: selectors[i].trim(),
-          nodeId: documentNodeId,
-        });
-        if (result.nodeId) {
-          return result;
+    const getPositionInViewport = async selector => {
+      const expression = `(() => {
+        const element = document.querySelector(${JSON.stringify(selector)});
+        if (!element) {
+          throw new Error('Unable to find element');
         }
+        const { x, y, width, height } = element.getBoundingClientRect();
+        return { x, y, width, height };
+      })()`;
+
+      const { result } = await Runtime.evaluate({
+        expression,
+        returnByValue: true,
+      });
+
+      if (result.subtype === 'error') {
+        throw new Error(
+          `Unable to get position of selector "${selector}". Review the \`chromeSelector\` option and make sure your story doesn't crash.`
+        );
       }
-      throw new Error(`No node found matching selector "${selector}"`);
+
+      return result.value;
     };
 
     client.captureScreenshot = withTimeout(
       30000,
       'captureScreenshot'
     )(async (selector = 'body') => {
-      const scale = deviceMetrics.deviceScaleFactor;
-
-      debug(`Setting viewport to "${selector}"`);
-      const { nodeId } = await querySelector(selector);
-      const { model } = await DOM.getBoxModel({ nodeId });
-      const x = Math.max(0, model.border[0]);
-      const y = Math.max(0, model.border[1]);
-      const width = model.width * scale;
-      const height = model.height * scale;
-
-      if (width === 0 || height === 0) {
-        debug('Got empty dimensions, capturing whole screen instead');
-      } else {
-        await Emulation.setVisibleSize({ width, height });
-        try {
-          await Emulation.forceViewport({ x, y, scale });
-        } catch (err) {
-          debug('Failed setting viewport');
-        }
-      }
+      debug(`Getting viewport position of "${selector}"`);
+      const position = await getPositionInViewport(selector);
 
       debug('Capturing screenshot');
-      const screenshot = await Page.captureScreenshot({ format: 'png' });
+      const clip = Object.assign({ scale: 1 }, position);
+      const screenshot = await Page.captureScreenshot({
+        format: 'png',
+        clip,
+      });
       const buffer = new Buffer(screenshot.data, 'base64');
 
       return buffer;
