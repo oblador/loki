@@ -5,7 +5,9 @@ function getBrowserGlobals(html) {
   const { window } = dom;
   const noop = function noop() {};
 
-  const EventSource = noop;
+  const EventSource = function() {
+    this.close = noop;
+  };
 
   const navigator = {
     userAgent: 'loki',
