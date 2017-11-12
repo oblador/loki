@@ -2,26 +2,9 @@ const fs = require('fs-extra');
 const debug = require('debug')('loki:chrome');
 const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
+const disableAnimations = require('./disable-animations');
+const readyStateManager = require('./ready-state-manager');
 const { withTimeout, TimeoutError } = require('../../failure-handling');
-
-const DISABLE_CSS_ANIMATIONS_STYLE = `
-* {
-  -webkit-transition: none !important;
-  transition: none !important;
-  -webkit-animation: none !important;
-  animation: none !important;
-}
-`;
-
-const DISABLE_ANIMATIONS_SCRIPT = `
-window.requestAnimationFrame = () => {};
-document.addEventListener('DOMContentLoaded', () => {
-  const styleElement = document.createElement('style');
-  const rule = ${JSON.stringify(DISABLE_CSS_ANIMATIONS_STYLE)};
-  document.documentElement.appendChild(styleElement);
-  styleElement.sheet.insertRule(rule);
-});
-`;
 
 function createChromeTarget(
   start,
@@ -93,6 +76,16 @@ function createChromeTarget(
       }
     };
 
+    const awaitReady = async () => {
+      const { result } = await Runtime.evaluate({
+        expression: 'window.loki.awaitReady()',
+        awaitPromise: true,
+      });
+      if (result.subtype === 'error') {
+        throw new Error(result.description.split('\n')[0]);
+      }
+    };
+
     const evaluateOnNewDocument = scriptSource => {
       if (Page.addScriptToEvaluateOnLoad) {
         // For backwards support
@@ -102,9 +95,10 @@ function createChromeTarget(
     };
 
     client.loadUrl = async url => {
+      await evaluateOnNewDocument(readyStateManager.asString);
       if (!options.chromeEnableAnimations) {
         debug('Disabling animations');
-        await evaluateOnNewDocument(DISABLE_ANIMATIONS_SCRIPT);
+        await evaluateOnNewDocument(disableAnimations.asString);
       }
 
       debug(`Navigating to ${url}`);
@@ -112,6 +106,9 @@ function createChromeTarget(
 
       debug('Awaiting requests loaded');
       await awaitRequestsFinished();
+
+      debug('Awaiting runtime setup');
+      await awaitReady();
     };
 
     const getPositionInViewport = async selector => {
