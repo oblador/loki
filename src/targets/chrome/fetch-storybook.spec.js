@@ -11,6 +11,7 @@ const storybook = [
   {
     kind: 'Button',
     stories: ['with text', 'with some emoji'],
+    skipped: ['skipped story'],
   },
 ];
 

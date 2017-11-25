@@ -17,7 +17,6 @@ Example `package.json`:
         "height": 768
       },
       "chrome.iphone7": {
-        "skipStories": "loading|MyFailingComponent",
         "target": "chrome.app",
         "preset": "iPhone 7"
       },
@@ -54,9 +53,11 @@ A JavaScript only solution that will work out of the box on every machine, howev
 |**Speed**|🏃Fast|🚶Slower| 
 |**Output**|![](gm-diff.png)|![](looks-same-diff.png)| 
 
-## `skipStories`
+## ~~`skipStories`~~ **DEPRECATED**
 
-This setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out. 
+~~This setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out.~~
+
+This setting is deprecated, use `storiesOf().add.skip()` instead on the stories you want to skip.
 
 ## `storiesFilter`
 
@@ -67,7 +68,7 @@ Opposite to `skipStories`.
 |Name|Type|Description|Targets|
 |---|---|---|---|
 |**`target`**|*string*|Target platform, possible values are `chrome.app`, `chrome.docker`, `ios.simulator`, `android.emulator`.|All|
-|**`skipStories`**|*string*|Same as `loki.skipStories`, but applied to only this configuration.|All|
+|**`skipStories`**|*string*|**DEPRECATED** Same as `loki.skipStories`, but applied to only this configuration.|All|
 |**`storiesFilter`**|*string*|Same as `loki.storiesFilter`, but applied to only this configuration.|All|
 |**`chromeSelector`**|*string*|Same as `loki.chromeSelector`, but applied to only this configuration.|`chrome.*`|
 |**`preset`**|*string*|Predefined bundled configuration, possible values are `Retina Macbook Pro 15`, `iPhone 7`, `iPhone 5` and `Google Pixel`.|`chrome.*`|

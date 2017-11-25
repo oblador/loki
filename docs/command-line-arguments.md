@@ -28,7 +28,7 @@ yarn loki test -- --port 9009
 |**`--chromeLoadTimeout`**|How many miliseconds loki will wait for the page to load before taking as screnshot.|`60000`|
 |**`--chromeSelector`**|CSS selector to the part of the DOM to screenshot. Useful you have decorators that should be excluded.|`#root > *`|
 |**`--chromeTolerance`**|How many percent tolerated difference compared to reference image.|`2.3`|
-|**`--skipStories`**|Regular expression for stories that should not be tested, it will be tested against a string with the format `${kind} ${story}`.|*None*|
+|**`--skipStories`**|**DEPRECATED** Regular expression for stories that should not be tested, it will be tested against a string with the format `${kind} ${story}`.|*None*|
 |**`--storiesFilter`**|Opposite of `--skipStories`.|*None*|
 |**`--configurationFilter`**|Regular expression for targets that should be tested.|*None*|
 |**`--targetFilter`**|Regular expression for targets that should be tested.|*None*|

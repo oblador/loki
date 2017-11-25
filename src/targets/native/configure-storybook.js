@@ -1,8 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies, import/no-unresolved, global-require */
 
+const storybook = require('@storybook/react-native');
 const addons = require('@storybook/addons').default;
 const ReactNative = require('react-native');
 const ExceptionsManager = require('react-native/Libraries/Core/ExceptionsManager');
+const decorateStorybook = require('../decorate-storybook');
 const {
   resetLoadingImages,
   awaitImagesLoaded,
@@ -78,6 +80,9 @@ function getAddonsChannel() {
 async function configureStorybook() {
   injectLokiGlobalErrorHandler();
 
+  // Decorate the storiesOf function to be able to skip stories
+  const getStorybook = decorateStorybook(storybook);
+
   // Monkey patch `Image`
   Object.defineProperty(ReactNative, 'Image', {
     configurable: true,
@@ -145,6 +150,15 @@ async function configureStorybook() {
   on('restore', () => {
     restore();
     emit('didRestore');
+  });
+
+  on('getStories', () => {
+    const stories = getStorybook().map(component => ({
+      kind: component.kind,
+      stories: component.stories.map(story => story.name),
+      skipped: component.skipped,
+    }));
+    emit('setStories', { stories });
   });
 
   channel.on('setCurrentStory', async () => {

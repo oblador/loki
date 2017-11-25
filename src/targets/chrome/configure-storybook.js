@@ -1,4 +1,5 @@
 /* global window */
+const decorateStorybook = require('../decorate-storybook');
 
 function createConfigurator(storybook) {
   return function configureStorybook() {
@@ -6,7 +7,7 @@ function createConfigurator(storybook) {
       if (!window.loki) {
         window.loki = {};
       }
-      window.loki.getStorybook = storybook.getStorybook;
+      window.loki.getStorybook = decorateStorybook(storybook);
     }
   };
 }
