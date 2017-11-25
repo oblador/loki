@@ -26,6 +26,11 @@ storiesOf('Button', module)
     <Button onPress={action('clicked-emoji')}>
       <Text>😀 😎 👍 💯</Text>
     </Button>
+  )
+  .add.skip('skipped story', () =>
+    <Button onPress={action('clicked-emoji')}>
+      <Text>I am skipped</Text>
+    </Button>
   );
 
 storiesOf('Logo', module)

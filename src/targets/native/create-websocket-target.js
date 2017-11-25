@@ -108,8 +108,8 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
   }
 
   async function getStorybook() {
-    send('getStories');
-    const { stories } = await messageQueue.waitFor('setStories');
+    sendLokiCommand('getStories');
+    const { stories } = await waitForLokiMessage('setStories');
 
     return stories;
   }

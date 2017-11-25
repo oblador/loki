@@ -52,6 +52,7 @@ async function fetchStorybook(baseUrl = 'http://localhost:6006') {
   return getStorybook().map(component => ({
     kind: component.kind,
     stories: component.stories.map(story => story.name),
+    skipped: component.skipped,
   }));
 }
 
