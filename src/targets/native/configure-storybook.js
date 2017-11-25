@@ -5,10 +5,7 @@ const addons = require('@storybook/addons').default;
 const ReactNative = require('react-native');
 const ExceptionsManager = require('react-native/Libraries/Core/ExceptionsManager');
 const decorateStorybook = require('../decorate-storybook');
-const {
-  resetLoadingImages,
-  awaitImagesLoaded,
-} = require('./ready-state-manager');
+const { awaitReady, resetPendingPromises } = require('../ready-state-manager');
 
 const DevSettings = ReactNative.NativeModules.DevSettings;
 
@@ -163,8 +160,8 @@ async function configureStorybook() {
 
   channel.on('setCurrentStory', async () => {
     try {
-      const count = await awaitImagesLoaded();
-      emit('imagesLoaded', { count });
+      await awaitReady();
+      emit('ready');
     } catch (error) {
       emit('error', {
         error: {
@@ -173,7 +170,7 @@ async function configureStorybook() {
         isFatal: false,
       });
     }
-    resetLoadingImages();
+    resetPendingPromises();
   });
 }
 

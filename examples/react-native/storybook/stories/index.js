@@ -12,6 +12,7 @@ import CenterView from './CenterView';
 import Welcome from './Welcome';
 import Logo from './Logo';
 import ErrorThrowingComponent from './ErrorThrowingComponent';
+import DelayedComponent from './DelayedComponent';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -33,9 +34,12 @@ storiesOf('Button', module)
     </Button>
   );
 
-storiesOf('Logo', module)
-  .add('without delay', () => <Logo />)
-  .add('with 15s delay', () => <Logo delay={15000} />);
+storiesOf('Asynchronous Render', module)
+  .add('Logo without delay', () => <Logo />)
+  .add('Logo with 1s delay', () => <Logo delay={1000} />)
+  .add.async('add.async() with 1s delay', ({ done }) =>
+    <DelayedComponent delay={1000} onDone={done} />
+  );
 
 storiesOf('Error Handling', module)
   .add('with ErrorThrowingComponent', () => <ErrorThrowingComponent />)

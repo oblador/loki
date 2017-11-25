@@ -125,8 +125,7 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
     debug('captureScreenshotForStory', kind, story);
     send('setCurrentStory', { kind, story });
     try {
-      const data = await waitForLokiMessage('imagesLoaded', 30000);
-      debug('imagesLoaded', data);
+      await waitForLokiMessage('ready', 30000);
     } catch (error) {
       if (error instanceof NativeError) {
         lastStoryCrashed = error.isFatal;

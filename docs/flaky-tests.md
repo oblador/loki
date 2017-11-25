@@ -10,6 +10,16 @@ storiesOf('MyComponent', module)
   .add.skip('skipped story', () => <MyComponent />);
 ```
 
+## Asynchronous Stories
+
+Some components will do some computing or loading data over the network and then re-render. This can cause flaky tests and incorrect screenshots. Loki handles most cases of network traffic and loading images, but for other cases you can mark your story as async and tell loki when you're done via the `context.done` function:
+
+```js
+storiesOf('MyComponent', module)
+  .add('synchronous story', () => <MyComponent />)
+  .add.async('asynchronous story', ({ done }) => <MyComponent onDone={done} />);
+```
+
 ## Transitions and Animations
 
 Animations cause the your component to be highly time sensitive and unless conditions are _exactly_ the same for each test instance they will yield different screenshots. Loki takes care of the most common web transitions out of the box by disabling CSS transitions/animations and `requestAnimationFrame`. The screenshot will be paused at the end state of the transition. To disable this use the `chromeEnableAnimations` option.
