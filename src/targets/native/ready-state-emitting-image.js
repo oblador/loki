@@ -4,20 +4,33 @@
  */
 const React = require('react');
 const Image = require('react-native/Libraries/Image/Image');
-const { registerImageLoading } = require('./ready-state-manager');
+const { registerPendingPromise } = require('../ready-state-manager');
+
+const IMAGE_LOAD_TIMEOUT = 20000;
 
 class ReadyStateEmittingImage extends React.Component {
   constructor(props) {
     super(props);
 
     if (props.source) {
-      registerImageLoading(
-        new Promise(resolve => {
-          this.resolve = resolve;
-        }),
-        props.source
+      registerPendingPromise(
+        new Promise((resolve, reject) => {
+          this.resolve = value => {
+            resolve(value);
+            clearTimeout(this.timer);
+          };
+          this.timer = setTimeout(() => {
+            const url = props.source.uri;
+            const message = `Image "${url}" failed to load within ${IMAGE_LOAD_TIMEOUT}ms`;
+            reject(new Error(message));
+          }, IMAGE_LOAD_TIMEOUT);
+        })
       );
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
   }
 
   setNativeProps = (...args) => {

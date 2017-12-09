@@ -1,16 +1,53 @@
+/* eslint object-shorthand: 0, prefer-arrow-callback: 0, no-var: 0 */
+// Diverge from regular rules here to not mess with UglifyJS
+
+const readyStateManager = require('./ready-state-manager');
+
 function decorateStorybook(storybook) {
   const originalStoriesOf = storybook.storiesOf;
   const skippedStories = {};
 
-  function storiesOf(kind, module) {
-    const stories = originalStoriesOf(kind, module);
-    stories.add.skip = function skip(story, storyFn) {
+  function wrapWithSkipStory(add, kind) {
+    return function skipStory(story, storyFn) {
       if (!skippedStories[kind]) {
         skippedStories[kind] = [];
       }
       skippedStories[kind].push(story);
-      return stories.add(story, storyFn);
+
+      return add(story, storyFn);
     };
+  }
+
+  function wrapWithAsyncStory(add) {
+    return function skipStory(story, storyFn) {
+      return add(story, function render(context) {
+        var resolveAsyncStory = null;
+        readyStateManager.resetPendingPromises();
+        readyStateManager.registerPendingPromise(
+          new Promise(function(resolve) {
+            resolveAsyncStory = resolve;
+          })
+        );
+
+        const done = function() {
+          if (resolveAsyncStory) {
+            resolveAsyncStory();
+          }
+          resolveAsyncStory = null;
+        };
+
+        return storyFn(Object.assign({ done: done }, context));
+      });
+    };
+  }
+
+  function storiesOf(kind, module) {
+    const stories = originalStoriesOf(kind, module);
+    stories.add.skip = wrapWithSkipStory(stories.add.bind(stories), kind);
+    stories.add.async = wrapWithAsyncStory(stories.add.bind(stories));
+    stories.add.async.skip = wrapWithSkipStory(stories.add.async, kind);
+    stories.add.skip.async = wrapWithAsyncStory(stories.add.skip);
+
     return stories;
   }
 
@@ -18,12 +55,11 @@ function decorateStorybook(storybook) {
   storybook.storiesOf = storiesOf;
 
   function getStorybook() {
-    // Diverge from regular rules here to not mess with UglifyJS
-    /* eslint object-shorthand: 0, prefer-arrow-callback: 0, func-names: 0 */
     return storybook.getStorybook().map(function(component) {
       const kind = component.kind;
       const stories = component.stories;
       const skipped = skippedStories[kind];
+
       if (skipped) {
         return {
           kind: kind,
@@ -33,6 +69,7 @@ function decorateStorybook(storybook) {
           }),
         };
       }
+
       return component;
     });
   }

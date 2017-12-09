@@ -3,7 +3,6 @@ const debug = require('debug')('loki:chrome');
 const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
 const disableAnimations = require('./disable-animations');
-const readyStateManager = require('./ready-state-manager');
 const { withTimeout, TimeoutError } = require('../../failure-handling');
 
 function createChromeTarget(
@@ -95,7 +94,6 @@ function createChromeTarget(
     };
 
     client.loadUrl = async url => {
-      await evaluateOnNewDocument(readyStateManager.asString);
       if (!options.chromeEnableAnimations) {
         debug('Disabling animations');
         await evaluateOnNewDocument(disableAnimations.asString);

@@ -1,5 +1,6 @@
 /* global window */
 const decorateStorybook = require('../decorate-storybook');
+const readyStateManager = require('../ready-state-manager');
 
 function createConfigurator(storybook) {
   return function configureStorybook() {
@@ -8,6 +9,10 @@ function createConfigurator(storybook) {
         window.loki = {};
       }
       window.loki.getStorybook = decorateStorybook(storybook);
+      window.loki.registerPendingPromise =
+        readyStateManager.registerPendingPromise;
+      window.loki.resetPendingPromises = readyStateManager.resetPendingPromises;
+      window.loki.awaitReady = readyStateManager.awaitReady;
     }
   };
 }
