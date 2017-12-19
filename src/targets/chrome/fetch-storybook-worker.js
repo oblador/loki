@@ -11,7 +11,7 @@ async function createStorybookSandbox(baseUrl) {
   const scripts = browser.document.querySelectorAll('script[src]');
   const previewSrc = Array.from(scripts)
     .map(node => node.attributes.src.nodeValue)
-    .filter(src => src.match(/preview\.([a-f0-9]+\.)?bundle\.js/) !== -1)[0];
+    .find(src => src.match(/preview\.([a-f0-9]{20}\.)?bundle\.js$/));
 
   if (!previewSrc) {
     throw new Error('Unable to locate preview bundle');
