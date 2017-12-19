@@ -1,7 +1,10 @@
-const { JSDOM } = require('jsdom');
+const { JSDOM, VirtualConsole } = require('jsdom');
 
 function getBrowserGlobals(html) {
-  const dom = new JSDOM(html);
+  const dom = new JSDOM(html, {
+    virtualConsole: new VirtualConsole(),
+    pretendToBeVisual: true,
+  });
   const { window } = dom;
   const noop = function noop() {};
 
@@ -36,13 +39,8 @@ function getBrowserGlobals(html) {
     localStorage,
     matchMedia,
     EventSource,
-    requestAnimationFrame: noop,
-    requestIdleCallback: noop,
-    console: {
-      log: noop,
-      warn: noop,
-      error: noop,
-    },
+    setImmediate: noop,
+    clearImmediate: noop,
   });
   globals.window = globals;
   globals.global = globals;

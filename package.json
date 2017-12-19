@@ -65,7 +65,7 @@
     "gitbook-plugin-prism": "^2.3.0",
     "gitbook-plugin-theme-gestalt": "^1.0.2",
     "gm": "^1.23.0",
-    "jsdom": "^11.1.0",
+    "jsdom": "^11.5.1",
     "lighthouse": "^2.2.1",
     "listr": "^0.12.0",
     "looks-same": "^3.2.1",
