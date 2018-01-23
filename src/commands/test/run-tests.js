@@ -87,6 +87,9 @@ async function runTests(flatConfigurations, options) {
             title: 'Fetch list of stories',
             task: async () => {
               storybook = await target.getStorybook();
+              if (storybook.length === 0) {
+                throw new Error('Error: No stories were found.');
+              }
             },
           },
           ...Object.values(
