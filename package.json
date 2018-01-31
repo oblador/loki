@@ -77,6 +77,9 @@
     "wait-on": "^2.0.2",
     "ws": "^3.0.0"
   },
+  "peerDependencies {
+    "@storybook/ui": ">=3 <3.2.18"
+  },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.3",
