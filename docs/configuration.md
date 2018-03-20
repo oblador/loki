@@ -2,7 +2,7 @@
 
 The init command will add a `loki` section to your `package.json`, but you can edit it to your wishes. *NOTE*: Any command line argument that `loki test` accepts can also be added to the `loki` config object.
 
-Example `package.json`: 
+Example `package.json`:
 
 ```json
 {
@@ -37,7 +37,7 @@ This setting is a CSS selector to the part of the page you want screenshots of. 
 
 ## `diffingEngine`
 
-There are two currently available options to choose from when comparing images in loki: 
+There are two currently available options to choose from when comparing images in loki:
 
 ### `gm`
 
@@ -45,13 +45,17 @@ Uses the GraphicsMagick library to create diffs, this is generally faster but re
 
 ### `looks-same`
 
-A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. 
+A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image.
 
 ||`gm`|`looks-same`|
 |-|---|------------|
-|**Dependency**|[GraphicsMagick](http://www.graphicsmagick.org)|None| 
-|**Speed**|🏃Fast|🚶Slower| 
-|**Output**|![](gm-diff.png)|![](looks-same-diff.png)| 
+|**Dependency**|[GraphicsMagick](http://www.graphicsmagick.org)|None|
+|**Speed**|🏃Fast|🚶Slower|
+|**Output**|![](gm-diff.png)|![](looks-same-diff.png)|
+
+## `verboseRenderer`
+
+Plain text output, useful for CI.
 
 ## ~~`skipStories`~~ **DEPRECATED**
 
@@ -61,7 +65,7 @@ This setting is deprecated, use `storiesOf().add.skip()` instead on the stories 
 
 ## `storiesFilter`
 
-Opposite to `skipStories`. 
+Opposite to `skipStories`.
 
 ## `configurations`
 
