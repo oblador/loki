@@ -1,10 +1,10 @@
 # Command line arguments
 
-If you run loki via `yarn` or `npm`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can also add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly. 
+If you run loki via `yarn` or `npm`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can also add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly.
 
 ## `loki test`
 
-Capture screenshots and compare them against the reference files. 
+Capture screenshots and compare them against the reference files.
 
 ```
 yarn loki test -- --port 9009
@@ -26,6 +26,7 @@ yarn loki test -- --port 9009
 |**`--chromeEnableAnimations`**|Enable CSS transitions and animations.|`false`|
 |**`--chromeFlags`**|Custom chrome flags.|`--headless --disable-gpu --hide-scrollbars`|
 |**`--chromeLoadTimeout`**|How many miliseconds loki will wait for the page to load before taking as screnshot.|`60000`|
+|**`--chromeScreenshotTimeout`**|How many miliseconds loki will wait for a screenshot to be taken.|`30000`|
 |**`--chromeSelector`**|CSS selector to the part of the DOM to screenshot. Useful you have decorators that should be excluded.|`#root > *`|
 |**`--chromeTolerance`**|How many percent tolerated difference compared to reference image.|`2.3`|
 |**`--skipStories`**|**DEPRECATED** Regular expression for stories that should not be tested, it will be tested against a string with the format `${kind} ${story}`.|*None*|
@@ -36,13 +37,13 @@ yarn loki test -- --port 9009
 
 ## `loki update`
 
-Capture screenshots and update the reference files. 
+Capture screenshots and update the reference files.
 
 Takes same arguments as `loki test`.
 
 ## `loki approve`
 
-Prunes old and updates reference files with the images generated in the last run. 
+Prunes old and updates reference files with the images generated in the last run.
 
 |Flag|Description|Default|
 |---|---|---|
