@@ -22,9 +22,9 @@ function createChromeTarget(
     };
   }
 
-  async function launchNewTab(options) {
+  async function launchNewTab(tabOptions, options) {
     const client = await createNewDebuggerInstance();
-    const deviceMetrics = getDeviceMetrics(options);
+    const deviceMetrics = getDeviceMetrics(tabOptions);
 
     const { Runtime, Page, Emulation, DOM, Network } = client;
 
@@ -32,12 +32,12 @@ function createChromeTarget(
     await Network.enable();
     await DOM.enable();
     await Page.enable();
-    if (options.userAgent) {
+    if (tabOptions.userAgent) {
       await Network.setUserAgentOverride({
-        userAgent: options.userAgent,
+        userAgent: tabOptions.userAgent,
       });
     }
-    if (options.clearBrowserCookies) {
+    if (tabOptions.clearBrowserCookies) {
       await Network.clearBrowserCookies();
     }
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
@@ -94,7 +94,7 @@ function createChromeTarget(
     };
 
     client.loadUrl = async url => {
-      if (!options.chromeEnableAnimations) {
+      if (!tabOptions.chromeEnableAnimations) {
         debug('Disabling animations');
         await evaluateOnNewDocument(disableAnimations.asString);
       }
@@ -184,7 +184,7 @@ function createChromeTarget(
     const selector = configuration.chromeSelector || options.chromeSelector;
     const url = getStoryUrl(kind, story);
 
-    const tab = await launchNewTab(tabOptions);
+    const tab = await launchNewTab(tabOptions, options);
     try {
       await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
     } catch (err) {
