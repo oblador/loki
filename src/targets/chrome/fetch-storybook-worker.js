@@ -7,7 +7,7 @@ const { ServerError } = require('../../errors');
 async function createStorybookSandbox(baseUrl) {
   debug(`Fetching iframe HTML and preview bundle JS from ${baseUrl}`);
   const html = await fetchUrl(`${baseUrl}/iframe.html`);
-  const browser = getBrowserGlobals(html);
+  const browser = getBrowserGlobals(html, baseUrl);
   const scripts = browser.document.querySelectorAll('script[src]');
   const previewSrc = Array.from(scripts)
     .map(node => node.attributes.src.nodeValue)

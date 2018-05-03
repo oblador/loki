@@ -1,9 +1,10 @@
 const { JSDOM, VirtualConsole } = require('jsdom');
 
-function getBrowserGlobals(html) {
+function getBrowserGlobals(html, url) {
   const dom = new JSDOM(html, {
     virtualConsole: new VirtualConsole(),
     pretendToBeVisual: true,
+    url,
   });
   const { window } = dom;
   const noop = function noop() {};
