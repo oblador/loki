@@ -4,6 +4,7 @@
   "chromeFlags": "--headless --disable-gpu --hide-scrollbars",
   "chromeLoadTimeout": "60000",
   "chromeScreenshotTimeout": "30000",
+  "chromeRetries": "0",
   "chromeSelector": "#root > *",
   "chromeTolerance": "2.3",
   "host": "localhost",
