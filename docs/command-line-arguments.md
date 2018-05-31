@@ -26,6 +26,7 @@ yarn loki test -- --port 9009
 |**`--chromeEnableAnimations`**|Enable CSS transitions and animations.|`false`|
 |**`--chromeFlags`**|Custom chrome flags.|`--headless --disable-gpu --hide-scrollbars`|
 |**`--chromeLoadTimeout`**|How many miliseconds loki will wait for the page to load before taking as screnshot.|`60000`|
+|**`--chromeScreenshotTimeout`**|How many miliseconds loki will wait for a screenshot to be taken.|`30000`|
 |**`--chromeSelector`**|CSS selector to the part of the DOM to screenshot. Useful you have decorators that should be excluded.|`#root > *`|
 |**`--chromeTolerance`**|How many percent tolerated difference compared to reference image.|`2.3`|
 |**`--skipStories`**|**DEPRECATED** Regular expression for stories that should not be tested, it will be tested against a string with the format `${kind} ${story}`.|*None*|
