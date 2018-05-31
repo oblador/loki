@@ -3,7 +3,11 @@ const debug = require('debug')('loki:chrome');
 const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
 const disableAnimations = require('./disable-animations');
-const { withTimeout, TimeoutError } = require('../../failure-handling');
+const {
+  withTimeout,
+  withRetries,
+  TimeoutError,
+} = require('../../failure-handling');
 
 function createChromeTarget(
   start,
@@ -133,23 +137,25 @@ function createChromeTarget(
       return result.value;
     };
 
-    client.captureScreenshot = withTimeout(
-      options.chromeScreenshotTimeout,
-      'captureScreenshot'
-    )(async (selector = 'body') => {
-      debug(`Getting viewport position of "${selector}"`);
-      const position = await getPositionInViewport(selector);
+    client.captureScreenshot = withRetries(options.chromeRetries)(
+      withTimeout(
+        options.chromeScreenshotTimeout,
+        'captureScreenshot'
+      )(async (selector = 'body') => {
+        debug(`Getting viewport position of "${selector}"`);
+        const position = await getPositionInViewport(selector);
 
-      debug('Capturing screenshot');
-      const clip = Object.assign({ scale: 1 }, position);
-      const screenshot = await Page.captureScreenshot({
-        format: 'png',
-        clip,
-      });
-      const buffer = new Buffer(screenshot.data, 'base64');
+        debug('Capturing screenshot');
+        const clip = Object.assign({ scale: 1 }, position);
+        const screenshot = await Page.captureScreenshot({
+          format: 'png',
+          clip,
+        });
+        const buffer = new Buffer(screenshot.data, 'base64');
 
-      return buffer;
-    });
+        return buffer;
+      })
+    );
 
     return client;
   }
