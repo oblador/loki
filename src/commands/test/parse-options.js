@@ -5,11 +5,7 @@ const { dependencyAvailable } = require('../../dependency-detection');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: [
-      'requireReference',
-      'chromeEnableAnimations',
-      'verboseRenderer'
-    ],
+    boolean: ['requireReference', 'chromeEnableAnimations', 'verboseRenderer'],
   });
 
   const $ = key => argv[key] || config[key] || defaults[key];
