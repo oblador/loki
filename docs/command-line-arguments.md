@@ -1,10 +1,10 @@
 # Command line arguments
 
-If you run loki via `yarn` or `npm`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can also add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly. 
+If you run loki via `yarn` or `npm`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can also add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly.
 
 ## `loki test`
 
-Capture screenshots and compare them against the reference files. 
+Capture screenshots and compare them against the reference files.
 
 ```
 yarn loki test -- --port 9009
@@ -33,16 +33,17 @@ yarn loki test -- --port 9009
 |**`--configurationFilter`**|Regular expression for targets that should be tested.|*None*|
 |**`--targetFilter`**|Regular expression for targets that should be tested.|*None*|
 |**`--requireReference`**|Fail stories without reference image, useful for CI.|*No*|
+|**`--verboseRenderer`**|Plain text renderer, useful for CI.|*No*|
 
 ## `loki update`
 
-Capture screenshots and update the reference files. 
+Capture screenshots and update the reference files.
 
 Takes same arguments as `loki test`.
 
 ## `loki approve`
 
-Prunes old and updates reference files with the images generated in the last run. 
+Prunes old and updates reference files with the images generated in the last run.
 
 |Flag|Description|Default|
 |---|---|---|
