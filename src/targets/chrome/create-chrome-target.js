@@ -138,7 +138,10 @@ function createChromeTarget(
     };
 
     client.captureScreenshot = withRetries(options.chromeRetries)(
-      withTimeout(options.chromeScreenshotTimeout, 'captureScreenshot')(async (selector = 'body') => {
+      withTimeout(
+        options.chromeScreenshotTimeout,
+        'captureScreenshot'
+      )(async (selector = 'body') => {
         debug(`Getting viewport position of "${selector}"`);
         const position = await getPositionInViewport(selector);
 
