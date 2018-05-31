@@ -5,7 +5,11 @@ const { dependencyAvailable } = require('../../dependency-detection');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: ['requireReference', 'chromeEnableAnimations'],
+    boolean: [
+      'requireReference',
+      'chromeEnableAnimations',
+      'verboseRenderer'
+    ],
   });
 
   const $ = key => argv[key] || config[key] || defaults[key];
@@ -22,12 +26,15 @@ function parseOptions(args, config) {
     chromeEnableAnimations: $('chromeEnableAnimations'),
     chromeFlags: $('chromeFlags').split(' '),
     chromeLoadTimeout: parseInt($('chromeLoadTimeout'), 10),
+    chromeScreenshotTimeout: parseInt($('chromeScreenshotTimeout'), 10),
+    chromeRetries: parseInt($('chromeRetries'), 10),
     chromeSelector: $('chromeSelector'),
     chromeTolerance: parseFloat($('chromeTolerance'), 10),
     skipStoriesPattern: $('skipStories'),
     storiesFilter: $('storiesFilter'),
     diffingEngine:
       $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
+    verboseRenderer: $('verboseRenderer'),
     requireReference: $('requireReference'),
     updateReference: argv._[0] === 'update',
     targetFilter: argv.targetFilter,

@@ -3,7 +3,11 @@ const debug = require('debug')('loki:chrome');
 const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
 const disableAnimations = require('./disable-animations');
-const { withTimeout, TimeoutError } = require('../../failure-handling');
+const {
+  withTimeout,
+  withRetries,
+  TimeoutError,
+} = require('../../failure-handling');
 
 function createChromeTarget(
   start,
@@ -22,9 +26,9 @@ function createChromeTarget(
     };
   }
 
-  async function launchNewTab(options) {
+  async function launchNewTab(tabOptions, options) {
     const client = await createNewDebuggerInstance();
-    const deviceMetrics = getDeviceMetrics(options);
+    const deviceMetrics = getDeviceMetrics(tabOptions);
 
     const { Runtime, Page, Emulation, DOM, Network } = client;
 
@@ -32,12 +36,12 @@ function createChromeTarget(
     await Network.enable();
     await DOM.enable();
     await Page.enable();
-    if (options.userAgent) {
+    if (tabOptions.userAgent) {
       await Network.setUserAgentOverride({
-        userAgent: options.userAgent,
+        userAgent: tabOptions.userAgent,
       });
     }
-    if (options.clearBrowserCookies) {
+    if (tabOptions.clearBrowserCookies) {
       await Network.clearBrowserCookies();
     }
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
@@ -94,7 +98,7 @@ function createChromeTarget(
     };
 
     client.loadUrl = async url => {
-      if (!options.chromeEnableAnimations) {
+      if (!tabOptions.chromeEnableAnimations) {
         debug('Disabling animations');
         await evaluateOnNewDocument(disableAnimations.asString);
       }
@@ -133,23 +137,25 @@ function createChromeTarget(
       return result.value;
     };
 
-    client.captureScreenshot = withTimeout(
-      30000,
-      'captureScreenshot'
-    )(async (selector = 'body') => {
-      debug(`Getting viewport position of "${selector}"`);
-      const position = await getPositionInViewport(selector);
+    client.captureScreenshot = withRetries(options.chromeRetries)(
+      withTimeout(
+        options.chromeScreenshotTimeout,
+        'captureScreenshot'
+      )(async (selector = 'body') => {
+        debug(`Getting viewport position of "${selector}"`);
+        const position = await getPositionInViewport(selector);
 
-      debug('Capturing screenshot');
-      const clip = Object.assign({ scale: 1 }, position);
-      const screenshot = await Page.captureScreenshot({
-        format: 'png',
-        clip,
-      });
-      const buffer = new Buffer(screenshot.data, 'base64');
+        debug('Capturing screenshot');
+        const clip = Object.assign({ scale: 1 }, position);
+        const screenshot = await Page.captureScreenshot({
+          format: 'png',
+          clip,
+        });
+        const buffer = new Buffer(screenshot.data, 'base64');
 
-      return buffer;
-    });
+        return buffer;
+      })
+    );
 
     return client;
   }
@@ -184,7 +190,7 @@ function createChromeTarget(
     const selector = configuration.chromeSelector || options.chromeSelector;
     const url = getStoryUrl(kind, story);
 
-    const tab = await launchNewTab(tabOptions);
+    const tab = await launchNewTab(tabOptions, options);
     try {
       await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
     } catch (err) {
