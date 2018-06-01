@@ -115,7 +115,9 @@ async function runTests(flatConfigurations, options) {
                       task: () =>
                         getListr(options)(
                           stories.map(story => ({
-                            title: options.verboseRenderer ? `${kind}: ${story}` : story,
+                            title: options.verboseRenderer
+                              ? `${kind}: ${story}`
+                              : story,
                             task: () =>
                               testStory(
                                 target,
