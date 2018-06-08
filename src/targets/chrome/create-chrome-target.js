@@ -1,18 +1,12 @@
 const fs = require('fs-extra');
 const debug = require('debug')('loki:chrome');
-const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
 const disableAnimations = require('./disable-animations');
 const getSelectorBoxSize = require('./get-selector-box-size');
+const getStories = require('./get-stories');
 const { withTimeout, TimeoutError } = require('../../failure-handling');
 
-function createChromeTarget(
-  start,
-  stop,
-  createNewDebuggerInstance,
-  baseUrl,
-  storybookUrl
-) {
+function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
   function getDeviceMetrics(options) {
     return {
       width: options.width,
@@ -169,7 +163,16 @@ function createChromeTarget(
     )}&selectedStory=${encodeURIComponent(story)}`;
 
   async function getStorybook() {
-    return fetchStorybook(storybookUrl || baseUrl);
+    const tab = await launchNewTab({
+      width: 100,
+      height: 100,
+      chromeEnableAnimations: true,
+      clearBrowserCookies: false,
+    });
+    const url = `${baseUrl}/iframe.html`;
+    await tab.Page.navigate({ url });
+    await tab.Page.loadEventFired();
+    return tab.executeFunctionWithWindow(getStories);
   }
 
   async function captureScreenshotForStory(
