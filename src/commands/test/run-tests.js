@@ -54,6 +54,14 @@ const filterStorybook = (storybook, excludePattern, includePattern) => {
     .filter(({ stories }) => stories.length !== 0);
 };
 
+const getListr = options => (tasks, listrOptions = {}) => {
+  const newOptions = listrOptions;
+  if (options.verboseRenderer) {
+    newOptions.renderer = 'verbose';
+  }
+  return new Listr(tasks, newOptions);
+};
+
 async function runTests(flatConfigurations, options) {
   if (options.updateReference) {
     await fs.ensureDir(options.referenceDir);
@@ -75,7 +83,7 @@ async function runTests(flatConfigurations, options) {
     return {
       title: name,
       task: () =>
-        new Listr([
+        getListr(options)([
           {
             title: 'Start',
             task: async ({ activeTargets }) => {
@@ -97,7 +105,7 @@ async function runTests(flatConfigurations, options) {
               (configuration, configurationName) => ({
                 title: `Test ${configurationName}`,
                 task: () =>
-                  new Listr(
+                  getListr(options)(
                     filterStorybook(
                       storybook,
                       options.skipStoriesPattern || configuration.skipStories,
@@ -105,9 +113,11 @@ async function runTests(flatConfigurations, options) {
                     ).map(({ kind, stories }) => ({
                       title: kind,
                       task: () =>
-                        new Listr(
+                        getListr(options)(
                           stories.map(story => ({
-                            title: story,
+                            title: options.verboseRenderer
+                              ? `${kind}: ${story}`
+                              : story,
                             task: () =>
                               testStory(
                                 target,
@@ -189,7 +199,7 @@ async function runTests(flatConfigurations, options) {
     }
   };
 
-  const tasks = new Listr(
+  const tasks = getListr(options)(
     Object.values(map(createTargetTask, groupByTarget(flatConfigurations)))
   );
 
