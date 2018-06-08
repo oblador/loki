@@ -2,8 +2,7 @@ const createChromeDockerTarget = require('./docker');
 
 const DOCKER_TEST_TIMEOUT = 60000;
 
-const fetchStorybookFixture = async fixture => {
-  const baseUrl = `file:${__dirname}/fixtures/storybook-${fixture}`;
+const fetchStorybookUrl = async baseUrl => {
   const target = createChromeDockerTarget({ baseUrl });
   await target.start();
   let result;
@@ -18,6 +17,9 @@ const fetchStorybookFixture = async fixture => {
   }
   return result;
 };
+
+const fetchStorybookFixture = async fixture =>
+  fetchStorybookUrl(`file:${__dirname}/fixtures/storybook-${fixture}`);
 
 const storybook = [
   {
@@ -56,6 +58,18 @@ describe('createChromeTarget', () => {
           new Error(
             "Loki addon not registered. Add `import 'loki/configure-react'` to your config.js file."
           )
+        );
+      },
+      DOCKER_TEST_TIMEOUT
+    );
+
+    it(
+      'throws if not running',
+      async () => {
+        await expect(
+          fetchStorybookUrl('http://localhost:23456')
+        ).rejects.toEqual(
+          new Error('Failed fetching stories because the server is down')
         );
       },
       DOCKER_TEST_TIMEOUT

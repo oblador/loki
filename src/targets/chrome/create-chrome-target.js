@@ -4,7 +4,12 @@ const presets = require('./presets.json');
 const disableAnimations = require('./disable-animations');
 const getSelectorBoxSize = require('./get-selector-box-size');
 const getStories = require('./get-stories');
+const awaitLokiReady = require('./await-loki-ready');
 const { withTimeout, TimeoutError } = require('../../failure-handling');
+const { FetchingURLsError, ServerError } = require('../../errors');
+
+const LOADING_STORIES_TIMEOUT = 60000;
+const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
 
 function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
   function getDeviceMetrics(options) {
@@ -62,21 +67,7 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       await Page.loadEventFired();
 
       if (failedURLs.length !== 0) {
-        const noun = failedURLs.length === 1 ? 'request' : 'requests';
-        const errorMessage = `${failedURLs.length} ${noun} failed to load; ${failedURLs.join(
-          ', '
-        )}`;
-        throw new Error(errorMessage);
-      }
-    };
-
-    const awaitReady = async () => {
-      const { result } = await Runtime.evaluate({
-        expression: 'window.loki.awaitReady()',
-        awaitPromise: true,
-      });
-      if (result.subtype === 'error') {
-        throw new Error(result.description.split('\n')[0]);
+        throw new FetchingURLsError(failedURLs);
       }
     };
 
@@ -102,7 +93,7 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
           result.description.replace(/^Error: /, '').split('\n')[0]
         );
       }
-      return JSON.parse(result.value);
+      return result.value && JSON.parse(result.value);
     };
 
     client.executeFunctionWithWindow = executeFunctionWithWindow;
@@ -114,13 +105,10 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       }
 
       debug(`Navigating to ${url}`);
-      await Page.navigate({ url });
-
-      debug('Awaiting requests loaded');
-      await awaitRequestsFinished();
+      await Promise.all([Page.navigate({ url }), awaitRequestsFinished()]);
 
       debug('Awaiting runtime setup');
-      await awaitReady();
+      await executeFunctionWithWindow(awaitLokiReady);
     };
 
     const getPositionInViewport = async selector => {
@@ -137,7 +125,7 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     };
 
     client.captureScreenshot = withTimeout(
-      30000,
+      CAPTURING_SCREENSHOT_TIMEOUT,
       'captureScreenshot'
     )(async (selector = 'body') => {
       debug(`Getting viewport position of "${selector}"`);
@@ -170,8 +158,20 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
       clearBrowserCookies: false,
     });
     const url = `${baseUrl}/iframe.html`;
-    await tab.Page.navigate({ url });
-    await tab.Page.loadEventFired();
+    try {
+      await withTimeout(LOADING_STORIES_TIMEOUT)(tab.loadUrl(url));
+    } catch (error) {
+      if (
+        error instanceof TimeoutError ||
+        (error instanceof FetchingURLsError && error.failedURLs.includes(url))
+      ) {
+        throw new ServerError(
+          'Failed fetching stories because the server is down',
+          `Try starting it with "yarn storybook" or pass the --port or --host arguments if it's not running at ${baseUrl}`
+        );
+      }
+      throw error;
+    }
     return tab.executeFunctionWithWindow(getStories);
   }
 

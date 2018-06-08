@@ -29,6 +29,17 @@ function ServerError(message, instructions) {
   this.instructions = instructions;
 }
 
+function FetchingURLsError(failedURLs) {
+  Error.captureStackTrace(this, this.constructor);
+  this.name = this.constructor.name;
+  const noun = failedURLs.length === 1 ? 'request' : 'requests';
+  const message = `${failedURLs.length} ${noun} failed to load; ${failedURLs.join(
+    ', '
+  )}`;
+  this.message = message;
+  this.failedURLs = failedURLs;
+}
+
 function formatStackTraceLine({ file, methodName, lineNumber, column }) {
   return `at ${methodName} (${path.relative(
     '.',
@@ -54,6 +65,7 @@ module.exports = {
   ReferenceImageError,
   TimeoutError,
   MissingDependencyError,
+  FetchingURLsError,
   ServerError,
   NativeError,
 };
