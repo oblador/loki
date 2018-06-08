@@ -3,6 +3,7 @@ const debug = require('debug')('loki:chrome');
 const fetchStorybook = require('./fetch-storybook');
 const presets = require('./presets.json');
 const disableAnimations = require('./disable-animations');
+const getSelectorBoxSize = require('./get-selector-box-size');
 const { withTimeout, TimeoutError } = require('../../failure-handling');
 
 function createChromeTarget(
@@ -93,6 +94,25 @@ function createChromeTarget(
       return Page.addScriptToEvaluateOnNewDocument({ scriptSource });
     };
 
+    const executeFunctionWithWindow = async (functionToExecute, ...args) => {
+      const stringifiedArgs = ['window']
+        .concat(args.map(JSON.stringify))
+        .join(',');
+      const expression = `(() => Promise.resolve((${functionToExecute})(${stringifiedArgs})).then(JSON.stringify))()`;
+      const { result } = await Runtime.evaluate({
+        expression,
+        awaitPromise: true,
+      });
+      if (result.subtype === 'error') {
+        throw new Error(
+          result.description.replace(/^Error: /, '').split('\n')[0]
+        );
+      }
+      return JSON.parse(result.value);
+    };
+
+    client.executeFunctionWithWindow = executeFunctionWithWindow;
+
     client.loadUrl = async url => {
       if (!options.chromeEnableAnimations) {
         debug('Disabling animations');
@@ -110,27 +130,16 @@ function createChromeTarget(
     };
 
     const getPositionInViewport = async selector => {
-      const expression = `(() => {
-        const element = document.querySelector(${JSON.stringify(selector)});
-        if (!element) {
-          throw new Error('Unable to find element');
+      try {
+        return await executeFunctionWithWindow(getSelectorBoxSize, selector);
+      } catch (error) {
+        if (error.message === 'Unable to find element') {
+          throw new Error(
+            `Unable to get position of selector "${selector}". Review the \`chromeSelector\` option and make sure your story doesn't crash.`
+          );
         }
-        const { x, y, width, height } = element.getBoundingClientRect();
-        return { x, y, width, height };
-      })()`;
-
-      const { result } = await Runtime.evaluate({
-        expression,
-        returnByValue: true,
-      });
-
-      if (result.subtype === 'error') {
-        throw new Error(
-          `Unable to get position of selector "${selector}". Review the \`chromeSelector\` option and make sure your story doesn't crash.`
-        );
+        throw error;
       }
-
-      return result.value;
     };
 
     client.captureScreenshot = withTimeout(
