@@ -9,7 +9,11 @@ function getImageDiff(path1, path2, diffPath, tolerance) {
       { file: diffPath, tolerance: tolerance / 100 },
       (err, isEqual) => {
         if (err) {
-          reject(err);
+          if (typeof err === 'string') {
+            reject(new Error(err));
+          } else {
+            reject(err);
+          }
         } else {
           if (isEqual) {
             fs.remove(diffPath);
