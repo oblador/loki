@@ -48,7 +48,6 @@ function createChromeDockerTarget({
   let port;
   let dockerId;
   let dockerUrl = baseUrl;
-  const storybookUrl = baseUrl;
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
 
@@ -133,13 +132,7 @@ function createChromeDockerTarget({
     }
   });
 
-  return createChromeTarget(
-    start,
-    stop,
-    createNewDebuggerInstance,
-    dockerUrl,
-    storybookUrl
-  );
+  return createChromeTarget(start, stop, createNewDebuggerInstance, dockerUrl);
 }
 
 module.exports = createChromeDockerTarget;
