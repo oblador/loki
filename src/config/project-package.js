@@ -10,7 +10,7 @@ function getProjectPackage() {
 }
 
 function hasReactNativeDependency(pkg) {
-  return !!(pkg.dependencies && pkg.dependencies['react-native'])
+  return !!(pkg.dependencies && pkg.dependencies['react-native']);
 }
 
 function hasVueDependency(pkg) {
