@@ -77,6 +77,7 @@ function createChromeDockerTarget({
     ensureDependencyAvailable('docker');
     const args = runArgs
       .concat([
+        '--shm-size=1g',
         '-p',
         `${port}:${port}`,
         chromeDockerImage,
