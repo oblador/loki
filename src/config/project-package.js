@@ -9,20 +9,27 @@ function getProjectPackage() {
   return require(getProjectPackagePath());
 }
 
+function hasDependency(packageName, pkg = getProjectPackage()) {
+  return Boolean(
+    (pkg.dependencies && pkg.dependencies[packageName]) ||
+      (pkg.peerDependencies && pkg.peerDependencies[packageName])
+  );
+}
+
 function hasReactNativeDependency(pkg) {
-  return !!(pkg.dependencies && pkg.dependencies['react-native']);
+  return hasDependency('react-native', pkg);
 }
 
 function hasVueDependency(pkg) {
-  return !!pkg.dependencies.vue;
+  return hasDependency('vue', pkg);
 }
 
 function isReactNativeProject() {
-  return hasReactNativeDependency(getProjectPackage());
+  return hasDependency('react-native');
 }
 
 function isVueProject() {
-  return hasVueDependency(getProjectPackage());
+  return hasDependency('vue');
 }
 
 module.exports = {
