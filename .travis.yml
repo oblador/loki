@@ -7,10 +7,10 @@ services:
 before_install:
 - cd examples/react && yarn && cd ../..
 script:
-- npm run lint
-- npm run test
-- cd examples/react && npm run test-ci && cd ../..
-before_deploy: "npm run build-docs"
+- yarn lint
+- yarn test
+- cd examples/react && yarn test-ci && cd ../..
+before_deploy: "yarn build-docs"
 deploy:
 - provider: npm
   email: joel@oblador.se
