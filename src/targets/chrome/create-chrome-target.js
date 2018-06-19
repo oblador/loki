@@ -14,6 +14,7 @@ const { FetchingURLsError, ServerError } = require('../../errors');
 
 const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
+const REQUEST_STABILIZATION_TIMEOUT = 100;
 
 function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
   function getDeviceMetrics(options) {
@@ -46,34 +47,60 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     }
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
 
-    const awaitRequestsFinished = async () => {
-      const requestURLMap = {};
-      const failedURLs = [];
+    const awaitRequestsFinished = () =>
+      new Promise(async (resolve, reject) => {
+        const pendingRequestURLMap = {};
+        const failedURLs = [];
+        let pageLoaded = false;
+        let stabilizationTimer = null;
 
-      const requestFailed = requestId => {
-        failedURLs.push(requestURLMap[requestId]);
-      };
+        const maybeFulfillPromise = () => {
+          if (pageLoaded && Object.keys(pendingRequestURLMap).length === 0) {
+            if (failedURLs.length !== 0) {
+              reject(new FetchingURLsError(failedURLs));
+            } else {
+              // In some cases such as fonts further requests will only happen after the page has been fully rendered
+              if (stabilizationTimer) {
+                clearTimeout(stabilizationTimer);
+              }
+              stabilizationTimer = setTimeout(
+                resolve,
+                REQUEST_STABILIZATION_TIMEOUT
+              );
+            }
+          }
+        };
 
-      Network.requestWillBeSent(({ requestId, request }) => {
-        requestURLMap[requestId] = request.url;
-      });
+        const requestEnded = requestId => {
+          delete pendingRequestURLMap[requestId];
+          maybeFulfillPromise();
+        };
 
-      Network.responseReceived(({ requestId, response }) => {
-        if (response.status >= 400) {
+        const requestFailed = requestId => {
+          failedURLs.push(pendingRequestURLMap[requestId]);
+          requestEnded(requestId);
+        };
+
+        Network.requestWillBeSent(({ requestId, request }) => {
+          pendingRequestURLMap[requestId] = request.url;
+        });
+
+        Network.responseReceived(({ requestId, response }) => {
+          if (response.status >= 400) {
+            requestFailed(requestId);
+          } else {
+            requestEnded(requestId);
+          }
+        });
+
+        Network.loadingFailed(({ requestId }) => {
           requestFailed(requestId);
-        }
+        });
+
+        await Page.loadEventFired();
+        pageLoaded = true;
+        maybeFulfillPromise();
       });
-
-      Network.loadingFailed(({ requestId }) => {
-        requestFailed(requestId);
-      });
-
-      await Page.loadEventFired();
-
-      if (failedURLs.length !== 0) {
-        throw new FetchingURLsError(failedURLs);
-      }
-    };
 
     const evaluateOnNewDocument = scriptSource => {
       if (Page.addScriptToEvaluateOnLoad) {
