@@ -5,6 +5,7 @@ const { execSync } = require('child_process');
 const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
+const fsExtra = require('fs-extra');
 const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const createChromeTarget = require('./create-chrome-target');
@@ -21,11 +22,11 @@ const getLocalIPAddress = () => {
   return ips[0];
 };
 
-const waitOnCDPAvailable = port =>
+const waitOnCDPAvailable = (host, port) =>
   new Promise((resolve, reject) => {
     waitOn(
       {
-        resources: [`tcp:localhost:${port}`],
+        resources: [`tcp:${host}:${port}`],
         delay: 50,
         interval: 100,
         timeout: 5000,
@@ -40,6 +41,33 @@ const waitOnCDPAvailable = port =>
     );
   });
 
+const getNetworkHost = async dockerId => {
+  let host = '127.0.0.1';
+
+  // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
+  const runningInsideDocker = (await fsExtra.exists('/proc/1/cgroup')) &&
+    /docker/.test(await fsExtra.readFile('/proc/1/cgroup', 'utf8'));
+
+  // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
+  // bridge, which means we can talk directly to it via its IP address.
+  if (runningInsideDocker) {
+    const { code, stdout } = await execa('docker', [
+      'inspect',
+      '-f',
+      '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
+      dockerId,
+    ]);
+
+    if (code !== 0) {
+      throw new Error('unable to determine ip of docker container');
+    }
+
+    host = stdout;
+  }
+
+  return host;
+};
+
 function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
   chromeDockerImage = 'yukinying/chrome-headless',
@@ -47,6 +75,7 @@ function createChromeDockerTarget({
 }) {
   let port;
   let dockerId;
+  let host;
   let dockerUrl = baseUrl;
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
@@ -96,9 +125,15 @@ function createChromeDockerTarget({
     );
     const { code, stdout, stderr } = await execa(dockerPath, args);
     if (code === 0) {
-      await waitOnCDPAvailable(port);
-      dockerId = stdout;
-      debug(`Docker started with id ${dockerId}`);
+      try {
+        dockerId = stdout;
+        host = await getNetworkHost(dockerId);
+        await waitOnCDPAvailable(host, port);
+        debug(`Docker started with id ${dockerId}`);
+      } catch (err) {
+        await stop();
+        throw err;
+      }
     } else {
       throw new Error(`Failed starting docker, ${stderr}`);
     }
@@ -114,14 +149,14 @@ function createChromeDockerTarget({
   }
 
   async function createNewDebuggerInstance() {
-    debug(`Launching new tab with debugger at port ${port}`);
-    const target = await CDP.New({ port });
+    debug(`Launching new tab with debugger at port ${host}:${port}`);
+    const target = await CDP.New({ host, port });
     debug(`Launched with target id ${target.id}`);
-    const client = await CDP({ port, target });
+    const client = await CDP({ host, port, target });
 
     client.close = () => {
       debug('New closing tab');
-      return CDP.Close({ port, id: target.id });
+      return CDP.Close({ host, port, id: target.id });
     };
 
     return client;
