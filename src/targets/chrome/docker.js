@@ -45,7 +45,8 @@ const getNetworkHost = async dockerId => {
   let host = '127.0.0.1';
 
   // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
-  const runningInsideDocker = fs.existsSync('/proc/1/cgroup') &&
+  const runningInsideDocker =
+    fs.existsSync('/proc/1/cgroup') &&
     /docker/.test(fs.readFileSync('/proc/1/cgroup', 'utf8'));
 
   // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
