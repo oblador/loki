@@ -1,6 +1,7 @@
 const path = require('path');
 const minimist = require('minimist');
 const defaults = require('./default-options');
+const ciInfo = require('ci-info');
 const { dependencyAvailable } = require('../../dependency-detection');
 
 function parseOptions(args, config) {
@@ -29,8 +30,8 @@ function parseOptions(args, config) {
     storiesFilter: $('storiesFilter'),
     diffingEngine:
       $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
-    verboseRenderer: $('verboseRenderer'),
-    requireReference: $('requireReference'),
+    verboseRenderer: $('verboseRenderer') || ciInfo.isCI,
+    requireReference: $('requireReference') || ciInfo.isCI,
     updateReference: argv._[0] === 'update',
     targetFilter: argv.targetFilter,
     configurationFilter: argv.configurationFilter || argv._[1],

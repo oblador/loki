@@ -33,8 +33,8 @@ yarn loki test -- --port 9009
 |**`--storiesFilter`**|Opposite of `--skipStories`.|*None*|
 |**`--configurationFilter`**|Regular expression for targets that should be tested.|*None*|
 |**`--targetFilter`**|Regular expression for targets that should be tested.|*None*|
-|**`--requireReference`**|Fail stories without reference image, useful for CI.|*No*|
-|**`--verboseRenderer`**|Plain text renderer, useful for CI.|*No*|
+|**`--requireReference`**|Fail stories without reference image, useful for CI.|*False, true for CI*|
+|**`--verboseRenderer`**|Plain text renderer, useful for CI.|*False, true for CI*|
 
 ## `loki update`
 
