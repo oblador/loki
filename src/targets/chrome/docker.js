@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
-const fsExtra = require('fs-extra');
+const fs = require('fs-extra');
 const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const createChromeTarget = require('./create-chrome-target');
@@ -45,8 +45,8 @@ const getNetworkHost = async dockerId => {
   let host = '127.0.0.1';
 
   // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
-  const runningInsideDocker = (await fsExtra.exists('/proc/1/cgroup')) &&
-    /docker/.test(await fsExtra.readFile('/proc/1/cgroup', 'utf8'));
+  const runningInsideDocker = fs.existsSync('/proc/1/cgroup') &&
+    /docker/.test(fs.readFileSync('/proc/1/cgroup', 'utf8'));
 
   // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
   // bridge, which means we can talk directly to it via its IP address.
@@ -59,7 +59,7 @@ const getNetworkHost = async dockerId => {
     ]);
 
     if (code !== 0) {
-      throw new Error('unable to determine ip of docker container');
+      throw new Error('Unable to determine IP of docker container');
     }
 
     host = stdout;
@@ -125,15 +125,10 @@ function createChromeDockerTarget({
     );
     const { code, stdout, stderr } = await execa(dockerPath, args);
     if (code === 0) {
-      try {
-        dockerId = stdout;
-        host = await getNetworkHost(dockerId);
-        await waitOnCDPAvailable(host, port);
-        debug(`Docker started with id ${dockerId}`);
-      } catch (err) {
-        await stop();
-        throw err;
-      }
+      dockerId = stdout;
+      host = await getNetworkHost(dockerId);
+      await waitOnCDPAvailable(host, port);
+      debug(`Docker started with id ${dockerId}`);
     } else {
       throw new Error(`Failed starting docker, ${stderr}`);
     }
