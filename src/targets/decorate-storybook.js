@@ -57,6 +57,7 @@ function decorateStorybook(storybook) {
     /* eslint no-param-reassign: ["error", { "props": false }] */
     storybook.storiesOf = storiesOf;
   } else {
+    // In recent versions of storybook object this isn't writeable, probably due to babel transpilation changes
     Object.defineProperty(storybook, 'storiesOf', {
       configurable: true,
       enumerable: true,
