@@ -51,8 +51,21 @@ function decorateStorybook(storybook) {
     return stories;
   }
 
-  /* eslint no-param-reassign: ["error", { "props": false }] */
-  storybook.storiesOf = storiesOf;
+  // Monkey patch storiesOf to be able to add async/skip methods
+  const descriptor = Object.getOwnPropertyDescriptor(storybook, 'storiesOf');
+  if (descriptor.writable) {
+    /* eslint no-param-reassign: ["error", { "props": false }] */
+    storybook.storiesOf = storiesOf;
+  } else {
+    // In recent versions of storybook object this isn't writeable, probably due to babel transpilation changes
+    Object.defineProperty(storybook, 'storiesOf', {
+      configurable: true,
+      enumerable: true,
+      get: function() {
+        return storiesOf;
+      },
+    });
+  }
 
   function getStorybook() {
     return storybook.getStorybook().map(function(component) {
