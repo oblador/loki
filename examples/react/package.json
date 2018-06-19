@@ -12,12 +12,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "loki",
-    "pretest-ci": "yarn update-loki",
+    "pretest-ci": "npm run update-loki",
     "test-ci": "build-storybook && loki --requireReference --reactUri file:./storybook-static",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "update-loki": "LOKI_FILE=`cd ../.. && yarn pack --silent --filename loki.tgz && echo \\`pwd\\`/loki.tgz` && yarn add file:$LOKI_FILE --dev && rm $LOKI_FILE"
+    "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save --no-package-lock && rm $LOKI_FILE"
   },
   "devDependencies": {
     "@storybook/cli": "^3.1.6",

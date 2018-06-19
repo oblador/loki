@@ -5,12 +5,12 @@ node_js:
 services:
 - docker
 before_install:
-- cd examples/react && yarn && cd ../..
+- cd examples/react && npm install && cd ../..
 script:
-- yarn lint
-- yarn test
-- cd examples/react && yarn test-ci && cd ../..
-before_deploy: "yarn build-docs"
+- npm run lint
+- npm run test
+- cd examples/react && npm run test-ci && cd ../..
+before_deploy: "npm run build-docs"
 deploy:
 - provider: npm
   email: joel@oblador.se
