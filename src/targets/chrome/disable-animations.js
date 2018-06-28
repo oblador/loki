@@ -7,6 +7,7 @@ const disableAnimations = window => {
     transition: none !important;
     -webkit-animation: none !important;
     animation: none !important;
+    will-change: auto !important;
   }
   `;
 
