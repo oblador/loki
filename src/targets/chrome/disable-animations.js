@@ -8,6 +8,8 @@ const disableAnimations = window => {
     -webkit-animation: none !important;
     animation: none !important;
     will-change: auto !important;
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
   }
   `;
 
