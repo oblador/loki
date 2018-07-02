@@ -14,7 +14,7 @@ const { FetchingURLsError, ServerError } = require('../../errors');
 
 const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
-const REQUEST_STABILIZATION_TIMEOUT = 100;
+const REQUEST_STABILIZATION_TIMEOUT = 300;
 
 function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
   function getDeviceMetrics(options) {
