@@ -5,7 +5,7 @@
   "chromeLoadTimeout": "60000",
   "chromeRetries": "0",
   "chromeSelector": "#root > *",
-  "chromeTolerance": "2.3",
+  "chromeTolerance": "0",
   "host": "localhost",
   "output": "./.loki/current",
   "difference": "./.loki/difference",
