@@ -41,11 +41,11 @@ There are two currently available options to choose from when comparing images i
 
 ### `gm`
 
-Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. This is default if available.
+Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. This is default if available. `chromeTolerance` percentage is based on overall image, meaning you'd likely want a low threshold.
 
 ### `looks-same`
 
-A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image.
+A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. `chromeTolerance` percentage is based on neighboring pixels which makes it ideal when you have different pixel densities.
 
 ||`gm`|`looks-same`|
 |-|---|------------|
