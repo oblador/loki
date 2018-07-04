@@ -1,10 +1,29 @@
 const getSelectorBoxSize = (window, selector) => {
-  const element = window.document.querySelector(selector);
-  if (!element) {
-    throw new Error('Unable to find element');
+  const elements = window.document.querySelectorAll(selector);
+  if (elements.length === 0) {
+    throw new Error('Unable to find selector');
   }
-  const { x, y, width, height } = element.getBoundingClientRect();
-  return { x, y, width, height };
+
+  return elements
+    .map(element => element.getBoundingClientRect())
+    .reduce((accumulator, { x, y, width, height }) => {
+      if (!accumulator) {
+        return { x, y, width, height };
+      }
+
+      const xMin = Math.min(accumulator.x, x);
+      const yMin = Math.min(accumulator.y, y);
+
+      const xMax = Math.max(accumulator.x + accumulator.width, x + width);
+      const yMax = Math.max(accumulator.y + accumulator.height, y + height);
+
+      return {
+        x: xMin,
+        y: yMin,
+        width: xMax - xMin,
+        height: yMax - yMin,
+      };
+    });
 };
 
 module.exports = getSelectorBoxSize;
