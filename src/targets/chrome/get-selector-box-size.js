@@ -1,21 +1,29 @@
 const getSelectorBoxSize = (window, selector) => {
-  const elements = window.document.querySelectorAll(selector);
+  const elements = [...window.document.querySelectorAll(selector)];
+
   if (elements.length === 0) {
     throw new Error('Unable to find selector');
   }
 
-  return Array.from(elements, element =>
-    element.getBoundingClientRect()
-  ).reduce((accumulator, { x, y, width, height }) => {
-    if (!accumulator) {
+  const removeWrapperElements = element => {
+    const isWrapper = elements.some(
+      node => (node === element ? false : element.contains(node))
+    );
+    return !isWrapper;
+  };
+
+  const getBoundingClientRect = element => element.getBoundingClientRect();
+
+  const boxSizeUnion = (domRect, { x, y, width, height }) => {
+    if (!domRect) {
       return { x, y, width, height };
     }
 
-    const xMin = Math.min(accumulator.x, x);
-    const yMin = Math.min(accumulator.y, y);
+    const xMin = Math.min(domRect.x, x);
+    const yMin = Math.min(domRect.y, y);
 
-    const xMax = Math.max(accumulator.x + accumulator.width, x + width);
-    const yMax = Math.max(accumulator.y + accumulator.height, y + height);
+    const xMax = Math.max(domRect.x + domRect.width, x + width);
+    const yMax = Math.max(domRect.y + domRect.height, y + height);
 
     return {
       x: xMin,
@@ -23,7 +31,12 @@ const getSelectorBoxSize = (window, selector) => {
       width: xMax - xMin,
       height: yMax - yMin,
     };
-  });
+  };
+
+  return elements
+    .filter(removeWrapperElements)
+    .map(getBoundingClientRect)
+    .reduce(boxSizeUnion);
 };
 
 module.exports = getSelectorBoxSize;
