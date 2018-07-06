@@ -5,7 +5,7 @@ const getSelectorBoxSize = (window, selector) => {
     throw new Error('Unable to find selector');
   }
 
-  const removeWrapperElements = element => {
+  const isNotWrapperElement = element => {
     const isWrapper = elements.some(
       node => (node === element ? false : element.contains(node))
     );
@@ -34,7 +34,7 @@ const getSelectorBoxSize = (window, selector) => {
   };
 
   return elements
-    .filter(removeWrapperElements)
+    .filter(isNotWrapperElement)
     .map(getBoundingClientRect)
     .reduce(boxSizeUnion);
 };
