@@ -34,6 +34,10 @@ storiesOf('Animation', module)
   .add('with CSS animation', () => <AnimatedComponent.CSSAnimation />)
   .add('with react-motion', () => <AnimatedComponent.ReactMotion />);
 
-storiesOf('Multiple elements', module).add('Stacked elements', () =>
-  <StackedElements />
+storiesOf('Multiple elements', module)
+  .add('Stacked elements', () => <StackedElements />)
+  .add('Stacked elements with a wrapper', () =>
+    <div className="wrapper" style={{ border: '10px solid red' }}>
+      <StackedElements footer="This works if not red border appears" />
+    </div>
 );

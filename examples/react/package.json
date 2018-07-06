@@ -25,6 +25,7 @@
     "loki": "*"
   },
   "loki": {
+    "chromeSelector": ".wrapper > *, #root > *",
     "diffingEngine": "looks-same",
     "configurations": {
       "chrome.laptop": {
