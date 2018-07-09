@@ -9,6 +9,7 @@ import Logo from '../src/Logo';
 import * as AnimatedComponent from '../src/AnimatedComponent';
 import DelayedComponent from '../src/DelayedComponent';
 import CursiveText from '../src/CursiveText';
+import StackedElements from '../src/StackedElements';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -32,3 +33,11 @@ storiesOf('Animation', module)
   .add('with CSS transition', () => <AnimatedComponent.CSSTransition />)
   .add('with CSS animation', () => <AnimatedComponent.CSSAnimation />)
   .add('with react-motion', () => <AnimatedComponent.ReactMotion />);
+
+storiesOf('Multiple elements', module)
+  .add('Stacked elements', () => <StackedElements />)
+  .add('Stacked elements with a wrapper', () =>
+    <div className="wrapper" style={{ border: '10px solid red' }}>
+      <StackedElements footer="This works if not red border appears" />
+    </div>
+);
