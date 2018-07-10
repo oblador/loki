@@ -56,7 +56,7 @@ function decorateStorybook(storybook) {
   if (descriptor.writable) {
     /* eslint no-param-reassign: ["error", { "props": false }] */
     storybook.storiesOf = storiesOf;
-  } else {
+  } else if (descriptor.configurable) {
     // In recent versions of storybook object this isn't writeable, probably due to babel transpilation changes
     Object.defineProperty(storybook, 'storiesOf', {
       configurable: true,
@@ -65,7 +65,26 @@ function decorateStorybook(storybook) {
         return storiesOf;
       },
     });
+  } else {
+    console.warn(
+      'Unable to monkeypatch loki storybook API methods. You must use `lokiSkip` and `lokiAsync` instead.'
+    );
   }
+
+  storybook.setAddon({
+    lokiSkip: function(...args) {
+      return wrapWithSkipStory(this.add.bind(this), this.kind)(...args);
+    },
+    lokiAsync: function(...args) {
+      return wrapWithAsyncStory(this.add.bind(this))(...args);
+    },
+    lokiAsyncSkip: function(...args) {
+      return wrapWithSkipStory(
+        wrapWithAsyncStory(this.add.bind(this)),
+        this.kind
+      )(...args);
+    },
+  });
 
   function getStorybook() {
     return storybook.getStorybook().map(function(component) {
