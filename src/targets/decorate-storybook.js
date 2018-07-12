@@ -3,13 +3,17 @@
 
 const readyStateManager = require('./ready-state-manager');
 
+let warnedSkipDeprecation = false;
+let warnedAsyncDeprecation = false;
+
 function decorateStorybook(storybook) {
   const originalStoriesOf = storybook.storiesOf;
   const skippedStories = {};
 
   function wrapWithSkipStory(add, kind, isDeprecatedCall) {
     return function skipStory(story, storyFn) {
-      if (isDeprecatedCall) {
+      if (isDeprecatedCall && !warnedSkipDeprecation) {
+        warnedSkipDeprecation = true;
         console.warn(
           '[DEPRECATED] `.add.skip(...)` is deprecated. Please use `.lokiSkip(...)` instead.'
         );
@@ -26,7 +30,8 @@ function decorateStorybook(storybook) {
 
   function wrapWithAsyncStory(add, isDeprecatedCall) {
     return function skipStory(story, storyFn) {
-      if (isDeprecatedCall) {
+      if (isDeprecatedCall && !warnedAsyncDeprecation) {
+        warnedAsyncDeprecation = true;
         console.warn(
           '[DEPRECATED] `.add.async(...)` is deprecated. Please use `.lokiAsync(...)` instead.'
         );
