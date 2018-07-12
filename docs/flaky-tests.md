@@ -7,7 +7,7 @@ In some cases having a story of a component is useful for development purposes, 
 ```js
 storiesOf('MyComponent', module)
   .add('enabled story', () => <MyComponent />)
-  .add.skip('skipped story', () => <MyComponent />);
+  .lokiSkip('skipped story', () => <MyComponent />);
 ```
 
 ## Asynchronous Stories
@@ -17,7 +17,7 @@ Some components will do some computing or loading data over the network and then
 ```js
 storiesOf('MyComponent', module)
   .add('synchronous story', () => <MyComponent />)
-  .add.async('asynchronous story', ({ done }) => <MyComponent onDone={done} />);
+  .lokiAsync('asynchronous story', ({ done }) => <MyComponent onDone={done} />);
 ```
 
 ## Transitions and Animations

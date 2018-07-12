@@ -20,11 +20,15 @@ storiesOf('Text', module).add('with external font', () => (
 storiesOf('Button', module)
   .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
   .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>)
-  .add.skip('skipped story', () => <Button onClick={action('clicked')}>I am skipped</Button>);
+  .lokiSkip('lokiSkip story', () => <Button onClick={action('clicked')}>I am skipped</Button>)
+  .add.skip('add.skip story', () => <Button onClick={action('clicked')}>I am skipped</Button>);
 
 storiesOf('Asynchronous render', module)
   .add('Logo without delay', () => <Logo />)
   .add('Logo with 1s delay', () => <Logo delay={1000} />)
+  .lokiAsync('lokiAsync() with 1s delay', ({ done }) => (
+    <DelayedComponent delay={1000} onDone={done} />
+  ))
   .add.async('add.async() with 1s delay', ({ done }) => (
     <DelayedComponent delay={1000} onDone={done} />
   ));
