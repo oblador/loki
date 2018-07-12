@@ -7,8 +7,14 @@ function decorateStorybook(storybook) {
   const originalStoriesOf = storybook.storiesOf;
   const skippedStories = {};
 
-  function wrapWithSkipStory(add, kind) {
+  function wrapWithSkipStory(add, kind, isDeprecatedCall) {
     return function skipStory(story, storyFn) {
+      if (isDeprecatedCall) {
+        console.warn(
+          '[DEPRECATED] `.add.skip(...)` is deprecated. Please use `.lokiSkip(...)` instead.'
+        );
+      }
+
       if (!skippedStories[kind]) {
         skippedStories[kind] = [];
       }
@@ -18,8 +24,14 @@ function decorateStorybook(storybook) {
     };
   }
 
-  function wrapWithAsyncStory(add) {
+  function wrapWithAsyncStory(add, isDeprecatedCall) {
     return function skipStory(story, storyFn) {
+      if (isDeprecatedCall) {
+        console.warn(
+          '[DEPRECATED] `.add.async(...)` is deprecated. Please use `.lokiAsync(...)` instead.'
+        );
+      }
+
       return add(story, function render(context) {
         var resolveAsyncStory = null;
         readyStateManager.resetPendingPromises();
@@ -43,10 +55,10 @@ function decorateStorybook(storybook) {
 
   function storiesOf(kind, module) {
     const stories = originalStoriesOf(kind, module);
-    stories.add.skip = wrapWithSkipStory(stories.add.bind(stories), kind);
-    stories.add.async = wrapWithAsyncStory(stories.add.bind(stories));
-    stories.add.async.skip = wrapWithSkipStory(stories.add.async, kind);
-    stories.add.skip.async = wrapWithAsyncStory(stories.add.skip);
+    stories.add.skip = wrapWithSkipStory(stories.add.bind(stories), kind, true);
+    stories.add.async = wrapWithAsyncStory(stories.add.bind(stories), true);
+    stories.add.async.skip = wrapWithSkipStory(stories.add.async, kind, true);
+    stories.add.skip.async = wrapWithAsyncStory(stories.add.skip, true);
 
     return stories;
   }
@@ -65,10 +77,6 @@ function decorateStorybook(storybook) {
         return storiesOf;
       },
     });
-  } else {
-    console.warn(
-      'Unable to monkeypatch loki storybook API methods. You must use `lokiSkip` and `lokiAsync` instead.'
-    );
   }
 
   storybook.setAddon({
