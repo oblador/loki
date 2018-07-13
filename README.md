@@ -2,6 +2,8 @@
 
 # Visual Regression Testing for Storybook
 
+[![GitHub license](https://img.shields.io/npm/l/loki.svg)](https://github.com/oblador/loki/blob/master/LICENSE) [![Travis](https://img.shields.io/travis/oblador/loki.svg)](https://travis-ci.org/oblador/loki) [![Node.js version](https://img.shields.io/node/v/loki.svg)](https://npmjs.com/package/loki) [![npm version](https://img.shields.io/npm/v/loki.svg)](https://npmjs.com/package/loki) [![npm downloads](https://img.shields.io/npm/dm/loki.svg)](https://npmjs.com/package/loki)
+
 <img src="https://user-images.githubusercontent.com/378279/28074070-f0052fac-6657-11e7-8a9d-398a12d2d6a8.png" width="672" height="494" alt="Loki" />
 
 ## Rationale
