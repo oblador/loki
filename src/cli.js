@@ -3,7 +3,11 @@
 const minimist = require('minimist');
 const { die, bold } = require('./console');
 const { version } = require('../package.json');
-const { MissingDependencyError, ServerError } = require('./errors');
+const {
+  MissingDependencyError,
+  ServerError,
+  FetchingURLsError,
+} = require('./errors');
 
 const getExecutorForCommand = command => {
   switch (command) {
@@ -34,7 +38,11 @@ async function run() {
   try {
     await executor(args);
   } catch (err) {
-    if (err instanceof MissingDependencyError || err instanceof ServerError) {
+    if (
+      err instanceof MissingDependencyError ||
+      err instanceof ServerError ||
+      err instanceof FetchingURLsError
+    ) {
       die(err.message, err.instructions);
     }
 
