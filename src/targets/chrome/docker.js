@@ -1,6 +1,5 @@
 const debug = require('debug')('loki:chrome:docker');
 const os = require('os');
-const path = require('path');
 const { execSync } = require('child_process');
 const execa = require('execa');
 const waitOn = require('wait-on');
@@ -94,7 +93,7 @@ function createChromeDockerTarget({
     }
     dockerUrl = baseUrl.replace('localhost', ip);
   } else if (baseUrl.indexOf('file:') === 0) {
-    const staticPath = path.resolve(baseUrl.substr('file:'.length));
+    const staticPath = baseUrl.substr('file:'.length);
     const staticMountPath = '/var/loki';
     runArgs.push('-v');
     runArgs.push(`${staticPath}:${staticMountPath}`);
