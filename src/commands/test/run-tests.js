@@ -85,6 +85,13 @@ async function runTests(flatConfigurations, options) {
       task: () =>
         getListr(options)([
           {
+            title: 'Prepare environment',
+            task: async () => {
+              await target.prepare();
+            },
+            enabled: () => !!target.prepare,
+          },
+          {
             title: 'Start',
             task: async ({ activeTargets }) => {
               await target.start();

@@ -16,7 +16,13 @@ const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
 const REQUEST_STABILIZATION_TIMEOUT = 100;
 
-function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
+function createChromeTarget(
+  start,
+  stop,
+  createNewDebuggerInstance,
+  baseUrl,
+  prepare
+) {
   function getDeviceMetrics(options) {
     return {
       width: options.width,
@@ -245,7 +251,14 @@ function createChromeTarget(start, stop, createNewDebuggerInstance, baseUrl) {
     return screenshot;
   }
 
-  return { start, stop, getStorybook, launchNewTab, captureScreenshotForStory };
+  return {
+    start,
+    stop,
+    prepare,
+    getStorybook,
+    launchNewTab,
+    captureScreenshotForStory,
+  };
 }
 
 module.exports = createChromeTarget;
