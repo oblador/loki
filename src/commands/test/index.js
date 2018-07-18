@@ -1,6 +1,6 @@
 const pickBy = require('ramda/src/pickBy');
 const uniq = require('ramda/src/uniq');
-const minimist = require('minimist');
+const getopts = require('getopts');
 const { warn, error, info } = require('../../console');
 const getConfig = require('../../config');
 const parseOptions = require('./parse-options');
@@ -12,7 +12,7 @@ const buildCommand = require('../../build-command');
 const escapeRegExp = str => str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
 
 const getUpdateCommand = (errors, args) => {
-  const argv = minimist(args);
+  const argv = getopts(args);
   const stories = uniq(errors.map(e => `${e.kind} ${e.story}`));
   const storiesFilter = `^${stories.map(escapeRegExp).join('|')}$`;
   const tooManyToFilter = stories.length > 10;

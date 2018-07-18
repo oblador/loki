@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 
-const minimist = require('minimist');
+const getopts = require('getopts');
 const { die, bold } = require('./console');
 const { version } = require('../package.json');
 const {
@@ -29,7 +29,7 @@ const getExecutorForCommand = command => {
 
 async function run() {
   const args = process.argv.slice(2);
-  const argv = minimist(args);
+  const argv = getopts(args);
   const command = argv._[0] || 'test';
   const executor = getExecutorForCommand(command);
 
