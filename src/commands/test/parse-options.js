@@ -1,12 +1,12 @@
 const path = require('path');
-const minimist = require('minimist');
+const getopts = require('getopts');
 const ciInfo = require('ci-info');
 const { dependencyAvailable } = require('../../dependency-detection');
 const defaults = require('./default-options');
 const getAbsoluteURL = require('./get-absolute-url');
 
 function parseOptions(args, config) {
-  const argv = minimist(args, {
+  const argv = getopts(args, {
     boolean: ['requireReference', 'chromeEnableAnimations', 'verboseRenderer'],
   });
 

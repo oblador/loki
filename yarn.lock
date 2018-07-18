@@ -1812,6 +1812,10 @@ get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-3.0.0.tgz#8e943d1358dc37555054ecbe2edb05aa174ede14"
 
+getopts@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/getopts/-/getopts-2.1.1.tgz#330d29c59d0a1b4ec7e0e4e43a8d1dd42ccee565"
+
 getpass@^0.1.1:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/getpass/-/getpass-0.1.7.tgz#5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
@@ -5038,6 +5042,10 @@ tunnel-agent@^0.6.0:
 tunnel-agent@~0.4.1:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.4.3.tgz#6373db76909fe570e08d73583365ed828a74eeeb"
+
+turbocolor@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/turbocolor/-/turbocolor-2.3.0.tgz#9b720e38c6f907add42d9315aa18cf797d79f148"
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"

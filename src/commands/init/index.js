@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
-const minimist = require('minimist');
+const getopts = require('getopts');
 const { warn, die, info } = require('../../console');
 const getDefaults = require('../../config/get-defaults');
 const {
@@ -37,9 +37,8 @@ function init(args) {
 
   const relative = to => path.relative('.', to);
 
-  const argv = minimist(args, {
+  const argv = getopts(args, {
     boolean: ['f', 'force'],
-    string: ['c', 'config'],
     default: {},
   });
 
