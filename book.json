@@ -2,7 +2,16 @@
   "gitbook": "3.2.2",
   "title": "Loki",
   "root": "docs",
-  "plugins": ["edit-link", "theme-gestalt", "-theme-default", "prism", "-highlight", "anchorjs", "github", "styles-sass-fix"],
+  "plugins": [
+    "edit-link",
+    "theme-gestalt",
+    "-theme-default",
+    "prism",
+    "-highlight",
+    "anchorjs",
+    "github",
+    "styles-sass-fix"
+  ],
   "pluginsConfig": {
     "edit-link": {
       "base": "https://github.com/oblador/loki/tree/master",

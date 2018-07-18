@@ -18,7 +18,7 @@ const testStory = require('./test-story');
 async function placeGitignore(pathsToIgnore) {
   const parentDir = path.dirname(pathsToIgnore[0]);
   const gitignorePath = `${parentDir}/.gitignore`;
-  if (!await fs.pathExists(gitignorePath)) {
+  if (!(await fs.pathExists(gitignorePath))) {
     const relativeToParent = p => path.relative(parentDir, p);
     const isDecendant = p => p.indexOf('..') !== 0;
     const gitignore = pathsToIgnore

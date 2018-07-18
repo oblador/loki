@@ -19,7 +19,7 @@
     "serve-docs": "gitbook serve",
     "build-docs": "(gitbook install || (npm rebuild node-sass && gitbook install)) && gitbook build",
     "publish-docs": "./bin/publish-docs",
-    "format": "npm run lint -- --fix",
+    "format": "prettier '{,src/**/,examples/**/}*.{js,json}' --write",
     "lint": "eslint *.js src",
     "test": "jest"
   },
@@ -81,7 +81,7 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jest": "^20.0.3",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-prettier": "^2.1.2",
+    "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.1.0",
     "gitbook-cli": "^2.3.2",
     "gitbook-plugin-anchorjs": "^1.1.1",
@@ -90,7 +90,7 @@
     "gitbook-plugin-prism": "^2.3.0",
     "gitbook-plugin-theme-gestalt": "^1.0.2",
     "jest": "^20.0.4",
-    "prettier": "^1.5.3"
+    "prettier": "^1.13.7"
   },
   "jest": {
     "testPathIgnorePatterns": [
