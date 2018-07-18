@@ -11,17 +11,27 @@ import DelayedComponent from '../src/DelayedComponent';
 import CursiveText from '../src/CursiveText';
 import StackedElements from '../src/StackedElements';
 
-storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
+storiesOf('Welcome', module).add('to Storybook', () => (
+  <Welcome showApp={linkTo('Button')} />
+));
 
 storiesOf('Text', module).add('with external font', () => (
   <CursiveText>Hello CursiveText</CursiveText>
 ));
 
 storiesOf('Button', module)
-  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
-  .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>)
-  .lokiSkip('lokiSkip story', () => <Button onClick={action('clicked')}>I am skipped</Button>)
-  .add.skip('add.skip story', () => <Button onClick={action('clicked')}>I am skipped</Button>);
+  .add('with text', () => (
+    <Button onClick={action('clicked')}>Hello Button</Button>
+  ))
+  .add('with some emoji', () => (
+    <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
+  ))
+  .lokiSkip('lokiSkip story', () => (
+    <Button onClick={action('clicked')}>I am skipped</Button>
+  ))
+  .add.skip('add.skip story', () => (
+    <Button onClick={action('clicked')}>I am skipped</Button>
+  ));
 
 storiesOf('Asynchronous render', module)
   .add('Logo without delay', () => <Logo />)
@@ -40,8 +50,8 @@ storiesOf('Animation', module)
 
 storiesOf('Multiple elements', module)
   .add('Stacked elements', () => <StackedElements />)
-  .add('Stacked elements with a wrapper', () =>
+  .add('Stacked elements with a wrapper', () => (
     <div className="wrapper" style={{ border: '10px solid red' }}>
       <StackedElements footer="This works if not red border appears" />
     </div>
-);
+  ));

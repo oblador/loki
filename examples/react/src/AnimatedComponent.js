@@ -26,7 +26,11 @@ const withAlternatingState = (WrappedComponent, interval = 1000) =>
   };
 
 export const CSSTransition = withAlternatingState(({ on }) => (
-  <div className={`AnimatedComponent CSSTransition ${on ? 'CSSTransition-on' : ''}`} />
+  <div
+    className={`AnimatedComponent CSSTransition ${
+      on ? 'CSSTransition-on' : ''
+    }`}
+  />
 ));
 
 export const CSSAnimation = () => (

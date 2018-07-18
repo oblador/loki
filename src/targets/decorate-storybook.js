@@ -1,4 +1,4 @@
-/* eslint object-shorthand: 0, prefer-arrow-callback: 0, no-var: 0 */
+/* eslint object-shorthand: 0, prefer-arrow-callback: 0, no-var: 0, no-console: 0 */
 // Diverge from regular rules here to not mess with UglifyJS
 
 const readyStateManager = require('./ready-state-manager');

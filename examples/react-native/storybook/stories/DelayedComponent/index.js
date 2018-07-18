@@ -31,10 +31,6 @@ export default class DelayedComponent extends Component {
   }
 
   render() {
-    return (
-      <Text>
-        {this.state.done ? 'Done!' : 'Loading…'}
-      </Text>
-    );
+    return <Text>{this.state.done ? 'Done!' : 'Loading…'}</Text>;
   }
 }

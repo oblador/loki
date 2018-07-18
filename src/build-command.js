@@ -14,7 +14,10 @@ const stringifyArg = args => arg => {
 };
 
 const argObjectToString = args =>
-  Object.keys(args).filter(isTruthy(args)).map(stringifyArg(args)).join(' ');
+  Object.keys(args)
+    .filter(isTruthy(args))
+    .map(stringifyArg(args))
+    .join(' ');
 
 function buildCommand(command, argObject) {
   const args = argObjectToString(argObject);

@@ -14,37 +14,39 @@ import Logo from './Logo';
 import ErrorThrowingComponent from './ErrorThrowingComponent';
 import DelayedComponent from './DelayedComponent';
 
-storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
+storiesOf('Welcome', module).add('to Storybook', () => (
+  <Welcome showApp={linkTo('Button')} />
+));
 
 storiesOf('Button', module)
   .addDecorator(getStory => <CenterView>{getStory()}</CenterView>)
-  .add('with text', () =>
+  .add('with text', () => (
     <Button onPress={action('clicked-text')}>
       <Text>Hello Button</Text>
     </Button>
-  )
-  .add('with some emoji', () =>
+  ))
+  .add('with some emoji', () => (
     <Button onPress={action('clicked-emoji')}>
       <Text>😀 😎 👍 💯</Text>
     </Button>
-  )
-  .lokiSkip('lokiSkip story', () =>
+  ))
+  .lokiSkip('lokiSkip story', () => (
     <Button onPress={action('clicked-emoji')}>
       <Text>I am skipped</Text>
     </Button>
-  )
-  .add.skip('add.skip story', () =>
+  ))
+  .add.skip('add.skip story', () => (
     <Button onPress={action('clicked-emoji')}>
       <Text>I am skipped</Text>
     </Button>
-  );
+  ));
 
 storiesOf('Asynchronous Render', module)
   .add('Logo without delay', () => <Logo />)
   .add('Logo with 1s delay', () => <Logo delay={1000} />)
-  .add.async('add.async() with 1s delay', ({ done }) =>
+  .add.async('add.async() with 1s delay', ({ done }) => (
     <DelayedComponent delay={1000} onDone={done} />
-  );
+  ));
 
 storiesOf('Error Handling', module)
   .add('with ErrorThrowingComponent', () => <ErrorThrowingComponent />)

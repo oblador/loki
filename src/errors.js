@@ -33,9 +33,9 @@ function FetchingURLsError(failedURLs) {
   Error.captureStackTrace(this, this.constructor);
   this.name = this.constructor.name;
   const noun = failedURLs.length === 1 ? 'request' : 'requests';
-  const message = `${failedURLs.length} ${noun} failed to load; ${failedURLs.join(
-    ', '
-  )}`;
+  const message = `${
+    failedURLs.length
+  } ${noun} failed to load; ${failedURLs.join(', ')}`;
   this.message = message;
   this.failedURLs = failedURLs;
 }
