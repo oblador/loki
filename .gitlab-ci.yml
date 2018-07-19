@@ -1,0 +1,18 @@
+stages:
+  - test
+
+visual-regression-test:
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  stage: test
+  image: node:8
+  services:
+    - docker:dind
+  before_script:
+    - curl -L http://get.docker.io | bash
+    - docker info
+  script:
+    - cd examples/react
+    - npm install
+    - npm run test-ci
