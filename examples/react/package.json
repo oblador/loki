@@ -13,7 +13,7 @@
     "build": "react-scripts build",
     "test": "loki",
     "pretest-ci": "npm run update-loki",
-    "test-ci": "build-storybook && loki --requireReference --reactUri file:./storybook-static",
+    "test-ci": "build-storybook && loki --requireReference --reactUri file:./storybook-static --chromeDockerHost docker",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",

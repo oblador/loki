@@ -1,0 +1,14 @@
+stages:
+  - test
+
+visual-regression-test:
+  stage: test
+  image: node:8
+
+  services:
+    - yukinying/chrome-headless:63.0.3230.2
+
+  script:
+    - cd examples/react
+    - npm install
+    - DEBUG=loki:* npm run test-ci -- --chromeDockerUseExisting
