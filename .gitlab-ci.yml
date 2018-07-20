@@ -10,10 +10,7 @@ visual-regression-test:
   services:
     - docker:dind
   before_script:
-    - cat /etc/hosts
-    - hostname
     - curl -L http://get.docker.io | bash
-    - docker info -f "{{json .Name}}"
     - docker info
   script:
     - cd examples/react

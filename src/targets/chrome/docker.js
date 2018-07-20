@@ -23,14 +23,15 @@ const getLocalIPAddress = () => {
 
 // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
 const getCurrentDockerId = () => {
-  if (!fs.existsSync('/proc/1/cgroup')) {
-    return;
+  let dockerId;
+
+  if (fs.existsSync('/proc/1/cgroup')) {
+    const cgroup = fs.readFileSync('/proc/1/cgroup', 'utf8');
+    const currentDockerIdMatch = /^\d+:cpu.+\/([^/]+)$/m.exec(cgroup);
+    dockerId = currentDockerIdMatch && currentDockerIdMatch[1];
   }
 
-  const cgroup = fs.readFileSync('/proc/1/cgroup', 'utf8');
-  const currentDockerIdMatch = /^\d+:cpu.+\/([^\/]+)$/m.exec(cgroup);
-
-  return currentDockerIdMatch && currentDockerIdMatch[1];
+  return dockerId;
 };
 
 const getDockerContainerIPAddress = async dockerId => {
@@ -47,25 +48,21 @@ const getDockerContainerIPAddress = async dockerId => {
   return stdout;
 };
 
-const getDockerNetworks = async dockerId => {
-  const { stdout: containers } = await execa('docker', [
-    'ps'
-  ]);
-  console.log(containers);
-
-  const { code, stdout } = await execa('docker', [
-    'inspect',
-    dockerId,
-    '-f',
-    '{{json .NetworkSettings.Networks }}'
-  ]);
+const isChildDockerContainer = async dockerId => {
+  // If the current docker container is not running in the current docker host,
+  // then we are running in docker-in-docker mode and docker containers we spawn are
+  // children of our docker container, and not siblings (running on the same host as us)
+  const { code } = await execa('docker', ['inspect', dockerId]);
 
   if (code !== 0) {
-    throw new Error('Unable to determine networks of docker container');
+    return true;
   }
 
-  return Object.keys(JSON.parse(stdout));
+  return false;
 };
+
+const getDockerHostname = async () =>
+  JSON.parse(await execa('docker', ['info', '-f', '{{json .Name}}']));
 
 const getHostExist = async hostname => {
   try {
@@ -81,16 +78,18 @@ const getNetworkHost = async dockerId => {
   console.log('Current Docker Id', currentDockerId);
 
   if (currentDockerId) {
-    console.log('Docker networks', JSON.stringify(await getDockerNetworks(currentDockerId)));
-    // Gitlab's docker in docker service is exposed as "docker"
-    //if (await getHostExist('docker')) {
-      //return 'docker';
-    //}
-
-    // If we are running inside a docker container, our spawned docker chrome instance
-    // will be a sibling on the default bridge, which means we can talk directly to it
-    // via its IP address.
-    return getDockerContainerIPAddress(dockerId);
+    if (isChildDockerContainer(currentDockerId)) {
+      const dockerHostname = getDockerHostname();
+      console.log('Docker Hostname', dockerHostname);
+      if (await getHostExist(dockerHostname)) {
+        return dockerHostname;
+      }
+    } else {
+      // If we are running inside a docker container, our spawned docker chrome instance
+      // will be a sibling on the default bridge, which means we can talk directly to it
+      // via its IP address.
+      return getDockerContainerIPAddress(dockerId);
+    }
   }
 
   return '127.0.0.1';
