@@ -29,7 +29,6 @@ const getCurrentDockerId = () => {
 
   const cgroup = fs.readFileSync('/proc/1/cgroup', 'utf8');
   const currentDockerIdMatch = /^\d+:cpu.+\/([^\/]+)$/m.exec(cgroup);
-  console.log('CGROUP', cgroup);
 
   return currentDockerIdMatch && currentDockerIdMatch[1];
 };
@@ -49,11 +48,16 @@ const getDockerContainerIPAddress = async dockerId => {
 };
 
 const getDockerNetworks = async dockerId => {
+  const { stdout: containers } = await execa('docker', [
+    'ps'
+  ]);
+  console.log(containers);
+
   const { code, stdout } = await execa('docker', [
     'inspect',
+    dockerId,
     '-f',
-    '{{json .NetworkSettings.Networks }}',
-    dockerId
+    '{{json .NetworkSettings.Networks }}'
   ]);
 
   if (code !== 0) {
