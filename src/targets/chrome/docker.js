@@ -40,6 +40,21 @@ const getDockerContainerIPAddress = async dockerId => {
   return stdout;
 };
 
+const getDockerNetworks = async dockerId => {
+  const { code, stdout } = await execa('docker', [
+    'inspect',
+    dockerId,
+    '-f',
+    '{{json .NetworkSettings.Networks }}'
+  ]);
+
+  if (code !== 0) {
+    throw new Error('Unable to determine networks of docker container');
+  }
+
+  return stdout;
+};
+
 const getHostExist = async hostname => {
   try {
     await execa('ping', ['-q', '-c 1', '-t 1', hostname]);
@@ -51,6 +66,7 @@ const getHostExist = async hostname => {
 
 const getNetworkHost = async dockerId => {
   if (getIsRunningInsideDocker()) {
+    console.log('Docker networks', JSON.stringify(await getDockerNetworks(dockerId)));
     // Gitlab's docker in docker service is exposed as "docker"
     //if (await getHostExist('docker')) {
       //return 'docker';
