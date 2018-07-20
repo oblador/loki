@@ -83,7 +83,6 @@ const getHostExist = async hostname => {
 
 const getNetworkHost = async dockerId => {
   const currentDockerId = getCurrentDockerId();
-  console.log('Current Docker Id', currentDockerId);
 
   if (currentDockerId) {
     if (await isSiblingDockerContainer(currentDockerId)) {
@@ -94,7 +93,6 @@ const getNetworkHost = async dockerId => {
     }
 
     const dockerHostname = await getDockerHostname();
-    console.log('Docker Hostname', dockerHostname);
     if (await getHostExist(dockerHostname)) {
       return dockerHostname;
     }
