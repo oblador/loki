@@ -28,7 +28,7 @@ const getCurrentDockerId = () => {
   }
 
   const cgroup = fs.readFileSync('/proc/1/cgroup', 'utf8');
-  const currentDockerIdMatch = /^\d+:cpu:.+\/(.+)$/m.exec(cgroup);
+  const currentDockerIdMatch = /^\d+:cpu.+\/([^\/]+)$/m.exec(cgroup);
   console.log('CGROUP', cgroup);
 
   return currentDockerIdMatch && currentDockerIdMatch[1];
