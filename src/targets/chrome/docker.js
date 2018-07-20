@@ -52,9 +52,9 @@ const getHostExist = async hostname => {
 const getNetworkHost = async dockerId => {
   if (getIsRunningInsideDocker()) {
     // Gitlab's docker in docker service is exposed as "docker"
-    if (await getHostExist('docker')) {
-      return 'docker';
-    }
+    //if (await getHostExist('docker')) {
+      //return 'docker';
+    //}
 
     // If we are running inside a docker container, our spawned docker chrome instance
     // will be a sibling on the default bridge, which means we can talk directly to it
