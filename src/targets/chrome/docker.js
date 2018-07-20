@@ -22,9 +22,16 @@ const getLocalIPAddress = () => {
 };
 
 // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
-const getIsRunningInsideDocker = () =>
-  fs.existsSync('/proc/1/cgroup') &&
-  /docker/.test(fs.readFileSync('/proc/1/cgroup', 'utf8'));
+const getCurrentDockerId = () => {
+  if (!fs.existsSync('/proc/1/cgroup')) {
+    return;
+  }
+
+  const cgroup = fs.readFileSync('/proc/1/cgroup', 'utf8');
+  const currentDockerIdMatch = /^\d+:cpu:\/docker\/(.+)$/m.exec(group);
+
+  return currentDockerIdMatch && currentDockerIdMatch[1];
+};
 
 const getDockerContainerIPAddress = async dockerId => {
   const { code, stdout } = await execa('docker', [
@@ -43,16 +50,16 @@ const getDockerContainerIPAddress = async dockerId => {
 const getDockerNetworks = async dockerId => {
   const { code, stdout } = await execa('docker', [
     'inspect',
-    dockerId,
     '-f',
-    '{{json .NetworkSettings.Networks }}'
+    '{{json .NetworkSettings.Networks }}',
+    dockerId
   ]);
 
   if (code !== 0) {
     throw new Error('Unable to determine networks of docker container');
   }
 
-  return stdout;
+  return Object.keys(JSON.parse(stdout));
 };
 
 const getHostExist = async hostname => {
@@ -65,8 +72,10 @@ const getHostExist = async hostname => {
 };
 
 const getNetworkHost = async dockerId => {
-  if (getIsRunningInsideDocker()) {
-    console.log('Docker networks', JSON.stringify(await getDockerNetworks(dockerId)));
+  const currentDockerId = getCurrentDockerId();
+
+  if (currentDockerId) {
+    console.log('Docker networks', JSON.stringify(await getDockerNetworks(currentDockerId)));
     // Gitlab's docker in docker service is exposed as "docker"
     //if (await getHostExist('docker')) {
       //return 'docker';
