@@ -67,8 +67,10 @@ const isSiblingDockerContainer = async dockerId => {
   return isSibling;
 };
 
-const getDockerHostname = async () =>
-  await execa('docker', ['info', '-f', '{{json .Name}}']);
+const getDockerHostname = async () => {
+  const {stdout} = await execa('docker', ['info', '-f', '{{json .Name}}']);
+  return JSON.parse(stdout);
+};
 
 const getHostExist = async hostname => {
   try {
