@@ -28,7 +28,8 @@ const getCurrentDockerId = () => {
   }
 
   const cgroup = fs.readFileSync('/proc/1/cgroup', 'utf8');
-  const currentDockerIdMatch = /^\d+:cpu:\/docker\/(.+)$/m.exec(cgroup);
+  const currentDockerIdMatch = /^\d+:cpu:.+\/(.+)$/m.exec(cgroup);
+  console.log('CGROUP', cgroup);
 
   return currentDockerIdMatch && currentDockerIdMatch[1];
 };
@@ -73,6 +74,7 @@ const getHostExist = async hostname => {
 
 const getNetworkHost = async dockerId => {
   const currentDockerId = getCurrentDockerId();
+  console.log('Current Docker Id', currentDockerId);
 
   if (currentDockerId) {
     console.log('Docker networks', JSON.stringify(await getDockerNetworks(currentDockerId)));
