@@ -21,6 +21,79 @@ const getLocalIPAddress = () => {
   return ips[0];
 };
 
+// https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
+const getCurrentDockerId = () => {
+  const PROCESS_CONTROL_GROUP_PATH = '/proc/1/cgroup';
+  if (fs.existsSync(PROCESS_CONTROL_GROUP_PATH)) {
+    const cgroup = fs.readFileSync(PROCESS_CONTROL_GROUP_PATH, 'utf8');
+    const currentDockerIdMatch = /^\d+:cpu.+\/([^/]+)$/m.exec(cgroup);
+    if (currentDockerIdMatch) {
+      return currentDockerIdMatch[1];
+    }
+  }
+  return null;
+};
+
+const getDockerContainerIPAddress = async dockerId => {
+  const { code, stdout } = await execa('docker', [
+    'inspect',
+    '-f {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
+    dockerId,
+  ]);
+
+  if (code !== 0) {
+    throw new Error('Unable to determine IP of docker container');
+  }
+
+  return stdout;
+};
+
+const isSiblingDockerContainer = async dockerId => {
+  // If the current docker container is not running in the current docker host,
+  // then we are running in docker-in-docker mode and docker containers we spawn are
+  // children of our docker container, and not siblings (running on the same host as us)
+  try {
+    const { code } = await execa('docker', ['inspect', dockerId]);
+    return code === 0;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getDockerHostname = async () => {
+  const { stdout } = await execa('docker', ['info', '-f', '{{json .Name}}']);
+  return JSON.parse(stdout);
+};
+
+const getHostExist = async hostname => {
+  try {
+    await execa('ping', ['-q', '-c 1', '-t 1', hostname]);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getNetworkHost = async dockerId => {
+  const currentDockerId = getCurrentDockerId();
+
+  if (currentDockerId) {
+    if (await isSiblingDockerContainer(currentDockerId)) {
+      // If we are running inside a docker container, our spawned docker chrome instance
+      // will be a sibling on the default bridge, which means we can talk directly to it
+      // via its IP address.
+      return getDockerContainerIPAddress(dockerId);
+    }
+
+    const dockerHostname = await getDockerHostname();
+    if (await getHostExist(dockerHostname)) {
+      return dockerHostname;
+    }
+  }
+
+  return '127.0.0.1';
+};
+
 const waitOnCDPAvailable = (host, port) =>
   new Promise((resolve, reject) => {
     waitOn(
