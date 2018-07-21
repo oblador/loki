@@ -23,15 +23,15 @@ const getLocalIPAddress = () => {
 
 // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
 const getCurrentDockerId = () => {
-  let dockerId;
-
-  if (fs.existsSync('/proc/1/cgroup')) {
-    const cgroup = fs.readFileSync('/proc/1/cgroup', 'utf8');
+  const PROCESS_CONTROL_GROUP_PATH = '/proc/1/cgroup';
+  if (fs.existsSync(PROCESS_CONTROL_GROUP_PATH)) {
+    const cgroup = fs.readFileSync(PROCESS_CONTROL_GROUP_PATH, 'utf8');
     const currentDockerIdMatch = /^\d+:cpu.+\/([^/]+)$/m.exec(cgroup);
-    dockerId = currentDockerIdMatch && currentDockerIdMatch[1];
+    if (currentDockerIdMatch) {
+      return currentDockerIdMatch[1];
+    }
   }
-
-  return dockerId;
+  return null;
 };
 
 const getDockerContainerIPAddress = async dockerId => {
@@ -49,26 +49,19 @@ const getDockerContainerIPAddress = async dockerId => {
 };
 
 const isSiblingDockerContainer = async dockerId => {
-  let isSibling = false;
-
   // If the current docker container is not running in the current docker host,
   // then we are running in docker-in-docker mode and docker containers we spawn are
   // children of our docker container, and not siblings (running on the same host as us)
   try {
     const { code } = await execa('docker', ['inspect', dockerId]);
-
-    if (code === 0) {
-      isSibling = true;
-    }
-  } catch (err) {
-    isSibling = false;
+    return code === 0;
+  } catch (error) {
+    return false;
   }
-
-  return isSibling;
 };
 
 const getDockerHostname = async () => {
-  const {stdout} = await execa('docker', ['info', '-f', '{{json .Name}}']);
+  const { stdout } = await execa('docker', ['info', '-f', '{{json .Name}}']);
   return JSON.parse(stdout);
 };
 
