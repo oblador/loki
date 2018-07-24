@@ -26,35 +26,42 @@ async function testStory(
   const outputPath = `${options.outputDir}/${filename}`;
   const referencePath = `${options.referenceDir}/${filename}`;
   const diffPath = `${options.differenceDir}/${filename}`;
+  const referenceExists = await fs.pathExists(referencePath);
+  const shouldUpdateReference =
+    options.updateReference || (!options.requireReference && !referenceExists);
+
   await target.captureScreenshotForStory(
     kind,
     story,
-    options.updateReference ? referencePath : outputPath,
+    shouldUpdateReference ? referencePath : outputPath,
     options,
     configuration
   );
-  if (options.updateReference) {
+
+  if (shouldUpdateReference) {
     return;
   }
-  if (await fs.pathExists(referencePath)) {
-    const isEqual = await getImageDiffer(options.diffingEngine)(
-      referencePath,
-      outputPath,
-      diffPath,
-      tolerance
-    );
-    if (!isEqual) {
-      throw new ReferenceImageError(
-        `Screenshot differs from reference, see ${path.relative(
-          path.resolve('./'),
-          diffPath
-        )}`,
-        kind,
-        story
-      );
-    }
-  } else if (options.requireReference) {
+
+  if (!referenceExists) {
     throw new ReferenceImageError('No reference image found', kind, story);
+  }
+
+  const isEqual = await getImageDiffer(options.diffingEngine)(
+    referencePath,
+    outputPath,
+    diffPath,
+    tolerance
+  );
+
+  if (!isEqual) {
+    throw new ReferenceImageError(
+      `Screenshot differs from reference, see ${path.relative(
+        path.resolve('./'),
+        diffPath
+      )}`,
+      kind,
+      story
+    );
   }
 }
 
