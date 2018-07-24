@@ -28,6 +28,7 @@ const getCurrentDockerId = () => {
     const cgroup = fs.readFileSync(PROCESS_CONTROL_GROUP_PATH, 'utf8');
     const currentDockerIdMatch = /^\d+:cpu.+\/([^/]+)$/m.exec(cgroup);
     if (currentDockerIdMatch) {
+      console.log('getCurrentDockerId', currentDockerIdMatch[1]);
       return currentDockerIdMatch[1];
     }
   }
@@ -44,6 +45,7 @@ const getDockerContainerIPAddress = async dockerId => {
   if (code !== 0) {
     throw new Error('Unable to determine IP of docker container');
   }
+  console.log('getDockerContainerIPAddress', stdout);
 
   return stdout;
 };
@@ -54,6 +56,7 @@ const isSiblingDockerContainer = async dockerId => {
   // children of our docker container, and not siblings (running on the same host as us)
   try {
     const { code } = await execa('docker', ['inspect', dockerId]);
+    console.log('sibling docker container');
     return code === 0;
   } catch (error) {
     return false;
@@ -76,15 +79,18 @@ const getHostExist = async hostname => {
 
 const getNetworkHost = async dockerId => {
   const currentDockerId = getCurrentDockerId();
+  console.log({currentDockerId});
 
   if (currentDockerId) {
     if (await isSiblingDockerContainer(currentDockerId)) {
       // If we are running inside a docker container, our spawned docker chrome instance
       // will be a sibling on the default bridge, which means we can talk directly to it
       // via its IP address.
+      console.log('sibling');
       return getDockerContainerIPAddress(dockerId);
     }
 
+    console.log('not sibling');
     const dockerHostname = await getDockerHostname();
     if (await getHostExist(dockerHostname)) {
       return dockerHostname;
