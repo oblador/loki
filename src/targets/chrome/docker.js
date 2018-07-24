@@ -113,39 +113,11 @@ const waitOnCDPAvailable = (host, port) =>
     );
   });
 
-const getNetworkHost = async dockerId => {
-  let host = '127.0.0.1';
-
-  // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
-  const runningInsideDocker =
-    fs.existsSync('/proc/1/cgroup') &&
-    /docker/.test(fs.readFileSync('/proc/1/cgroup', 'utf8'));
-
-  // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
-  // bridge, which means we can talk directly to it via its IP address.
-  if (runningInsideDocker) {
-    const { code, stdout } = await execa('docker', [
-      'inspect',
-      '-f',
-      '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
-      dockerId,
-    ]);
-
-    if (code !== 0) {
-      throw new Error('Unable to determine IP of docker container');
-    }
-
-    host = stdout;
-  }
-
-  return host;
-};
-
 function createChromeDockerTarget({
-  baseUrl = 'http://localhost:6006',
-  chromeDockerImage = 'yukinying/chrome-headless',
-  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
-}) {
+                                    baseUrl = 'http://localhost:6006',
+                                    chromeDockerImage = 'yukinying/chrome-headless',
+                                    chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+                                  }) {
   let port;
   let dockerId;
   let host;
@@ -221,7 +193,13 @@ function createChromeDockerTarget({
     if (code === 0) {
       dockerId = stdout;
       host = await getNetworkHost(dockerId);
-      await waitOnCDPAvailable(host, port);
+      try {
+        await waitOnCDPAvailable(host, port);
+      } catch (error) {
+        throw new Error(
+          `Timed out waiting for Chrome Debugger to appear on ${host}:${port}`
+        );
+      }
       debug(`Docker started with id ${dockerId}`);
     } else {
       throw new Error(`Failed starting docker, ${stderr}`);
@@ -238,7 +216,7 @@ function createChromeDockerTarget({
   }
 
   async function createNewDebuggerInstance() {
-    debug(`Launching new tab with debugger at port ${host}:${port}`);
+    debug(`Launching new tab with debugger at ${host}:${port}`);
     const target = await CDP.New({ host, port });
     debug(`Launched with target id ${target.id}`);
     const client = await CDP({ host, port, target });
