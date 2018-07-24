@@ -21,6 +21,85 @@ const getLocalIPAddress = () => {
   return ips[0];
 };
 
+// https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
+const getCurrentDockerId = () => {
+  const PROCESS_CONTROL_GROUP_PATH = '/proc/1/cgroup';
+  if (fs.existsSync(PROCESS_CONTROL_GROUP_PATH)) {
+    const cgroup = fs.readFileSync(PROCESS_CONTROL_GROUP_PATH, 'utf8');
+    const currentDockerIdMatch = /^\d+:cpu.+\/([^/]+)$/m.exec(cgroup);
+    if (currentDockerIdMatch) {
+      console.log('getCurrentDockerId', currentDockerIdMatch[1]);
+      return currentDockerIdMatch[1];
+    }
+  }
+  return null;
+};
+
+const getDockerContainerIPAddress = async dockerId => {
+  const { code, stdout } = await execa('docker', [
+    'inspect',
+    '-f {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
+    dockerId,
+  ]);
+
+  if (code !== 0) {
+    throw new Error('Unable to determine IP of docker container');
+  }
+  console.log('getDockerContainerIPAddress', stdout);
+
+  return stdout;
+};
+
+const isSiblingDockerContainer = async dockerId => {
+  // If the current docker container is not running in the current docker host,
+  // then we are running in docker-in-docker mode and docker containers we spawn are
+  // children of our docker container, and not siblings (running on the same host as us)
+  try {
+    const { code } = await execa('docker', ['inspect', dockerId]);
+    console.log('sibling docker container');
+    return code === 0;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getDockerHostname = async () => {
+  const { stdout } = await execa('docker', ['info', '-f', '{{json .Name}}']);
+  return JSON.parse(stdout);
+};
+
+const getHostExist = async hostname => {
+  try {
+    await execa('ping', ['-q', '-c 1', '-t 1', hostname]);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getNetworkHost = async dockerId => {
+  const currentDockerId = getCurrentDockerId();
+  console.log({currentDockerId});
+
+  if (currentDockerId) {
+    if (await isSiblingDockerContainer(currentDockerId)) {
+      // If we are running inside a docker container, our spawned docker chrome instance
+      // will be a sibling on the default bridge, which means we can talk directly to it
+      // via its IP address.
+      console.log('sibling');
+      return getDockerContainerIPAddress(dockerId);
+    }
+
+    console.log('not sibling');
+    const dockerHostname = await getDockerHostname();
+    if (await getHostExist(dockerHostname)) {
+      return dockerHostname;
+    }
+  }
+
+  return '127.0.0.1';
+};
+
 const waitOnCDPAvailable = (host, port) =>
   new Promise((resolve, reject) => {
     waitOn(
@@ -40,39 +119,11 @@ const waitOnCDPAvailable = (host, port) =>
     );
   });
 
-const getNetworkHost = async dockerId => {
-  let host = '127.0.0.1';
-
-  // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
-  const runningInsideDocker =
-    fs.existsSync('/proc/1/cgroup') &&
-    /docker/.test(fs.readFileSync('/proc/1/cgroup', 'utf8'));
-
-  // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
-  // bridge, which means we can talk directly to it via its IP address.
-  if (runningInsideDocker) {
-    const { code, stdout } = await execa('docker', [
-      'inspect',
-      '-f',
-      '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
-      dockerId,
-    ]);
-
-    if (code !== 0) {
-      throw new Error('Unable to determine IP of docker container');
-    }
-
-    host = stdout;
-  }
-
-  return host;
-};
-
 function createChromeDockerTarget({
-  baseUrl = 'http://localhost:6006',
-  chromeDockerImage = 'yukinying/chrome-headless',
-  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
-}) {
+                                    baseUrl = 'http://localhost:6006',
+                                    chromeDockerImage = 'yukinying/chrome-headless',
+                                    chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+                                  }) {
   let port;
   let dockerId;
   let host;
@@ -148,7 +199,13 @@ function createChromeDockerTarget({
     if (code === 0) {
       dockerId = stdout;
       host = await getNetworkHost(dockerId);
-      await waitOnCDPAvailable(host, port);
+      try {
+        await waitOnCDPAvailable(host, port);
+      } catch (error) {
+        throw new Error(
+          `Timed out waiting for Chrome Debugger to appear on ${host}:${port}`
+        );
+      }
       debug(`Docker started with id ${dockerId}`);
     } else {
       throw new Error(`Failed starting docker, ${stderr}`);
@@ -165,7 +222,7 @@ function createChromeDockerTarget({
   }
 
   async function createNewDebuggerInstance() {
-    debug(`Launching new tab with debugger at port ${host}:${port}`);
+    debug(`Launching new tab with debugger at ${host}:${port}`);
     const target = await CDP.New({ host, port });
     debug(`Launched with target id ${target.id}`);
     const client = await CDP({ host, port, target });
