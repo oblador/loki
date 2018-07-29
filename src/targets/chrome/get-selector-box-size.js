@@ -12,6 +12,18 @@ const getSelectorBoxSize = (window, selector) => {
     return !isWrapper;
   };
 
+  const isVisisble = element => {
+    const style = window.getComputedStyle(element);
+
+    return !(
+      style.visibility === 'hidden' ||
+      style.display === 'none' ||
+      style.opacity === '0' ||
+      style.width === '0px' ||
+      style.height === '0px'
+    );
+  };
+
   const getBoundingClientRect = element => element.getBoundingClientRect();
 
   const boxSizeUnion = (domRect, { x, y, width, height }) => {
@@ -35,6 +47,7 @@ const getSelectorBoxSize = (window, selector) => {
 
   return elements
     .filter(isNotWrapperElement)
+    .filter(isVisisble)
     .map(getBoundingClientRect)
     .reduce(boxSizeUnion);
 };

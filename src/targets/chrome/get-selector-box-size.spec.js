@@ -3,10 +3,19 @@ const getSelectorBoxSize = require('./get-selector-box-size');
 const createMockWindow = elements => ({
   document: {
     querySelectorAll: () =>
-      elements.map(element => ({
-        getBoundingClientRect: () => element,
-        contains: () => element.class === 'wrapper',
-      })),
+      elements.map(element =>
+        Object.assign({}, element, {
+          getBoundingClientRect: () => element,
+          contains: () => element.class === 'wrapper',
+        })
+      ),
+  },
+  getComputedStyle: element => {
+    const { width, height, style = {} } = element;
+    return Object.assign({}, style, {
+      width: `${width}px`,
+      height: `${height}px`,
+    });
   },
 });
 
@@ -134,6 +143,24 @@ describe('getSelectorBoxSize', () => {
       y: 10,
       width: 90,
       height: 130,
+    });
+  });
+
+  it('should return the box size with only visible elements', () => {
+    const mockElementRects = [
+      { x: 0, y: 0, width: 10, height: 10 },
+      { x: 10, y: 10, width: 10, height: 10, style: { visibility: 'hidden' } },
+      { x: 20, y: 20, width: 10, height: 10, style: { display: 'none' } },
+      { x: 30, y: 30, width: 10, height: 10, style: { opacity: '0' } },
+      { x: 10, y: 10, width: 0, height: 100 },
+      { x: 10, y: 10, width: 100, height: 0 },
+    ];
+    const mockWindow = createMockWindow(mockElementRects);
+    expect(getSelectorBoxSize(mockWindow, 'any-selector')).toEqual({
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 10,
     });
   });
 });

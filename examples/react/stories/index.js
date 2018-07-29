@@ -10,6 +10,7 @@ import * as AnimatedComponent from '../src/AnimatedComponent';
 import DelayedComponent from '../src/DelayedComponent';
 import CursiveText from '../src/CursiveText';
 import StackedElements from '../src/StackedElements';
+import StackedInvisibleElements from '../src/StackedInvisibleElements';
 
 storiesOf('Welcome', module).add('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -54,4 +55,5 @@ storiesOf('Multiple elements', module)
     <div className="wrapper" style={{ border: '10px solid red' }}>
       <StackedElements footer="This works if not red border appears" />
     </div>
-  ));
+  ))
+  .add('Invisible elements', () => <StackedInvisibleElements />);
