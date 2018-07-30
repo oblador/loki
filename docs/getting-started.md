@@ -45,4 +45,4 @@ Loki will create screenshots of all the tested stories in the `loki/current` fol
 
 ### 7. Approve changes
 
-If the changes were as you inteded, it's time to update the reference files. The test command should output a suggested command to use that will only update the failed tests. Otherwise just use the approve command; `yarn loki approve`. Commit your changes along with the new reference images and repeat.
+If the changes were as you intended, it's time to update the reference files. The test command should output a suggested command to use that will only update the failed tests. Otherwise just use the approve command; `yarn loki approve`. Commit your changes along with the new reference images and repeat.
