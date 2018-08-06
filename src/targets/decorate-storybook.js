@@ -56,7 +56,7 @@ function decorateStorybook(storybook) {
   if (descriptor.writable) {
     /* eslint no-param-reassign: ["error", { "props": false }] */
     storybook.storiesOf = storiesOf;
-  } else {
+  } else if (descriptor.configurable) {
     // In recent versions of storybook object this isn't writeable, probably due to babel transpilation changes
     Object.defineProperty(storybook, 'storiesOf', {
       configurable: true,
