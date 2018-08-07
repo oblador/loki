@@ -237,17 +237,18 @@ function createChromeTarget(
     const tab = await launchNewTab(tabOptions);
     try {
       await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
+      const screenshot = await tab.captureScreenshot(selector);
+      await fs.outputFile(outputPath, screenshot);
+      return screenshot;
     } catch (err) {
       if (err instanceof TimeoutError) {
         debug(`Timed out waiting for "${url}" to load`);
       } else {
         throw err;
       }
+    } finally {
+      await tab.close();
     }
-    const screenshot = await tab.captureScreenshot(selector);
-    await fs.outputFile(outputPath, screenshot);
-    await tab.close();
-    return screenshot;
   }
 
   return {
