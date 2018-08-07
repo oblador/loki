@@ -241,11 +241,11 @@ function createChromeTarget(
     const url = getStoryUrl(kind, story);
 
     const tab = await launchNewTab(tabOptions);
+    let screenshot;
     try {
       await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
-      const screenshot = await tab.captureScreenshot(selector);
+      screenshot = await tab.captureScreenshot(selector);
       await fs.outputFile(outputPath, screenshot);
-      return screenshot;
     } catch (err) {
       if (err instanceof TimeoutError) {
         debug(`Timed out waiting for "${url}" to load`);
@@ -255,6 +255,8 @@ function createChromeTarget(
     } finally {
       await tab.close();
     }
+
+    return screenshot;
   }
 
   return {
