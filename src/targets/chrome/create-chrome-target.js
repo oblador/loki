@@ -167,6 +167,12 @@ function createChromeTarget(
           debug(`Getting viewport position of "${selector}"`);
           const position = await getPositionInViewport(selector);
 
+          if (position.width === 0 || position.height === 0) {
+            throw new Error(
+              `Selector "${selector} has zero width or height. Can't capture screenshot.`
+            );
+          }
+
           debug('Capturing screenshot');
           const clip = Object.assign({ scale: 1 }, position);
           const screenshot = await Page.captureScreenshot({
@@ -235,18 +241,21 @@ function createChromeTarget(
     const url = getStoryUrl(kind, story);
 
     const tab = await launchNewTab(tabOptions);
+    let screenshot;
     try {
       await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
+      screenshot = await tab.captureScreenshot(selector);
+      await fs.outputFile(outputPath, screenshot);
     } catch (err) {
       if (err instanceof TimeoutError) {
         debug(`Timed out waiting for "${url}" to load`);
       } else {
         throw err;
       }
+    } finally {
+      await tab.close();
     }
-    const screenshot = await tab.captureScreenshot(selector);
-    await fs.outputFile(outputPath, screenshot);
-    await tab.close();
+
     return screenshot;
   }
 
