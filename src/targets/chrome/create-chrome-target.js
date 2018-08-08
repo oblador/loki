@@ -171,12 +171,6 @@ function createChromeTarget(
             );
           }
 
-          if (position.width === 0 || position.height === 0) {
-            throw new Error(
-              `Selector "${selector} has zero width or height. Can't capture screenshot.`
-            );
-          }
-
           debug('Capturing screenshot');
           const clip = Object.assign({ scale: 1 }, position);
           const screenshot = await Page.captureScreenshot({
