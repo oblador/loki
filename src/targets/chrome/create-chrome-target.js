@@ -148,24 +148,22 @@ function createChromeTarget(
       await executeFunctionWithWindow(awaitLokiReady);
     };
 
-    const getPositionInViewport = async selector => {
-      try {
-        return await executeFunctionWithWindow(getSelectorBoxSize, selector);
-      } catch (error) {
-        if (error.message === 'Unable to find selector') {
-          throw new Error(
-            `Unable to get position of selector "${selector}". Review the \`chromeSelector\` option and make sure your story doesn't crash.`
-          );
-        }
-        throw error;
-      }
-    };
+    const getPositionInViewport = async selector =>
+      executeFunctionWithWindow(getSelectorBoxSize, selector);
 
     client.captureScreenshot = withRetries(options.chromeRetries)(
       withTimeout(CAPTURING_SCREENSHOT_TIMEOUT, 'captureScreenshot')(
         async (selector = 'body') => {
           debug(`Getting viewport position of "${selector}"`);
-          const position = await getPositionInViewport(selector);
+          let position;
+          try {
+            position = await getPositionInViewport(selector);
+          } catch (e) {
+            // Can happen if selector doesn't match any elements, or only matches invisible or wrapping elements
+            debug('Exception when getting position in viewport.', e);
+            debug("Will now use 'body' as the selector", e);
+            position = await getPositionInViewport('body');
+          }
 
           if (position.width === 0 || position.height === 0) {
             throw new Error(

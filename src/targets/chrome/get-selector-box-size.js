@@ -12,7 +12,7 @@ const getSelectorBoxSize = (window, selector) => {
     return !isWrapper;
   };
 
-  const isVisisble = element => {
+  const isVisible = element => {
     const style = window.getComputedStyle(element);
 
     return !(
@@ -45,11 +45,15 @@ const getSelectorBoxSize = (window, selector) => {
     };
   };
 
-  return elements
+  const filteredElements = elements
     .filter(isNotWrapperElement)
-    .filter(isVisisble)
-    .map(getBoundingClientRect)
-    .reduce(boxSizeUnion);
+    .filter(isVisible);
+
+  if (filteredElements.length > 0) {
+    return filteredElements.map(getBoundingClientRect).reduce(boxSizeUnion);
+  }
+
+  throw new Error('Unable to find a visible, non-wrapper element');
 };
 
 module.exports = getSelectorBoxSize;
