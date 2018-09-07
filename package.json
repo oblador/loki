@@ -74,12 +74,12 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
-    "babel-jest": "^20.0.3",
+    "babel-jest": "^23.4.0",
     "eslint": "^4.3.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jest": "^20.0.3",
+    "eslint-plugin-jest": "^21.18.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.1.0",
@@ -89,7 +89,7 @@
     "gitbook-plugin-github": "^2.0.0",
     "gitbook-plugin-prism": "^2.3.0",
     "gitbook-plugin-theme-gestalt": "^1.0.2",
-    "jest": "^20.0.4",
+    "jest": "^23.4.1",
     "prettier": "^1.13.7"
   },
   "jest": {
