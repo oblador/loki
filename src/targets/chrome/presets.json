@@ -34,5 +34,25 @@
     "deviceScaleFactor": 2,
     "mobile": false,
     "fitWindow": false
+  },
+  "A4 Paper": {
+    "userAgent":
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
+    "width": 595,
+    "height": 842,
+    "deviceScaleFactor": 1,
+    "mobile": false,
+    "media": "print",
+    "fitWindow": false
+  },
+  "US Letter Paper": {
+    "userAgent":
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
+    "width": 612,
+    "height": 792,
+    "deviceScaleFactor": 1,
+    "mobile": false,
+    "media": "print",
+    "fitWindow": false
   }
 }

@@ -1,0 +1,11 @@
+@media screen {
+  .MediaAwareComponent:before {
+    content: 'Media: screen';
+  }
+}
+
+@media print {
+  .MediaAwareComponent:before {
+    content: 'Media: print';
+  }
+}
