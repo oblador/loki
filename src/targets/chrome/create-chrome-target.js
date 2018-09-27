@@ -52,6 +52,9 @@ function createChromeTarget(
       await Network.clearBrowserCookies();
     }
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
+    if (options.media) {
+      await Emulation.setEmulatedMedia({ media: options.media });
+    }
 
     const awaitRequestsFinished = () =>
       new Promise(async (resolve, reject) => {
@@ -226,16 +229,15 @@ function createChromeTarget(
     options,
     configuration
   ) {
-    let tabOptions = configuration;
+    let tabOptions = Object.assign(
+      { media: options.chromeEmulatedMedia },
+      configuration
+    );
     if (configuration.preset) {
       if (!presets[configuration.preset]) {
         throw new Error(`Invalid preset ${configuration.preset}`);
       }
-      tabOptions = Object.assign(
-        {},
-        configuration,
-        presets[configuration.preset]
-      );
+      tabOptions = Object.assign(tabOptions, presets[configuration.preset]);
     }
     const selector = configuration.chromeSelector || options.chromeSelector;
     const url = getStoryUrl(kind, story);

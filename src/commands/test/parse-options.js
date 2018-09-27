@@ -28,6 +28,7 @@ function parseOptions(args, config) {
     chromeRetries: parseInt($('chromeRetries'), 10),
     chromeSelector: $('chromeSelector'),
     chromeTolerance: parseFloat($('chromeTolerance'), 10),
+    chromeEmulatedMedia: $('chromeEmulatedMedia'),
     skipStoriesPattern: $('skipStories'),
     storiesFilter: $('storiesFilter'),
     diffingEngine:
