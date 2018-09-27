@@ -26,13 +26,24 @@
     "mobile": false,
     "fitWindow": false
   },
-  "Google Pixel": {
+  "A4 Paper": {
     "userAgent":
-      "Mozilla/5.0 (Linux; Android 7.1.1; Pixel Build/NMF26U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36",
-    "width": 360,
-    "height": 640,
-    "deviceScaleFactor": 2,
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
+    "width": 595,
+    "height": 842,
+    "deviceScaleFactor": 1,
     "mobile": false,
+    "media": "print",
+    "fitWindow": false
+  },
+  "US Letter Paper": {
+    "userAgent":
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
+    "width": 612,
+    "height": 792,
+    "deviceScaleFactor": 1,
+    "mobile": false,
+    "media": "print",
     "fitWindow": false
   }
 }
