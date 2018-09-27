@@ -9,6 +9,7 @@ import Logo from '../src/Logo';
 import * as AnimatedComponent from '../src/AnimatedComponent';
 import DelayedComponent from '../src/DelayedComponent';
 import CursiveText from '../src/CursiveText';
+import MediaAwareComponent from '../src/MediaAwareComponent';
 import StackedElements from '../src/StackedElements';
 import StackedInvisibleElements from '../src/StackedInvisibleElements';
 
@@ -48,6 +49,10 @@ storiesOf('Animation', module)
   .add('with CSS transition', () => <AnimatedComponent.CSSTransition />)
   .add('with CSS animation', () => <AnimatedComponent.CSSAnimation />)
   .add('with react-motion', () => <AnimatedComponent.ReactMotion />);
+
+storiesOf('Media', module).add('with media queries', () => (
+  <MediaAwareComponent />
+));
 
 storiesOf('Multiple elements', module)
   .add('Stacked elements', () => <StackedElements />)
