@@ -6,15 +6,6 @@
   "bin": {
     "loki": "bin/loki"
   },
-  "files": [
-    "README.md",
-    "LICENCE",
-    "src",
-    "bin",
-    "configure-react.js",
-    "configure-react-native.js",
-    "configure-vue.js"
-  ],
   "scripts": {
     "serve-docs": "gitbook serve",
     "build-docs": "(gitbook install || (npm rebuild node-sass && gitbook install)) && gitbook build",

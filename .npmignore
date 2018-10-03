@@ -1,0 +1,6 @@
+*
+!*.js
+!bin/*
+!src/**/*
+src/**/*.spec.js
+src/**/fixtures
