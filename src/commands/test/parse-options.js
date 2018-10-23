@@ -18,6 +18,8 @@ function parseOptions(args, config) {
     reactUri:
       $('reactUri') || `http://${$('host')}:${argv.port || $('reactPort')}`,
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
+    dockerHost: $('dockerHost'),
+    dockerPort: $('dockerPort'),
     chromeConcurrency: parseInt($('chromeConcurrency'), 10),
     chromeDockerImage: $('chromeDockerImage'),
     chromeEnableAnimations: $('chromeEnableAnimations'),

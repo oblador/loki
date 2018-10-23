@@ -10,6 +10,7 @@ const { die } = require('../../console');
 const {
   createChromeAppTarget,
   createChromeDockerTarget,
+  createChromeDockerExtTarget,
   createIOSSimulatorTarget,
   createAndroidEmulatorTarget,
 } = require('../../targets');
@@ -173,6 +174,19 @@ async function runTests(flatConfigurations, options) {
             baseUrl: options.reactUri,
             chromeDockerImage: options.chromeDockerImage,
             chromeFlags: options.chromeFlags,
+          }),
+          configurations,
+          options.chromeConcurrency,
+          options.chromeTolerance
+        );
+      }
+      case 'chrome.dockerExt': {
+        return getTargetTasks(
+          'Chrome (dockerExt)',
+          createChromeDockerExtTarget({
+            baseUrl: options.reactUri,
+            dockerHost: options.dockerHost,
+            dockerPort: options.dockerPort,
           }),
           configurations,
           options.chromeConcurrency,

@@ -1,4 +1,8 @@
-const { createChromeAppTarget, createChromeDockerTarget } = require('./chrome');
+const {
+  createChromeAppTarget,
+  createChromeDockerTarget,
+  createChromeDockerExtTarget
+} = require('./chrome');
 const {
   createIOSSimulatorTarget,
   createAndroidEmulatorTarget,
@@ -7,6 +11,7 @@ const {
 module.exports = {
   createChromeAppTarget,
   createChromeDockerTarget,
+  createChromeDockerExtTarget,
   createIOSSimulatorTarget,
   createAndroidEmulatorTarget,
 };
