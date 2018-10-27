@@ -141,6 +141,11 @@ async function configureStorybook() {
 
   on('prepare', () => {
     prepare();
+
+    /* eslint-disable no-underscore-dangle */
+    global._isLokiTest = true;
+    ReactNative.Platform._isLokiTest = true;
+
     setTimeout(() => emit('didPrepare'), platform === 'android' ? 500 : 0);
   });
 
