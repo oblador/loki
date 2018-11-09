@@ -14,6 +14,10 @@
   transform: rotate(360deg);
 }
 
+.CSSTransition-will-change {
+  will-change: transform;
+}
+
 .CSSAnimation {
   animation: 1.5s AnimatedComponent-spin infinite normal linear;
 }

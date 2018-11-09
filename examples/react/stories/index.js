@@ -47,6 +47,9 @@ storiesOf('Asynchronous render', module)
 
 storiesOf('Animation', module)
   .add('with CSS transition', () => <AnimatedComponent.CSSTransition />)
+  .add('with CSS transition with will-change property', () => (
+    <AnimatedComponent.CSSTransitionWillChange />
+  ))
   .add('with CSS animation', () => <AnimatedComponent.CSSAnimation />)
   .add('with react-motion', () => <AnimatedComponent.ReactMotion />);
 
