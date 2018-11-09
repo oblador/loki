@@ -72,16 +72,27 @@ function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
   chromeDockerImage = 'yukinying/chrome-headless',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+  dockerHost = null,
+  dockerPort = null,
 }) {
   let port;
   let dockerId;
   let host;
+  let dockerPath;
   let dockerUrl = baseUrl;
-  const dockerPath = 'docker';
-  const runArgs = ['run', '--rm', '-d', '-P'];
+  let localDocker = false;
+  let runArgs;
 
-  if (!process.env.CI) {
-    runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
+  if (dockerHost && dockerPort) {
+    localDocker = true;
+    host = dockerHost;
+    port = dockerPort;
+  } else {
+    dockerPath = 'docker';
+    runArgs = ['run', '--rm', '-d', '-P'];
+    if (!process.env.CI) {
+      runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
+    }
   }
 
   if (baseUrl.indexOf('http://localhost') === 0) {
@@ -95,9 +106,12 @@ function createChromeDockerTarget({
   } else if (baseUrl.indexOf('file:') === 0) {
     const staticPath = baseUrl.substr('file:'.length);
     const staticMountPath = '/var/loki';
-    runArgs.push('-v');
-    runArgs.push(`${staticPath}:${staticMountPath}`);
     dockerUrl = `file://${staticMountPath}`;
+
+    if (!localDocker) {
+      runArgs.push('-v');
+      runArgs.push(`${staticPath}:${staticMountPath}`);
+    }
   }
 
   async function getIsImageDownloaded(imageName) {
@@ -122,41 +136,60 @@ function createChromeDockerTarget({
   }
 
   async function start() {
-    port = await getRandomPort();
-
-    ensureDependencyAvailable('docker');
-    const args = runArgs
-      .concat([
-        '--shm-size=1g',
-        '-p',
-        `${port}:${port}`,
-        chromeDockerImage,
-        '--disable-datasaver-prompt',
-        '--no-first-run',
-        '--disable-extensions',
-        '--remote-debugging-address=0.0.0.0',
-        `--remote-debugging-port=${port}`,
-      ])
-      .concat(chromeFlags);
-
-    debug(
-      `Launching chrome in docker with command "${dockerPath} ${args.join(
-        ' '
-      )}"`
-    );
-    const { code, stdout, stderr } = await execa(dockerPath, args);
-    if (code === 0) {
-      dockerId = stdout;
-      host = await getNetworkHost(dockerId);
+    if (localDocker) {
+      debug(`Connecting to docker "${host}:${port}"`);
       await waitOnCDPAvailable(host, port);
-      debug(`Docker started with id ${dockerId}`);
+      debug(`Connected to docker "${host}:${port}"`);
+
+      // open tabs will block the execution, so we close all open tabs on startup
+      debug(`Closing all open tabs`);
+      const tabs = await CDP.List({ host, port });
+      await Promise.all(tabs.map(tab => CDP.Close({ host, port, id: tab.id })));
+      debug(`Closed all open tabs`);
     } else {
-      throw new Error(`Failed starting docker, ${stderr}`);
+      port = await getRandomPort();
+
+      ensureDependencyAvailable('docker');
+      const args = runArgs
+        .concat([
+          '--shm-size=1g',
+          '-p',
+          `${port}:${port}`,
+          chromeDockerImage,
+          '--disable-datasaver-prompt',
+          '--no-first-run',
+          '--disable-extensions',
+          '--remote-debugging-address=0.0.0.0',
+          `--remote-debugging-port=${port}`,
+        ])
+        .concat(chromeFlags);
+
+      debug(
+        `Launching chrome in docker with command "${dockerPath} ${args.join(
+          ' '
+        )}"`
+      );
+      const { code, stdout, stderr } = await execa(dockerPath, args);
+      if (code === 0) {
+        dockerId = stdout;
+        host = await getNetworkHost(dockerId);
+        await waitOnCDPAvailable(host, port);
+        debug(`Docker started with id ${dockerId}`);
+      } else {
+        throw new Error(`Failed starting docker, ${stderr}`);
+      }
     }
   }
 
   async function stop() {
-    if (dockerId) {
+    if (localDocker) {
+      debug('Disconnected from docker container');
+
+      debug(`Closing all open tabs`);
+      const tabs = await CDP.List({ host, port });
+      await Promise.all(tabs.map(tab => CDP.Close({ host, port, id: tab.id })));
+      debug(`Closed all open tabs`);
+    } else if (dockerId) {
       debug(`Killing chrome docker instance with id ${dockerId}`);
       await execa(dockerPath, ['kill', dockerId]);
     } else {

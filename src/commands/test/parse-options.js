@@ -31,6 +31,8 @@ function parseOptions(args, config) {
     chromeEmulatedMedia: $('chromeEmulatedMedia'),
     skipStoriesPattern: $('skipStories'),
     storiesFilter: $('storiesFilter'),
+    dockerHost: $('dockerHost'),
+    dockerPort: $('dockerPort'),
     diffingEngine:
       $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
     verboseRenderer: $('verboseRenderer') || ciInfo.isCI,
