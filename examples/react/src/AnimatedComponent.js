@@ -33,6 +33,14 @@ export const CSSTransition = withAlternatingState(({ on }) => (
   />
 ));
 
+export const CSSTransitionWillChange = withAlternatingState(({ on }) => (
+  <div
+    className={`AnimatedComponent CSSTransition CSSTransitionWillChange ${
+      on ? 'CSSTransition-on' : ''
+    }`}
+  />
+));
+
 export const CSSAnimation = () => (
   <div className="AnimatedComponent CSSAnimation" />
 );
