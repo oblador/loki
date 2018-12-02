@@ -6,8 +6,8 @@ const getSelectorBoxSize = (window, selector) => {
   }
 
   const isNotWrapperElement = element => {
-    const isWrapper = elements.some(
-      node => (node === element ? false : element.contains(node))
+    const isWrapper = elements.some(node =>
+      node === element ? false : element.contains(node)
     );
     return !isWrapper;
   };
