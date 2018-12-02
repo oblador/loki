@@ -1,5 +1,7 @@
 {
   "chromeConcurrency": "4",
+  "chromeDockerHost": "localhost",
+  "chromeDockerPort": "9222",
   "chromeDockerImage": "yukinying/chrome-headless:63.0.3230.2",
   "chromeFlags": "--headless --disable-gpu --hide-scrollbars",
   "chromeLoadTimeout": "60000",

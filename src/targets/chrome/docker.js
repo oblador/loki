@@ -8,6 +8,7 @@ const fs = require('fs-extra');
 const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const createChromeTarget = require('./create-chrome-target');
+const createExistingDockerTarget = require('./create-existing-docker-target');
 
 const getNetworkHost = async dockerId => {
   let host = '127.0.0.1';
@@ -41,7 +42,16 @@ function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
   chromeDockerImage = 'yukinying/chrome-headless',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+  chromeDockerUseExisting = false,
+  chromeDockerHost = 'localhost',
+  chromeDockerPort = '9222',
 }) {
+  if (chromeDockerUseExisting) {
+    return createExistingDockerTarget({
+      baseUrl, chromeFlags, chromeDockerHost, chromeDockerPort
+    })
+  }
+
   let port;
   let dockerId;
   let host;
