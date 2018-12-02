@@ -1,5 +1,5 @@
 const debug = require('debug')('loki:chrome:local');
-const chromeLauncher = require('lighthouse/chrome-launcher/chrome-launcher');
+const chromeLauncher = require('chrome-launcher');
 const CDP = require('chrome-remote-interface');
 const createChromeTarget = require('./create-chrome-target');
 
