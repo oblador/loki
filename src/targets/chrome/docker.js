@@ -76,7 +76,7 @@ function createChromeDockerTarget({
   let port;
   let dockerId;
   let host;
-  let dockerUrl = baseUrl;
+  let storybookUrl = baseUrl;
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
 
@@ -91,13 +91,13 @@ function createChromeDockerTarget({
         'Unable to detect local IP address, try passing --host argument'
       );
     }
-    dockerUrl = baseUrl.replace('localhost', ip);
+    storybookUrl = baseUrl.replace('localhost', ip);
   } else if (baseUrl.indexOf('file:') === 0) {
     const staticPath = baseUrl.substr('file:'.length);
     const staticMountPath = '/var/loki';
     runArgs.push('-v');
     runArgs.push(`${staticPath}:${staticMountPath}`);
-    dockerUrl = `file://${staticMountPath}`;
+    storybookUrl = `file://${staticMountPath}`;
   }
 
   async function getIsImageDownloaded(imageName) {
@@ -188,7 +188,7 @@ function createChromeDockerTarget({
     start,
     stop,
     createNewDebuggerInstance,
-    dockerUrl,
+    storybookUrl,
     ensureImageDownloaded
   );
 }
