@@ -22,7 +22,7 @@ const createMockWindow = elements => ({
 describe('getSelectorBoxSize', () => {
   it('should throw an exception when no elements', () => {
     const mockWindow = createMockWindow([]);
-    expect(() => getSelectorBoxSize(mockWindow, 'any-selector')).toThrowError();
+    expect(() => getSelectorBoxSize(mockWindow, 'any-selector')).toThrow();
   });
 
   it('should return the box size for a single element', () => {
