@@ -9,3 +9,8 @@ build-storybook && loki --requireReference --reactUri file:./storybook-static
 ```
 
 See the [loki react example project](https://github.com/oblador/loki/tree/master/examples/react) for a reference implementation of this approach. 
+
+## Using Docker
+
+Some CIs like e. g. [CircleCI](http://circleci.com/) run the code in a Docker container already, so setting up a Chrome headless docker container inside the container isn't a viable solution. Instead it is possible to spin up a headless-chrome container in the CI and connect it to the test.
+To do this you can run loki with `--chromeDockerUseExisting`. This way loki will look for an already running container at `localhost:9222` (or any other location you specify via `--chromeDockerHost` and `--chromeDockerHost`). We recommend to use the exact same image for headless chrome on your CI that you use for local testing to avoid discrepancies in rendering.
