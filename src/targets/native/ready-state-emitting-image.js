@@ -46,8 +46,9 @@ class ReadyStateEmittingImage extends React.Component {
       this.resolve();
       this.resolve = null;
     }
-    if (this.props.onLoadEnd) {
-      this.props.onLoadEnd(e);
+    const { onLoadEnd } = this.props;
+    if (onLoadEnd) {
+      onLoadEnd(e);
     }
   };
 

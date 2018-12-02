@@ -23,9 +23,11 @@ function buildCommand(command, argObject) {
   const args = argObjectToString(argObject);
   if (dependencyAvailable('loki')) {
     return `loki ${command} ${args}`;
-  } else if (dependencyAvailable('yarn')) {
+  }
+  if (dependencyAvailable('yarn')) {
     return `yarn loki ${command} -- ${args}`;
-  } else if (dependencyAvailable('npm')) {
+  }
+  if (dependencyAvailable('npm')) {
     return `npm run loki ${command} -- ${args}`;
   }
   return `./node_modules/.bin/loki ${command} ${args}`;

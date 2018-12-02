@@ -15,6 +15,7 @@ function getConfig() {
     const matches = pkg.scripts.storybook.match(/(-p|--port) ([0-9]+)/);
     if (matches) {
       const portKey = isReactNativeProject() ? 'reactNativePort' : 'reactPort';
+      // eslint-disable-next-line prefer-destructuring
       config[portKey] = matches[2];
     }
   }

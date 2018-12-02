@@ -7,7 +7,7 @@ const ExceptionsManager = require('react-native/Libraries/Core/ExceptionsManager
 const decorateStorybook = require('../decorate-storybook');
 const { awaitReady, resetPendingPromises } = require('../ready-state-manager');
 
-const DevSettings = ReactNative.NativeModules.DevSettings;
+const { DevSettings } = ReactNative.NativeModules;
 
 const MESSAGE_PREFIX = 'loki:';
 const hasDevSettings = !!DevSettings && !!DevSettings.reload;

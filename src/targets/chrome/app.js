@@ -33,7 +33,7 @@ function createChromeAppTarget({
   }
 
   async function createNewDebuggerInstance() {
-    const port = instance.port;
+    const { port } = instance;
     debug(`Launching new tab with debugger at port ${port}`);
     const target = await CDP.New({ port });
     debug(`Launched with target id ${target.id}`);

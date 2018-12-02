@@ -182,7 +182,7 @@ function createChromeTarget(
             format: 'png',
             clip,
           });
-          const buffer = new Buffer(screenshot.data, 'base64');
+          const buffer = Buffer.from(screenshot.data, 'base64');
 
           return buffer;
         }

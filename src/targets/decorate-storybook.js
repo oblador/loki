@@ -101,8 +101,7 @@ function decorateStorybook(storybook) {
 
   function getStorybook() {
     return storybook.getStorybook().map(function(component) {
-      const kind = component.kind;
-      const stories = component.stories;
+      const { kind, stories } = component;
       const skipped = skippedStories[kind];
 
       if (skipped) {

@@ -1,8 +1,8 @@
 const fs = require('fs-extra');
 const path = require('path');
+const { slugify } = require('transliteration');
 const { ReferenceImageError } = require('../../errors');
 const { getImageDiffer } = require('../../diffing');
-const { slugify } = require('transliteration');
 
 const SLUGIFY_OPTIONS = {
   lowercase: false,
