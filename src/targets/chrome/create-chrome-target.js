@@ -241,6 +241,7 @@ function createChromeTarget(
     }
     const selector = configuration.chromeSelector || options.chromeSelector;
     const url = getStoryUrl(kind, story);
+    debug(`Loading story from ${url}`)
 
     const tab = await launchNewTab(tabOptions);
     let screenshot;
