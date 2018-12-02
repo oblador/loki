@@ -5,13 +5,13 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
 import { Button, Welcome } from '@storybook/react/demo';
-import Logo from '../src/Logo';
-import * as AnimatedComponent from '../src/AnimatedComponent';
-import DelayedComponent from '../src/DelayedComponent';
-import CursiveText from '../src/CursiveText';
-import MediaAwareComponent from '../src/MediaAwareComponent';
-import StackedElements from '../src/StackedElements';
-import StackedInvisibleElements from '../src/StackedInvisibleElements';
+import Logo from '../Logo';
+import * as AnimatedComponent from '../AnimatedComponent';
+import DelayedComponent from '../DelayedComponent';
+import CursiveText from '../CursiveText';
+import MediaAwareComponent from '../MediaAwareComponent';
+import StackedElements from '../StackedElements';
+import StackedInvisibleElements from '../StackedInvisibleElements';
 
 storiesOf('Welcome', module).add('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -26,12 +26,13 @@ storiesOf('Button', module)
     <Button onClick={action('clicked')}>Hello Button</Button>
   ))
   .add('with some emoji', () => (
-    <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
+    <Button onClick={action('clicked')}>
+      <span role="img" aria-label="so cool">
+        😀 😎 👍 💯
+      </span>
+    </Button>
   ))
   .lokiSkip('lokiSkip story', () => (
-    <Button onClick={action('clicked')}>I am skipped</Button>
-  ))
-  .add.skip('add.skip story', () => (
     <Button onClick={action('clicked')}>I am skipped</Button>
   ));
 
@@ -39,9 +40,6 @@ storiesOf('Asynchronous render', module)
   .add('Logo without delay', () => <Logo />)
   .add('Logo with 1s delay', () => <Logo delay={1000} />)
   .lokiAsync('lokiAsync() with 1s delay', ({ done }) => (
-    <DelayedComponent delay={1000} onDone={done} />
-  ))
-  .add.async('add.async() with 1s delay', ({ done }) => (
     <DelayedComponent delay={1000} onDone={done} />
   ));
 

@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "react-motion": "^0.5.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -15,14 +15,19 @@
     "pretest-ci": "npm run update-loki",
     "test-ci": "build-storybook && loki --requireReference --reactUri file:./storybook-static",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public",
     "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save --no-package-lock && rm $LOKI_FILE"
   },
   "devDependencies": {
-    "@storybook/cli": "^3.1.6",
-    "@storybook/react": "^3.1.7",
-    "loki": "*"
+    "@storybook/cli": "^4.0.10",
+    "@storybook/react": "^4.0.10",
+    "loki": "*",
+    "@storybook/addon-actions": "^4.0.10",
+    "@storybook/addon-links": "^4.0.10",
+    "@storybook/addons": "^4.0.10",
+    "@babel/core": "^7.1.6",
+    "babel-loader": "^8.0.4"
   },
   "loki": {
     "chromeSelector": ".wrapper > *, #root > *",
@@ -42,5 +47,11 @@
         "preset": "A4 Paper"
       }
     }
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
