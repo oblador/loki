@@ -4,6 +4,7 @@
  */
 const React = require('react');
 const Image = require('react-native/Libraries/Image/Image');
+const hoistNonReactStatics = require('hoist-non-react-statics');
 const { registerPendingPromise } = require('../ready-state-manager');
 
 const IMAGE_LOAD_TIMEOUT = 20000;
@@ -64,8 +65,6 @@ class ReadyStateEmittingImage extends React.Component {
   }
 }
 
-ReadyStateEmittingImage.propTypes = Image.propTypes;
-ReadyStateEmittingImage.prefetch = Image.prefetch;
-ReadyStateEmittingImage.getSize = Image.getSize;
+hoistNonReactStatics(ReadyStateEmittingImage, Image);
 
 module.exports = ReadyStateEmittingImage;
