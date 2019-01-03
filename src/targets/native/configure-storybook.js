@@ -104,13 +104,11 @@ async function configureStorybook() {
     );
 
   const originalState = {
-    statusBarHidden: false, // TODO: get actual value
     disableYellowBox: console.disableYellowBox, // eslint-disable-line no-console
   };
 
   const restore = () => {
     customErrorHandler = null;
-    ReactNative.StatusBar.setHidden(originalState.statusBarHidden);
     // eslint-disable-next-line no-console
     console.disableYellowBox = originalState.disableYellowBox;
   };
@@ -134,7 +132,6 @@ async function configureStorybook() {
     if (hasDevSettings) {
       DevSettings.setHotLoadingEnabled(false);
     }
-    ReactNative.StatusBar.setHidden(true, 'none');
     // eslint-disable-next-line no-console
     console.disableYellowBox = true;
   };
