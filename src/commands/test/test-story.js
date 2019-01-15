@@ -46,12 +46,10 @@ async function testStory(
     throw new ReferenceImageError('No reference image found', kind, story);
   }
 
-  const isEqual = await getImageDiffer(options.diffingEngine)(
-    referencePath,
-    outputPath,
-    diffPath,
-    tolerance
-  );
+  const isEqual = await getImageDiffer(
+    options.diffingEngine,
+    options[options.diffingEngine]
+  )(referencePath, outputPath, diffPath, tolerance);
 
   if (!isEqual) {
     throw new ReferenceImageError(

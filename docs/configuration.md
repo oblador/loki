@@ -37,13 +37,26 @@ This setting is a CSS selector to the part of the page you want screenshots of. 
 
 ## `diffingEngine`
 
-There are two currently available options to choose from when comparing images in loki:
+There are two currently available options to choose from when comparing images in loki. These are both configurable by passing in a JSON block to them with their name in the configuration. This block will be passed through to the library and you can use their specific reference documentation. Example `pacakge.json`:
 
-### `gm`
+```json
+{
+  "loki": {
+    "looks-same": {
+      "ignoreCaret": true
+    }
+  }
+}
+```
+
+### [`gm`](https://github.com/aheckmann/gm)
+
 
 Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. This is default if available. `chromeTolerance` percentage is based on overall image, meaning you'd likely want a low threshold.
 
-### `looks-same`
+The configuration is parsed to the `options` argument in `gm.compare`
+
+### ['looks-same'](https://github.com/gemini-testing/looks-same)
 
 A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. `chromeTolerance` percentage is based on neighboring pixels which makes it ideal when you have different pixel densities.
 

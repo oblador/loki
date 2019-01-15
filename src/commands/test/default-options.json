@@ -11,5 +11,7 @@
   "difference": "./.loki/difference",
   "reference": "./.loki/reference",
   "reactPort": "6006",
-  "reactNativePort": "7007"
+  "reactNativePort": "7007",
+  "looksSame": {},
+  "gm": {}
 }
