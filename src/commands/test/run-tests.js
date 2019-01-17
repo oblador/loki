@@ -219,8 +219,6 @@ async function runTests(flatConfigurations, options) {
   } catch (err) {
     await Promise.all(context.activeTargets.map((target) => target.stop()));
     throw err;
-  } finally {
-    process.exit(0);
   }
 }
 
