@@ -91,7 +91,6 @@ function createChromeTarget(
         };
 
         Network.requestWillBeSent(({ requestId, request }) => {
-          console.info('!!!!', request.url);
           pendingRequestURLMap[requestId] = request.url;
         });
 
