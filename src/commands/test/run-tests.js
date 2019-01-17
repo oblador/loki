@@ -11,16 +11,16 @@ const {
   createChromeAppTarget,
   createChromeDockerTarget,
   createIOSSimulatorTarget,
-  createAndroidEmulatorTarget,
+  createAndroidEmulatorTarget
 } = require('../../targets');
 const testStory = require('./test-story');
 
 async function placeGitignore(pathsToIgnore) {
   const parentDir = path.dirname(pathsToIgnore[0]);
   const gitignorePath = `${parentDir}/.gitignore`;
-  if (!(await fs.pathExists(gitignorePath))) {
-    const relativeToParent = p => path.relative(parentDir, p);
-    const isDecendant = p => p.indexOf('..') !== 0;
+  if (!await fs.pathExists(gitignorePath)) {
+    const relativeToParent = (p) => path.relative(parentDir, p);
+    const isDecendant = (p) => p.indexOf('..') !== 0;
     const gitignore = pathsToIgnore
       .map(relativeToParent)
       .filter(isDecendant)
@@ -30,14 +30,14 @@ async function placeGitignore(pathsToIgnore) {
   }
 }
 
-const groupByTarget = configurations =>
+const groupByTarget = (configurations) =>
   mapObjIndexed(
     fromPairs,
     groupBy(([, { target }]) => target, toPairs(configurations))
   );
 
 const filterStorybook = (storybook, excludePattern, includePattern) => {
-  const filterStory = kind => story => {
+  const filterStory = (kind) => (story) => {
     const fullStoryName = `${kind} ${story}`;
     const exclude =
       excludePattern && new RegExp(excludePattern, 'i').test(fullStoryName);
@@ -49,12 +49,12 @@ const filterStorybook = (storybook, excludePattern, includePattern) => {
   return storybook
     .map(({ kind, stories }) => ({
       kind,
-      stories: stories.filter(filterStory(kind)),
+      stories: stories.filter(filterStory(kind))
     }))
     .filter(({ stories }) => stories.length !== 0);
 };
 
-const getListr = options => (tasks, listrOptions = {}) => {
+const getListr = (options) => (tasks, listrOptions = {}) => {
   const newOptions = listrOptions;
   if (options.verboseRenderer) {
     newOptions.renderer = 'verbose';
@@ -89,14 +89,14 @@ async function runTests(flatConfigurations, options) {
             task: async () => {
               await target.prepare();
             },
-            enabled: () => !!target.prepare,
+            enabled: () => !!target.prepare
           },
           {
             title: 'Start',
             task: async ({ activeTargets }) => {
               await target.start();
               activeTargets.push(target);
-            },
+            }
           },
           {
             title: 'Fetch list of stories',
@@ -105,7 +105,7 @@ async function runTests(flatConfigurations, options) {
               if (storybook.length === 0) {
                 throw new Error('Error: No stories were found.');
               }
-            },
+            }
           },
           ...Object.values(
             mapObjIndexed(
@@ -121,7 +121,7 @@ async function runTests(flatConfigurations, options) {
                       title: kind,
                       task: () =>
                         getListr(options)(
-                          stories.map(story => ({
+                          stories.map((story) => ({
                             title: options.verboseRenderer
                               ? `${kind}: ${story}`
                               : story,
@@ -134,12 +134,12 @@ async function runTests(flatConfigurations, options) {
                                 configurationName,
                                 kind,
                                 story
-                              ),
+                              )
                           }))
-                        ),
+                        )
                     })),
                     { concurrent: concurrency, exitOnError: false }
-                  ),
+                  )
               }),
               configurations
             )
@@ -152,13 +152,13 @@ async function runTests(flatConfigurations, options) {
               if (index !== -1) {
                 activeTargets.splice(index, 1);
               }
-            },
-          },
-        ]),
+            }
+          }
+        ])
     };
   };
 
-  const createTargetTask = configurations => {
+  const createTargetTask = (configurations) => {
     const { target } = configurations[Object.keys(configurations)[0]];
     switch (target) {
       case 'chrome.app': {
@@ -166,7 +166,7 @@ async function runTests(flatConfigurations, options) {
           'Chrome (app)',
           createChromeAppTarget({
             baseUrl: options.reactUri,
-            chromeFlags: options.chromeFlags,
+            chromeFlags: options.chromeFlags
           }),
           configurations,
           options.chromeConcurrency,
@@ -182,7 +182,7 @@ async function runTests(flatConfigurations, options) {
             chromeDockerUseExisting: options.chromeDockerUseExisting,
             chromeDockerHost: options.chromeDockerHost,
             chromeDockerPort: options.chromeDockerPort,
-            chromeFlags: options.chromeFlags,
+            chromeFlags: options.chromeFlags
           }),
           configurations,
           options.chromeConcurrency,
@@ -217,8 +217,10 @@ async function runTests(flatConfigurations, options) {
   try {
     await tasks.run(context);
   } catch (err) {
-    await Promise.all(context.activeTargets.map(target => target.stop()));
+    await Promise.all(context.activeTargets.map((target) => target.stop()));
     throw err;
+  } finally {
+    process.exit(0);
   }
 }
 

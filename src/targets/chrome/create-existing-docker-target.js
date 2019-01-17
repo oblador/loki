@@ -7,13 +7,13 @@ const waitOnCDPAvailable = require('./helpers/wait-on-CDP-available');
 const getLocalIPAddress = require('./helpers/get-local-ip-address');
 const createChromeTarget = require('./create-chrome-target');
 
-const SERVER_STARTUP_TIMEOUT = 10000 /* ms */;
+const SERVER_STARTUP_TIMEOUT = 10000; /* ms */
 
 function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
   chromeDockerHost = 'localhost',
-  chromeDockerPort = '9222',
+  chromeDockerPort = '9222'
 }) {
   let storybookUrl = baseUrl;
 
@@ -21,13 +21,13 @@ function createChromeDockerTarget({
     local: 'local',
     remote: 'remote',
     file: 'file'
-  }
+  };
 
-  let runMode = RUN_MODES.remote
+  let runMode = RUN_MODES.remote;
   if (baseUrl.indexOf('http://localhost') === 0) {
-    runMode = RUN_MODES.local
+    runMode = RUN_MODES.local;
   } else if (baseUrl.indexOf('file:') === 0) {
-    runMode = RUN_MODES.file
+    runMode = RUN_MODES.file;
   }
   debug(`Running in ${runMode} mode`);
 
@@ -45,7 +45,13 @@ function createChromeDockerTarget({
     }
     storybookUrl = `http://${ip}:${storybookPort}`;
     storybookHost = ip;
-    server = http.createServer((req, res) => serveHandler(req, res, {public: staticPath}))
+    server = http.createServer((req, res) =>
+      serveHandler(req, res, {
+        public: staticPath,
+        cleanUrls: false,
+        renderSingle: true
+      })
+    );
     debug(`Serving files from ${staticPath}`);
   }
 
@@ -61,7 +67,7 @@ function createChromeDockerTarget({
 
   debug(`Looking for storybook at ${storybookUrl}`);
 
-  let dockerHost = chromeDockerHost
+  let dockerHost = chromeDockerHost;
   if (chromeDockerHost.indexOf('localhost') === 0) {
     const ip = getLocalIPAddress();
     if (!ip) {
@@ -73,10 +79,12 @@ function createChromeDockerTarget({
   }
 
   async function start() {
-    debug(`Trying to connect to Chrome at http://${dockerHost}:${chromeDockerPort}`)
+    debug(
+      `Trying to connect to Chrome at http://${dockerHost}:${chromeDockerPort}`
+    );
     if (server) {
-      debug(`Serving storybook at http://${storybookHost}:${storybookPort}`)
-      server.listen({host: storybookHost, port: storybookPort})
+      debug(`Serving storybook at http://${storybookHost}:${storybookPort}`);
+      server.listen({ host: storybookHost, port: storybookPort });
       await Promise.all([
         waitOnCDPAvailable(dockerHost, chromeDockerPort),
         new Promise((resolve, reject) => {
@@ -84,7 +92,7 @@ function createChromeDockerTarget({
           server.addListener('error', reject);
         }).timeout(SERVER_STARTUP_TIMEOUT)
       ]);
-      debug('Set up complete')
+      debug('Set up complete');
     } else {
       await waitOnCDPAvailable(dockerHost, chromeDockerPort);
     }
@@ -102,14 +110,24 @@ function createChromeDockerTarget({
   }
 
   async function createNewDebuggerInstance() {
-    debug(`Launching new tab with debugger at port ${dockerHost}:${chromeDockerPort}`);
+    debug(
+      `Launching new tab with debugger at port ${dockerHost}:${chromeDockerPort}`
+    );
     const target = await CDP.New({ host: dockerHost, port: chromeDockerPort });
     debug(`Launched with target id ${target.id}`);
-    const client = await CDP({ host: dockerHost, port: chromeDockerPort, target });
+    const client = await CDP({
+      host: dockerHost,
+      port: chromeDockerPort,
+      target
+    });
 
     client.close = () => {
       debug('New closing tab');
-      return CDP.Close({ host: dockerHost, port: chromeDockerPort, id: target.id });
+      return CDP.Close({
+        host: dockerHost,
+        port: chromeDockerPort,
+        id: target.id
+      });
     };
 
     return client;

@@ -6,7 +6,7 @@ const { getImageDiffer } = require('../../diffing');
 
 const SLUGIFY_OPTIONS = {
   lowercase: false,
-  separator: '_',
+  separator: '_'
 };
 
 const getBaseName = (configurationName, kind, story) =>

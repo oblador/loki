@@ -8,13 +8,13 @@ const awaitLokiReady = require('./await-loki-ready');
 const {
   withTimeout,
   TimeoutError,
-  withRetries,
+  withRetries
 } = require('../../failure-handling');
 const { FetchingURLsError, ServerError } = require('../../errors');
 
 const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
-const REQUEST_STABILIZATION_TIMEOUT = 100;
+const REQUEST_STABILIZATION_TIMEOUT = 1000;
 
 function createChromeTarget(
   start,
@@ -29,7 +29,7 @@ function createChromeTarget(
       height: options.height,
       deviceScaleFactor: options.deviceScaleFactor || 1,
       mobile: options.mobile || false,
-      fitWindow: options.fitWindow || false,
+      fitWindow: options.fitWindow || false
     };
   }
 
@@ -45,7 +45,7 @@ function createChromeTarget(
     await Page.enable();
     if (options.userAgent) {
       await Network.setUserAgentOverride({
-        userAgent: options.userAgent,
+        userAgent: options.userAgent
       });
     }
     if (options.clearBrowserCookies) {
@@ -80,17 +80,18 @@ function createChromeTarget(
           }
         };
 
-        const requestEnded = requestId => {
+        const requestEnded = (requestId) => {
           delete pendingRequestURLMap[requestId];
           maybeFulfillPromise();
         };
 
-        const requestFailed = requestId => {
+        const requestFailed = (requestId) => {
           failedURLs.push(pendingRequestURLMap[requestId]);
           requestEnded(requestId);
         };
 
         Network.requestWillBeSent(({ requestId, request }) => {
+          console.info('!!!!', request.url);
           pendingRequestURLMap[requestId] = request.url;
         });
 
@@ -111,7 +112,7 @@ function createChromeTarget(
         maybeFulfillPromise();
       });
 
-    const evaluateOnNewDocument = scriptSource => {
+    const evaluateOnNewDocument = (scriptSource) => {
       if (Page.addScriptToEvaluateOnLoad) {
         // For backwards support
         return Page.addScriptToEvaluateOnLoad({ scriptSource });
@@ -126,7 +127,7 @@ function createChromeTarget(
       const expression = `(() => Promise.resolve((${functionToExecute})(${stringifiedArgs})).then(JSON.stringify))()`;
       const { result } = await Runtime.evaluate({
         expression,
-        awaitPromise: true,
+        awaitPromise: true
       });
       if (result.subtype === 'error') {
         throw new Error(
@@ -138,20 +139,22 @@ function createChromeTarget(
 
     client.executeFunctionWithWindow = executeFunctionWithWindow;
 
-    client.loadUrl = async url => {
+    client.loadUrl = async (url) => {
       if (!options.chromeEnableAnimations) {
         debug('Disabling animations');
         await evaluateOnNewDocument(disableAnimations.asString);
       }
 
       debug(`Navigating to ${url}`);
-      await Promise.all([Page.navigate({ url }), awaitRequestsFinished()]);
-
+      await Promise.all([
+        Page.navigate({ url, transitionType: 'auto_subframe' }),
+        awaitRequestsFinished()
+      ]);
       debug('Awaiting runtime setup');
       await executeFunctionWithWindow(awaitLokiReady);
     };
 
-    const getPositionInViewport = async selector => {
+    const getPositionInViewport = async (selector) => {
       try {
         return await executeFunctionWithWindow(getSelectorBoxSize, selector);
       } catch (error) {
@@ -165,28 +168,28 @@ function createChromeTarget(
     };
 
     client.captureScreenshot = withRetries(options.chromeRetries)(
-      withTimeout(CAPTURING_SCREENSHOT_TIMEOUT, 'captureScreenshot')(
-        async (selector = 'body') => {
-          debug(`Getting viewport position of "${selector}"`);
-          const position = await getPositionInViewport(selector);
-
-          if (position.width === 0 || position.height === 0) {
-            throw new Error(
-              `Selector "${selector} has zero width or height. Can't capture screenshot.`
-            );
-          }
-
-          debug('Capturing screenshot');
-          const clip = Object.assign({ scale: 1 }, position);
-          const screenshot = await Page.captureScreenshot({
-            format: 'png',
-            clip,
-          });
-          const buffer = Buffer.from(screenshot.data, 'base64');
-
-          return buffer;
+      withTimeout(
+        CAPTURING_SCREENSHOT_TIMEOUT,
+        'captureScreenshot'
+      )(async (selector = 'body') => {
+        debug(`Getting viewport position of "${selector}"`);
+        const position = await getPositionInViewport(selector);
+        if (position.width === 0 || position.height === 0) {
+          throw new Error(
+            `Selector "${selector} has zero width or height. Can't capture screenshot.`
+          );
         }
-      )
+
+        debug('Capturing screenshot');
+        const clip = Object.assign({ scale: 1 }, position);
+        const screenshot = await Page.captureScreenshot({
+          format: 'png',
+          clip
+        });
+        const buffer = Buffer.from(screenshot.data, 'base64');
+
+        return buffer;
+      })
     );
 
     return client;
@@ -202,7 +205,7 @@ function createChromeTarget(
       width: 100,
       height: 100,
       chromeEnableAnimations: true,
-      clearBrowserCookies: false,
+      clearBrowserCookies: false
     });
     const url = `${baseUrl}/iframe.html`;
     try {
@@ -241,8 +244,7 @@ function createChromeTarget(
     }
     const selector = configuration.chromeSelector || options.chromeSelector;
     const url = getStoryUrl(kind, story);
-    debug(`Loading story from ${url}`)
-
+    debug(`Loading story from ${url}`);
     const tab = await launchNewTab(tabOptions);
     let screenshot;
     try {
@@ -268,7 +270,7 @@ function createChromeTarget(
     prepare,
     getStorybook,
     launchNewTab,
-    captureScreenshotForStory,
+    captureScreenshotForStory
   };
 }
 

@@ -1,11 +1,11 @@
 const debug = require('debug')('loki:chrome:local');
-const chromeLauncher = require('lighthouse/chrome-launcher/chrome-launcher');
+const chromeLauncher = require('chrome-launcher');
 const CDP = require('chrome-remote-interface');
 const createChromeTarget = require('./create-chrome-target');
 
 function createChromeAppTarget({
   baseUrl = 'http://localhost:6006',
-  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars']
 }) {
   let instance;
 
@@ -13,7 +13,7 @@ function createChromeAppTarget({
     const launchOptions = Object.assign(
       {
         chromeFlags,
-        logLevel: 'silent',
+        logLevel: 'silent'
       },
       options
     );
