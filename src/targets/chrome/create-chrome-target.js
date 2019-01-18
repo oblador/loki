@@ -85,7 +85,7 @@ function createChromeTarget(
           maybeFulfillPromise();
         };
 
-        const requestFailed = (requestId) => {
+        const requestFailed = requestId => {
           failedURLs.push(pendingRequestURLMap[requestId]);
           requestEnded(requestId);
         };
@@ -171,6 +171,7 @@ function createChromeTarget(
         async (selector = 'body') => {
           debug(`Getting viewport position of "${selector}"`);
           const position = await getPositionInViewport(selector);
+
           if (position.width === 0 || position.height === 0) {
             throw new Error(
               `Selector "${selector} has zero width or height. Can't capture screenshot.`
