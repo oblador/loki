@@ -5,7 +5,7 @@ const createChromeTarget = require('./create-chrome-target');
 
 function createChromeAppTarget({
   baseUrl = 'http://localhost:6006',
-  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars']
+  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
 }) {
   let instance;
 
@@ -13,7 +13,7 @@ function createChromeAppTarget({
     const launchOptions = Object.assign(
       {
         chromeFlags,
-        logLevel: 'silent'
+        logLevel: 'silent',
       },
       options
     );

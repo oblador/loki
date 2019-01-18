@@ -80,7 +80,7 @@ function decorateStorybook(storybook) {
       enumerable: true,
       get: function() {
         return storiesOf;
-      }
+      },
     });
   }
 
@@ -96,7 +96,7 @@ function decorateStorybook(storybook) {
         wrapWithAsyncStory(this.add.bind(this)),
         this.kind
       )(...args);
-    }
+    },
   });
 
   function getStorybook() {
@@ -110,7 +110,7 @@ function decorateStorybook(storybook) {
           skipped: skipped,
           stories: stories.filter(function(story) {
             return skipped.indexOf(story.name) === -1;
-          })
+          }),
         };
       }
 
