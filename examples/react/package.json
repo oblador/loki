@@ -20,14 +20,12 @@
     "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save --no-package-lock && rm $LOKI_FILE"
   },
   "devDependencies": {
-    "@storybook/cli": "^4.0.10",
-    "@storybook/react": "^4.0.10",
-    "loki": "*",
-    "@storybook/addon-actions": "^4.0.10",
-    "@storybook/addon-links": "^4.0.10",
-    "@storybook/addons": "^4.0.10",
-    "@babel/core": "^7.1.6",
-    "babel-loader": "^8.0.4"
+    "@storybook/addon-actions": "^5.0.0",
+    "@storybook/addon-links": "^5.0.0",
+    "@storybook/addons": "^5.0.0",
+    "@storybook/cli": "^5.0.0",
+    "@storybook/react": "^5.0.0",
+    "loki": "*"
   },
   "loki": {
     "chromeSelector": ".wrapper > *, #root > *",
