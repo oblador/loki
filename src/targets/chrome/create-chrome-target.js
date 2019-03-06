@@ -91,6 +91,9 @@ function createChromeTarget(
         };
 
         Network.requestWillBeSent(({ requestId, request }) => {
+          if (stabilizationTimer) {
+            clearTimeout(stabilizationTimer);
+          }
           pendingRequestURLMap[requestId] = request.url;
         });
 
