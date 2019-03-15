@@ -6,7 +6,7 @@ function getImageDiff(path1, path2, diffPath, tolerance) {
     gm.compare(
       path1,
       path2,
-      { file: diffPath, tolerance: tolerance / 100 },
+      { file: diffPath, tolerance},
       (err, isEqual) => {
         if (err) {
           if (typeof err === 'string') {

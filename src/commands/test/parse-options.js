@@ -27,7 +27,7 @@ function parseOptions(args, config) {
     chromeLoadTimeout: parseInt($('chromeLoadTimeout'), 10),
     chromeRetries: parseInt($('chromeRetries'), 10),
     chromeSelector: $('chromeSelector'),
-    chromeTolerance: parseFloat($('chromeTolerance'), 10),
+    tolerance: parseFloat($('tolerance')),
     chromeEmulatedMedia: $('chromeEmulatedMedia'),
     skipStoriesPattern: $('skipStories'),
     storiesFilter: $('storiesFilter'),

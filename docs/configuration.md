@@ -10,6 +10,7 @@ Example `package.json`:
   "version": "1.0.0",
   "loki": {
     "chromeSelector": "#my-decorator > *",
+    "tolerance": 0.1,
     "configurations": {
       "chrome.laptop": {
         "target": "chrome.app",
@@ -31,6 +32,12 @@ Example `package.json`:
 }
 ```
 
+## `tolerance`
+
+The tolerated difference compared to reference image. Behaviour of tolerance depends on `diffingEngine`.
+E.g. `gm` reports `0.000011534` while `looks-same` reports `0.3143432161152431` when comparing the same set of images.
+
+
 ## `chromeSelector`
 
 This setting is a CSS selector to the part of the page you want screenshots of. This is useful if you have decorators that's not really part of the component itself. Note that it doesn't screenshot the DOM element itself but rather the crops the screenshot to those dimensions, so if you have any elements absolutely positioned above they will be included.
@@ -41,11 +48,11 @@ There are two currently available options to choose from when comparing images i
 
 ### `gm`
 
-Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. This is default if available. `chromeTolerance` percentage is based on overall image, meaning you'd likely want a low threshold.
+Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. This is default if available. `tolerance` percentage is based on overall image, meaning you'd likely want a low threshold.
 
 ### `looks-same`
 
-A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. `chromeTolerance` percentage is based on neighboring pixels which makes it ideal when you have different pixel densities.
+A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. `tolerance` percentage is based on neighboring pixels which makes it ideal when you have different pixel densities.
 
 |                | `gm`                                            | `looks-same`             |
 | -------------- | ----------------------------------------------- | ------------------------ |

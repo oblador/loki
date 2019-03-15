@@ -75,8 +75,8 @@ async function runTests(flatConfigurations, options) {
     name,
     target,
     configurations,
+    tolerance = 0,
     concurrency = 1,
-    tolerance = 0
   ) => {
     let storybook;
 
@@ -169,8 +169,8 @@ async function runTests(flatConfigurations, options) {
             chromeFlags: options.chromeFlags,
           }),
           configurations,
-          options.chromeConcurrency,
-          options.chromeTolerance
+          options.tolerance,
+          options.chromeConcurrency
         );
       }
       case 'chrome.docker': {
@@ -182,22 +182,24 @@ async function runTests(flatConfigurations, options) {
             chromeFlags: options.chromeFlags,
           }),
           configurations,
-          options.chromeConcurrency,
-          options.chromeTolerance
+          options.tolerance,
+          options.chromeConcurrency
         );
       }
       case 'ios.simulator': {
         return getTargetTasks(
           'iOS Simulator',
           createIOSSimulatorTarget(options.reactNativeUri),
-          configurations
+          configurations,
+          options.tolerance,
         );
       }
       case 'android.emulator': {
         return getTargetTasks(
           'Android Emulator',
           createAndroidEmulatorTarget(options.reactNativeUri),
-          configurations
+          configurations,
+          options.tolerance,
         );
       }
       default: {
