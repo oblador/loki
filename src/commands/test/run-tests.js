@@ -160,6 +160,7 @@ async function runTests(flatConfigurations, options) {
 
   const createTargetTask = configurations => {
     const { target } = configurations[Object.keys(configurations)[0]];
+    if (options.chromeTolerance) return die(`The 'chromeTolerance' option has been replaced by 'tolernace'. Please update your config`);
     switch (target) {
       case 'chrome.app': {
         return getTargetTasks(
