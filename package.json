@@ -1,6 +1,6 @@
 {
   "name": "loki",
-  "version": "0.14.0",
+  "version": "0.14.2",
   "description": "Visual Regression Testing for react-storybook",
   "main": "index.js",
   "bin": {
@@ -55,6 +55,7 @@
     "fs-extra": "^7.0.1",
     "get-port": "^4.0.0",
     "gm": "^1.23.1",
+    "hoist-non-react-statics": "^3.2.1",
     "lighthouse": "^2.2.1",
     "listr": "^0.14.3",
     "looks-same": "^4.0.0",

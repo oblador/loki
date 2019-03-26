@@ -5,6 +5,7 @@ const disableAnimations = require('./disable-animations');
 const getSelectorBoxSize = require('./get-selector-box-size');
 const getStories = require('./get-stories');
 const awaitLokiReady = require('./await-loki-ready');
+const addLokiSessionMarker = require('./add-loki-session-marker');
 const {
   withTimeout,
   TimeoutError,
@@ -91,6 +92,9 @@ function createChromeTarget(
         };
 
         Network.requestWillBeSent(({ requestId, request }) => {
+          if (stabilizationTimer) {
+            clearTimeout(stabilizationTimer);
+          }
           pendingRequestURLMap[requestId] = request.url;
         });
 
@@ -151,6 +155,8 @@ function createChromeTarget(
       ]);
       debug('Awaiting runtime setup');
       await executeFunctionWithWindow(awaitLokiReady);
+
+      await executeFunctionWithWindow(addLokiSessionMarker);
     };
 
     const getPositionInViewport = async selector => {
