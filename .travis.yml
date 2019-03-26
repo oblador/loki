@@ -1,32 +1,48 @@
 sudo: required
 language: node_js
 node_js:
-- '8'
-services:
-- docker
-before_install:
-- cd examples/react && npm install && cd ../..
-script:
-- npm run lint
-- npm run test
-- cd examples/react && npm run test-ci && cd ../..
-before_deploy: "npm run build-docs"
-deploy:
-- provider: npm
-  email: joel@oblador.se
-  api_key:
-    secure: "MxsN+ekEiSPTDT0GG4aZkYNGtIdAx71/EuN4sygE1prI2K8h162xW9MrkYn4H7TyN7WPk3JxeKiKDJWJnumf65BUNxpxAkQpfJjWESzYt/q0i/hdhB6KJb/32ooyB0lgS921QgcT5Zm1iz+sEj+4SjrScBoovp885Y+Ya5oTpXtei5x8i/RI7qtViSTLbRwRcPLyrR5Btd5SqS7B7tlvEPeni1SryvyM7t1dhQ+Mbe77NQ+rFws7C6TZ67bjw5eZi7GcSKDr9lDF1M/RAUcF6OndslZiNjEObgHs8jmnM9f8MJn85QD5ubvy1Wpwv82Nu1fDCmDY6rbRRpNhqNERoNe5twhhG7uGtueSf++q2DLR4o9LAASh9m/aicfzv+tQfMGg1YYevWblqijh/cp4P8o7vBWA+ppfSFUBFFf5cePncWQdz/Inl5pWieRZ03EymmTzrzjSD6jI7xtyRZPNQAzJrqSAIGlnHkKutf+rUk6GKaFAubwNDRl7z03oLKKHYoTebVIJk4M4kcbeH97ygZTuzb9Igkf759mpJQA4eq6WU5fw22Fvn51bEbttOe2iWGyRBFC7WsJgOY7I/7gffyaA+XpzbvAMhE4ssGpdj6t+JDhhfpICAbLFsSXdgXknqXKjq/yDZGHpv52oS6P3wW3k1tAMyFWy/xiFGgFxdfI="
-  on:
-    tags: true
-    repo: oblador/loki
-    condition: "$TRAVIS_TAG =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+.*$"
-- provider: pages
-  skip_cleanup: true
-  local_dir: "_book"
-  fqdn: "loki.js.org"
-  github_token:
-    secure: "NILrfGIHnp8p2cunceKlWV5pdgItD7c/BiNtD4S+BnV5UyyBG9fQph5xcKoh/vwlAepMOuEpFvzBc5iVrlXZB40aXJa5iXqqADJrV6Kwc1dlvV3/emR4Yfhb3qQDzebdpMamy8F3ScgdovOl48GvBwnM0PCTCR3PnHNqeqp3Up+0nwSmxJTh06kcv7uoFsKjW09kIsE4+E60xi0KZr12JBpAaz6rQ/Wz0zEPE1Aa0lPyD4eAwNSUOlS1HuozOZt03ly3c24IZs2hzrpC9jJj5hGzkqGcnxFESCjoNtat1fNeASODzQZbLY+p5blBkYN1icCRkX4GdXzFpg/wMNcyazJMf8eybJTNVOZ4FIIIzR0zKEu/cGTV6xFxvkr7EpBGlX/H5YcIaZrw9Mhix8ww9tcoviTJicaahM+sNKV3IppssSMSNjM7BG+JXSGvOwkDyAHgT64zoShKJ/G02wKpJpXH1deh/k0XztmkJlac05O8es8HXa7RUF9H8+07ZfETjOz7mh+JCSattMqVkquooFwcW8tbhI0x9N5qJhzR45KnSpupyi0Cp7j3MB6sZ6UmcN0C8om+wwtrVGqubMdwgNYNPQdQDf4uPBzHhn5BwBRNLSXVpn0lR7awZ6ef0OmRX2OkoFT+iPxYUbuIEB2LM2iNTE+O6fcvcf7Isk7d8L4="
-  on:
-    tags: true
-    repo: oblador/loki
-    condition: "$TRAVIS_TAG =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+.*$"
+  - '8'
+jobs:
+  include:
+    - stage: test
+      name: 'Linting'
+      script: npm run lint
+    - stage: test
+      name: 'Unit tests'
+      script: npm run test
+    - stage: test
+      services:
+        - docker
+      before_install:
+        - cd examples/react && npm install
+      name: 'Visual tests: React DOM'
+      script: npm run test-ci
+    - stage: deploy
+      script: skip
+      if: branch = master
+      name: 'NPM'
+      deploy:
+        - provider: npm
+          email: joel@oblador.se
+          api_key:
+            secure: 'MxsN+ekEiSPTDT0GG4aZkYNGtIdAx71/EuN4sygE1prI2K8h162xW9MrkYn4H7TyN7WPk3JxeKiKDJWJnumf65BUNxpxAkQpfJjWESzYt/q0i/hdhB6KJb/32ooyB0lgS921QgcT5Zm1iz+sEj+4SjrScBoovp885Y+Ya5oTpXtei5x8i/RI7qtViSTLbRwRcPLyrR5Btd5SqS7B7tlvEPeni1SryvyM7t1dhQ+Mbe77NQ+rFws7C6TZ67bjw5eZi7GcSKDr9lDF1M/RAUcF6OndslZiNjEObgHs8jmnM9f8MJn85QD5ubvy1Wpwv82Nu1fDCmDY6rbRRpNhqNERoNe5twhhG7uGtueSf++q2DLR4o9LAASh9m/aicfzv+tQfMGg1YYevWblqijh/cp4P8o7vBWA+ppfSFUBFFf5cePncWQdz/Inl5pWieRZ03EymmTzrzjSD6jI7xtyRZPNQAzJrqSAIGlnHkKutf+rUk6GKaFAubwNDRl7z03oLKKHYoTebVIJk4M4kcbeH97ygZTuzb9Igkf759mpJQA4eq6WU5fw22Fvn51bEbttOe2iWGyRBFC7WsJgOY7I/7gffyaA+XpzbvAMhE4ssGpdj6t+JDhhfpICAbLFsSXdgXknqXKjq/yDZGHpv52oS6P3wW3k1tAMyFWy/xiFGgFxdfI='
+          on:
+            tags: true
+            repo: oblador/loki
+            condition: "$TRAVIS_TAG =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+.*$"
+    - stage: deploy
+      script: skip
+      if: branch = master
+      name: 'Documentation'
+      before_deploy: 'npm run build-docs'
+      deploy:
+        - provider: pages
+          skip_cleanup: true
+          local_dir: '_book'
+          fqdn: 'loki.js.org'
+          github_token:
+            secure: 'NILrfGIHnp8p2cunceKlWV5pdgItD7c/BiNtD4S+BnV5UyyBG9fQph5xcKoh/vwlAepMOuEpFvzBc5iVrlXZB40aXJa5iXqqADJrV6Kwc1dlvV3/emR4Yfhb3qQDzebdpMamy8F3ScgdovOl48GvBwnM0PCTCR3PnHNqeqp3Up+0nwSmxJTh06kcv7uoFsKjW09kIsE4+E60xi0KZr12JBpAaz6rQ/Wz0zEPE1Aa0lPyD4eAwNSUOlS1HuozOZt03ly3c24IZs2hzrpC9jJj5hGzkqGcnxFESCjoNtat1fNeASODzQZbLY+p5blBkYN1icCRkX4GdXzFpg/wMNcyazJMf8eybJTNVOZ4FIIIzR0zKEu/cGTV6xFxvkr7EpBGlX/H5YcIaZrw9Mhix8ww9tcoviTJicaahM+sNKV3IppssSMSNjM7BG+JXSGvOwkDyAHgT64zoShKJ/G02wKpJpXH1deh/k0XztmkJlac05O8es8HXa7RUF9H8+07ZfETjOz7mh+JCSattMqVkquooFwcW8tbhI0x9N5qJhzR45KnSpupyi0Cp7j3MB6sZ6UmcN0C8om+wwtrVGqubMdwgNYNPQdQDf4uPBzHhn5BwBRNLSXVpn0lR7awZ6ef0OmRX2OkoFT+iPxYUbuIEB2LM2iNTE+O6fcvcf7Isk7d8L4='
+          on:
+            tags: true
+            repo: oblador/loki
+            condition: "$TRAVIS_TAG =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+.*$"
