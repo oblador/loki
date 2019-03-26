@@ -11,16 +11,15 @@ const SERVER_STARTUP_TIMEOUT = 10000; /* ms */
 
 function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
-  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
   chromeDockerHost = 'localhost',
-  chromeDockerPort = '9222'
+  chromeDockerPort = '9222',
 }) {
   let storybookUrl = baseUrl;
 
   const RUN_MODES = {
     local: 'local',
     remote: 'remote',
-    file: 'file'
+    file: 'file',
   };
 
   let runMode = RUN_MODES.remote;
@@ -49,7 +48,7 @@ function createChromeDockerTarget({
       serveHandler(req, res, {
         public: staticPath,
         cleanUrls: false,
-        renderSingle: true
+        renderSingle: true,
       })
     );
     debug(`Serving files from ${staticPath}`);
@@ -90,7 +89,7 @@ function createChromeDockerTarget({
         new Promise((resolve, reject) => {
           server.addListener('listening', resolve);
           server.addListener('error', reject);
-        }).timeout(SERVER_STARTUP_TIMEOUT)
+        }).timeout(SERVER_STARTUP_TIMEOUT),
       ]);
       debug('Set up complete');
     } else {
@@ -118,7 +117,7 @@ function createChromeDockerTarget({
     const client = await CDP({
       host: dockerHost,
       port: chromeDockerPort,
-      target
+      target,
     });
 
     client.close = () => {
@@ -126,7 +125,7 @@ function createChromeDockerTarget({
       return CDP.Close({
         host: dockerHost,
         port: chromeDockerPort,
-        id: target.id
+        id: target.id,
       });
     };
 

@@ -151,7 +151,7 @@ function createChromeTarget(
       debug(`Navigating to ${url}`);
       await Promise.all([
         Page.navigate({ url, transitionType: 'auto_subframe' }),
-        awaitRequestsFinished()
+        awaitRequestsFinished(),
       ]);
       debug('Awaiting runtime setup');
       await executeFunctionWithWindow(awaitLokiReady);

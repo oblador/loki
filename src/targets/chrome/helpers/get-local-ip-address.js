@@ -4,7 +4,7 @@ const os = require('os');
  * Returns the first external IPv4 address this machine can be reached at.
  * @returns {String} The IPv4 address
  */
-module.exports = function getLocalIPAddress () {
+module.exports = function getLocalIPAddress() {
   const interfaces = os.networkInterfaces();
   const ips = Object.keys(interfaces)
     .map(key =>

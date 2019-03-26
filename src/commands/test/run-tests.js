@@ -182,7 +182,7 @@ async function runTests(flatConfigurations, options) {
             chromeDockerUseExisting: options.chromeDockerUseExisting,
             chromeDockerHost: options.chromeDockerHost,
             chromeDockerPort: options.chromeDockerPort,
-            chromeFlags: options.chromeFlags
+            chromeFlags: options.chromeFlags,
           }),
           configurations,
           options.chromeConcurrency,

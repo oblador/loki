@@ -1,12 +1,12 @@
 const debug = require('debug')('loki:chrome:docker');
 const { execSync } = require('child_process');
 const execa = require('execa');
-const getLocalIPAddress = require('./helpers/get-local-ip-address');
-const waitOnCDPAvailable = require('./helpers/wait-on-CDP-available');
 const CDP = require('chrome-remote-interface');
 const fs = require('fs-extra');
 const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
+const getLocalIPAddress = require('./helpers/get-local-ip-address');
+const waitOnCDPAvailable = require('./helpers/wait-on-CDP-available');
 const createChromeTarget = require('./create-chrome-target');
 const createExistingDockerTarget = require('./create-existing-docker-target');
 
@@ -48,8 +48,11 @@ function createChromeDockerTarget({
 }) {
   if (chromeDockerUseExisting) {
     return createExistingDockerTarget({
-      baseUrl, chromeFlags, chromeDockerHost, chromeDockerPort
-    })
+      baseUrl,
+      chromeFlags,
+      chromeDockerHost,
+      chromeDockerPort,
+    });
   }
 
   let port;

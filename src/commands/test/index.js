@@ -65,7 +65,7 @@ async function test(args) {
   try {
     await runTests(configurations, options)
       .then(() => process.exit(0))
-      .catch((err) => {
+      .catch(err => {
         throw err;
       });
   } catch (err) {

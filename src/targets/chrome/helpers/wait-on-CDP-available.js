@@ -6,7 +6,7 @@ const waitOn = require('wait-on');
  * @param port THe port where to look for CDP
  * @returns {Promise} Will resolve without content when CDP is available or error out otherwise
  */
-module.exports = function waitOnCDPAvailable (host, port) {
+module.exports = function waitOnCDPAvailable(host, port) {
   return new Promise((resolve, reject) => {
     waitOn(
       {
@@ -24,4 +24,4 @@ module.exports = function waitOnCDPAvailable (host, port) {
       }
     );
   });
-}
+};

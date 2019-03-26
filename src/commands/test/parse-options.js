@@ -7,7 +7,12 @@ const getAbsoluteURL = require('./get-absolute-url');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: ['requireReference', 'chromeEnableAnimations', 'chromeDockerUseExisting', 'verboseRenderer'],
+    boolean: [
+      'requireReference',
+      'chromeEnableAnimations',
+      'chromeDockerUseExisting',
+      'verboseRenderer',
+    ],
   });
 
   const $ = key => argv[key] || config[key] || defaults[key];
