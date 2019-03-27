@@ -33,6 +33,7 @@ storiesOf('Animation', module)
     <AnimatedComponent.CSSTransitionWillChange />
   ))
   .add('with CSS animation', () => <AnimatedComponent.CSSAnimation />)
+  .add('with CSS animation on pseudo element', () => <AnimatedComponent.CSSAnimationPseudoElement />)
   .add('with react-motion', () => <AnimatedComponent.ReactMotion />);
 
 storiesOf('Media', module).add('with media queries', () => (

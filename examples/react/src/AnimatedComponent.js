@@ -41,6 +41,10 @@ export const CSSTransitionWillChange = withAlternatingState(({ on }) => (
   />
 ));
 
+export const CSSAnimationPseudoElement = () => (
+  <div className="AnimatedComponent AnimatedPseudoElement" />
+);
+
 export const CSSAnimation = () => (
   <div className="AnimatedComponent CSSAnimation" />
 );

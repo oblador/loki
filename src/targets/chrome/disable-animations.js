@@ -2,7 +2,7 @@
 
 const disableAnimations = window => {
   const DISABLE_CSS_ANIMATIONS_STYLE = `
-  * {
+  *, :before, :after {
     -webkit-transition: none !important;
     transition: none !important;
     -webkit-animation: none !important;
