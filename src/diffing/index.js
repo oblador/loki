@@ -1,14 +1,14 @@
 const getImageDiffWithGm = require('./gm');
 const getImageDiffLooksSame = require('./looks-same');
 
-function getImageDiffer(engine) {
+function getImageDiffer(engine, config) {
   switch (engine) {
     case undefined:
     case 'looks-same': {
-      return getImageDiffLooksSame;
+      return getImageDiffLooksSame(config);
     }
     case 'gm': {
-      return getImageDiffWithGm;
+      return getImageDiffWithGm(config);
     }
     default: {
       throw new Error(`Unsupported engine "${engine}"`);
