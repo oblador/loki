@@ -1,28 +1,31 @@
 const fs = require('fs-extra');
 const gm = require('gm');
 
-function getImageDiff(path1, path2, diffPath, tolerance) {
-  return new Promise((resolve, reject) => {
-    gm.compare(
-      path1,
-      path2,
-      { file: diffPath, tolerance: tolerance / 100 },
-      (err, isEqual) => {
-        if (err) {
-          if (typeof err === 'string') {
-            reject(new Error(err));
+function imageDiffGenerator(config) {
+  return function getImageDiff(path1, path2, diffPath, tolerance) {
+    const instanceConfig = { tolerance: tolerance / 100, ...config };
+    return new Promise((resolve, reject) => {
+      gm.compare(
+        path1,
+        path2,
+        { ...instanceConfig, file: diffPath },
+        (err, isEqual) => {
+          if (err) {
+            if (typeof err === 'string') {
+              reject(new Error(err));
+            } else {
+              reject(err);
+            }
           } else {
-            reject(err);
+            if (isEqual) {
+              fs.remove(diffPath);
+            }
+            resolve(isEqual);
           }
-        } else {
-          if (isEqual) {
-            fs.remove(diffPath);
-          }
-          resolve(isEqual);
         }
-      }
-    );
-  });
+      );
+    });
+  };
 }
 
-module.exports = getImageDiff;
+module.exports = imageDiffGenerator;

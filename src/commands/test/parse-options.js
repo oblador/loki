@@ -33,6 +33,8 @@ function parseOptions(args, config) {
     storiesFilter: $('storiesFilter'),
     diffingEngine:
       $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
+    looksSame: $('looksSame'),
+    gm: $('gm'),
     verboseRenderer: $('verboseRenderer') || ciInfo.isCI,
     requireReference: $('requireReference') || ciInfo.isCI,
     updateReference: argv._[0] === 'update',
