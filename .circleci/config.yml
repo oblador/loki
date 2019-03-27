@@ -1,0 +1,28 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.13.0
+      - image: yukinying/chrome-headless:63.0.3230.2
+
+    working_directory: ~/repo/examples/react
+
+    steps:
+      - checkout:
+          path: ~/repo
+
+      - run: npm install
+
+      - run:
+          name: 'Visual tests: React DOM'
+          command: npm run test-ci -- --chromeDockerUseExisting
+
+      - store_artifacts:
+          path: storybook-static
+
+      - store_artifacts:
+          path: .loki
