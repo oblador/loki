@@ -5,6 +5,14 @@
   background-color: green;
 }
 
+.AnimatedPseudoElement:after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 100px;
+  background-color: blue;
+}
+
 .CSSTransition {
   transition: transform 1s;
   transform: rotate(0deg);
@@ -18,7 +26,8 @@
   will-change: transform;
 }
 
-.CSSAnimation {
+.CSSAnimation,
+.AnimatedPseudoElement:after {
   animation: 1.5s AnimatedComponent-spin infinite normal linear;
 }
 
