@@ -2,7 +2,6 @@ const debug = require('debug')('loki:chrome:existing');
 const CDP = require('chrome-remote-interface');
 const serveHandler = require('serve-handler');
 const http = require('http');
-const Promise = require('bluebird');
 const waitOnCDPAvailable = require('./helpers/wait-on-CDP-available');
 const getLocalIPAddress = require('./helpers/get-local-ip-address');
 const createChromeTarget = require('./create-chrome-target');

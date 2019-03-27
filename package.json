@@ -44,7 +44,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.5.3",
     "chalk": "^2.4.1",
     "chrome-launcher": "^0.10.5",
     "chrome-remote-interface": "^0.27.0",
@@ -56,7 +55,6 @@
     "get-port": "^4.0.0",
     "gm": "^1.23.1",
     "hoist-non-react-statics": "^3.2.1",
-    "lighthouse": "^2.2.1",
     "listr": "^0.14.3",
     "looks-same": "^4.0.0",
     "minimist": "^1.2.0",
