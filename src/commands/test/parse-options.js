@@ -7,7 +7,7 @@ const getAbsoluteURL = require('./get-absolute-url');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: ['requireReference', 'chromeEnableAnimations', 'verboseRenderer'],
+    boolean: ['requireReference', 'chromeEnableAnimations', 'chromeDockerUseExisting', 'verboseRenderer'],
   });
 
   const $ = key => argv[key] || config[key] || defaults[key];
@@ -21,6 +21,9 @@ function parseOptions(args, config) {
       `http://${$('host')}:${argv.port || $('reactPort')}`,
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
     chromeConcurrency: parseInt($('chromeConcurrency'), 10),
+    chromeDockerUseExisting: $('chromeDockerUseExisting'),
+    chromeDockerHost: $('chromeDockerHost'),
+    chromeDockerPort: $('chromeDockerPort'),
     chromeDockerImage: $('chromeDockerImage'),
     chromeEnableAnimations: $('chromeEnableAnimations'),
     chromeFlags: $('chromeFlags').split(' '),

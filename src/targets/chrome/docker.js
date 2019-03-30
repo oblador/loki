@@ -1,44 +1,14 @@
 const debug = require('debug')('loki:chrome:docker');
-const os = require('os');
 const { execSync } = require('child_process');
 const execa = require('execa');
-const waitOn = require('wait-on');
+const getLocalIPAddress = require('./helpers/get-local-ip-address');
+const waitOnCDPAvailable = require('./helpers/wait-on-CDP-available');
 const CDP = require('chrome-remote-interface');
 const fs = require('fs-extra');
 const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const createChromeTarget = require('./create-chrome-target');
-
-const getLocalIPAddress = () => {
-  const interfaces = os.networkInterfaces();
-  const ips = Object.keys(interfaces)
-    .map(key =>
-      interfaces[key]
-        .filter(({ family, internal }) => family === 'IPv4' && !internal)
-        .map(({ address }) => address)
-    )
-    .reduce((acc, current) => acc.concat(current), []);
-  return ips[0];
-};
-
-const waitOnCDPAvailable = (host, port) =>
-  new Promise((resolve, reject) => {
-    waitOn(
-      {
-        resources: [`tcp:${host}:${port}`],
-        delay: 50,
-        interval: 100,
-        timeout: 5000,
-      },
-      err => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      }
-    );
-  });
+const createExistingDockerTarget = require('./create-existing-docker-target');
 
 const getNetworkHost = async dockerId => {
   let host = '127.0.0.1';
@@ -72,11 +42,20 @@ function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
   chromeDockerImage = 'yukinying/chrome-headless',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+  chromeDockerUseExisting = false,
+  chromeDockerHost = 'localhost',
+  chromeDockerPort = '9222',
 }) {
+  if (chromeDockerUseExisting) {
+    return createExistingDockerTarget({
+      baseUrl, chromeFlags, chromeDockerHost, chromeDockerPort
+    })
+  }
+
   let port;
   let dockerId;
   let host;
-  let dockerUrl = baseUrl;
+  let storybookUrl = baseUrl;
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
 
@@ -91,13 +70,13 @@ function createChromeDockerTarget({
         'Unable to detect local IP address, try passing --host argument'
       );
     }
-    dockerUrl = baseUrl.replace('localhost', ip);
+    storybookUrl = baseUrl.replace('localhost', ip);
   } else if (baseUrl.indexOf('file:') === 0) {
     const staticPath = baseUrl.substr('file:'.length);
     const staticMountPath = '/var/loki';
     runArgs.push('-v');
     runArgs.push(`${staticPath}:${staticMountPath}`);
-    dockerUrl = `file://${staticMountPath}`;
+    storybookUrl = `file://${staticMountPath}`;
   }
 
   async function getIsImageDownloaded(imageName) {
@@ -188,7 +167,7 @@ function createChromeDockerTarget({
     start,
     stop,
     createNewDebuggerInstance,
-    dockerUrl,
+    storybookUrl,
     ensureImageDownloaded
   );
 }

@@ -15,7 +15,7 @@ const { FetchingURLsError, ServerError } = require('../../errors');
 
 const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
-const REQUEST_STABILIZATION_TIMEOUT = 100;
+const REQUEST_STABILIZATION_TIMEOUT = 1000;
 
 function createChromeTarget(
   start,
@@ -149,8 +149,10 @@ function createChromeTarget(
       }
 
       debug(`Navigating to ${url}`);
-      await Promise.all([Page.navigate({ url }), awaitRequestsFinished()]);
-
+      await Promise.all([
+        Page.navigate({ url, transitionType: 'auto_subframe' }),
+        awaitRequestsFinished()
+      ]);
       debug('Awaiting runtime setup');
       await executeFunctionWithWindow(awaitLokiReady);
 

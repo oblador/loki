@@ -63,7 +63,11 @@ async function test(args) {
   }
 
   try {
-    await runTests(configurations, options);
+    await runTests(configurations, options)
+      .then(() => process.exit(0))
+      .catch((err) => {
+        throw err;
+      });
   } catch (err) {
     if (err.name === 'ListrError') {
       const imageErrors = err.errors.filter(

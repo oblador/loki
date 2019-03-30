@@ -179,7 +179,10 @@ async function runTests(flatConfigurations, options) {
           createChromeDockerTarget({
             baseUrl: options.reactUri,
             chromeDockerImage: options.chromeDockerImage,
-            chromeFlags: options.chromeFlags,
+            chromeDockerUseExisting: options.chromeDockerUseExisting,
+            chromeDockerHost: options.chromeDockerHost,
+            chromeDockerPort: options.chromeDockerPort,
+            chromeFlags: options.chromeFlags
           }),
           configurations,
           options.chromeConcurrency,
