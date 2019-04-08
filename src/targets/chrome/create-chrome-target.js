@@ -14,7 +14,6 @@ const {
 const { FetchingURLsError, ServerError } = require('../../errors');
 
 const LOADING_STORIES_TIMEOUT = 60000;
-const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
 const REQUEST_STABILIZATION_TIMEOUT = 100;
 
 function createChromeTarget(
@@ -171,7 +170,7 @@ function createChromeTarget(
     };
 
     client.captureScreenshot = withRetries(options.chromeRetries)(
-      withTimeout(CAPTURING_SCREENSHOT_TIMEOUT, 'captureScreenshot')(
+      withTimeout(options.chromeScreenshotTimeout, 'captureScreenshot')(
         async (selector = 'body') => {
           debug(`Getting viewport position of "${selector}"`);
           const position = await getPositionInViewport(selector);

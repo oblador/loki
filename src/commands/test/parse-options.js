@@ -25,6 +25,7 @@ function parseOptions(args, config) {
     chromeEnableAnimations: $('chromeEnableAnimations'),
     chromeFlags: $('chromeFlags').split(' '),
     chromeLoadTimeout: parseInt($('chromeLoadTimeout'), 10),
+    chromeScreenshotTimeout: parseInt($('chromeScreenshotTimeout'), 10),
     chromeRetries: parseInt($('chromeRetries'), 10),
     chromeSelector: $('chromeSelector'),
     chromeTolerance: parseFloat($('chromeTolerance'), 10),
