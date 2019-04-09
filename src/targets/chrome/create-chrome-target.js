@@ -170,8 +170,8 @@ function createChromeTarget(
     };
 
     client.captureScreenshot = withRetries(options.chromeRetries)(
-      withTimeout(options.chromeScreenshotTimeout, 'captureScreenshot')(
-        async (selector = 'body') => {
+      async (timeout, selector = 'body') =>
+        withTimeout(timeout, 'captureScreenshot')(async () => {
           debug(`Getting viewport position of "${selector}"`);
           const position = await getPositionInViewport(selector);
 
@@ -190,8 +190,7 @@ function createChromeTarget(
           const buffer = Buffer.from(screenshot.data, 'base64');
 
           return buffer;
-        }
-      )
+        })()
     );
 
     return client;
@@ -251,7 +250,10 @@ function createChromeTarget(
     let screenshot;
     try {
       await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
-      screenshot = await tab.captureScreenshot(selector);
+      screenshot = await tab.captureScreenshot(
+        options.chromeScreenshotTimeout,
+        selector
+      );
       await fs.outputFile(outputPath, screenshot);
     } catch (err) {
       if (err instanceof TimeoutError) {
