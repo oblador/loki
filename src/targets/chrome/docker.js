@@ -9,6 +9,14 @@ const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const createChromeTarget = require('./create-chrome-target');
 
+const getExecutor = dockerAsSudo => (dockerPath, args) => {
+  if (dockerAsSudo) {
+    return execa('sudo', [dockerPath, ...args]);
+  }
+
+  return execa(dockerPath, args);
+};
+
 const getLocalIPAddress = () => {
   const interfaces = os.networkInterfaces();
   const ips = Object.keys(interfaces)
@@ -40,7 +48,7 @@ const waitOnCDPAvailable = (host, port) =>
     );
   });
 
-const getNetworkHost = async dockerId => {
+const getNetworkHost = async (execute, dockerId) => {
   let host = '127.0.0.1';
 
   // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
@@ -51,7 +59,7 @@ const getNetworkHost = async dockerId => {
   // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
   // bridge, which means we can talk directly to it via its IP address.
   if (runningInsideDocker) {
-    const { code, stdout } = await execa('docker', [
+    const { code, stdout } = await execute('docker', [
       'inspect',
       '-f',
       '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
@@ -72,6 +80,7 @@ function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
   chromeDockerImage = 'yukinying/chrome-headless',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+  dockerAsSudo = false,
 }) {
   let port;
   let dockerId;
@@ -79,6 +88,7 @@ function createChromeDockerTarget({
   let dockerUrl = baseUrl;
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
+  const execute = getExecutor(dockerAsSudo);
 
   if (!process.env.CI) {
     runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
@@ -101,7 +111,7 @@ function createChromeDockerTarget({
   }
 
   async function getIsImageDownloaded(imageName) {
-    const { code, stdout, stderr } = await execa(dockerPath, [
+    const { code, stdout, stderr } = await execute(dockerPath, [
       'images',
       '-q',
       imageName,
@@ -117,7 +127,7 @@ function createChromeDockerTarget({
 
     const isImageDownloaded = await getIsImageDownloaded(chromeDockerImage);
     if (!isImageDownloaded) {
-      await execa(dockerPath, ['pull', chromeDockerImage]);
+      await execute(dockerPath, ['pull', chromeDockerImage]);
     }
   }
 
@@ -144,10 +154,10 @@ function createChromeDockerTarget({
         ' '
       )}"`
     );
-    const { code, stdout, stderr } = await execa(dockerPath, args);
+    const { code, stdout, stderr } = await execute(dockerPath, args);
     if (code === 0) {
       dockerId = stdout;
-      host = await getNetworkHost(dockerId);
+      host = await getNetworkHost(execute, dockerId);
       await waitOnCDPAvailable(host, port);
       debug(`Docker started with id ${dockerId}`);
     } else {
@@ -158,7 +168,7 @@ function createChromeDockerTarget({
   async function stop() {
     if (dockerId) {
       debug(`Killing chrome docker instance with id ${dockerId}`);
-      await execa(dockerPath, ['kill', dockerId]);
+      await execute(dockerPath, ['kill', dockerId]);
     } else {
       debug('No chrome docker instance to kill');
     }
@@ -180,7 +190,8 @@ function createChromeDockerTarget({
 
   process.on('SIGINT', () => {
     if (dockerId) {
-      execSync(`${dockerPath} kill ${dockerId}`);
+      const maybeSudo = dockerAsSudo ? 'sudo' : '';
+      execSync(`${maybeSudo}${dockerPath} docker kill ${dockerId}`);
     }
   });
 
