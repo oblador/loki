@@ -1,12 +1,6 @@
 const getSelectorBoxSize = (window, selector) => {
-  const elements = [...window.document.querySelectorAll(selector)];
-
-  if (elements.length === 0) {
-    throw new Error('Unable to find selector');
-  }
-
-  const isNotWrapperElement = element => {
-    const isWrapper = elements.some(node =>
+  const isNotWrapperElement = (element, index, array) => {
+    const isWrapper = array.some(node =>
       node === element ? false : element.contains(node)
     );
     return !isWrapper;
@@ -23,6 +17,14 @@ const getSelectorBoxSize = (window, selector) => {
       style.height === '0px'
     );
   };
+
+  const elements = Array.from(window.document.querySelectorAll(selector))
+    .filter(isVisisble)
+    .filter(isNotWrapperElement);
+
+  if (elements.length === 0) {
+    throw new Error('No visible elements found');
+  }
 
   const getBoundingClientRect = element => element.getBoundingClientRect();
 
@@ -45,11 +47,7 @@ const getSelectorBoxSize = (window, selector) => {
     };
   };
 
-  return elements
-    .filter(isNotWrapperElement)
-    .filter(isVisisble)
-    .map(getBoundingClientRect)
-    .reduce(boxSizeUnion);
+  return elements.map(getBoundingClientRect).reduce(boxSizeUnion);
 };
 
 module.exports = getSelectorBoxSize;

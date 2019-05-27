@@ -161,7 +161,7 @@ function createChromeTarget(
       try {
         return await executeFunctionWithWindow(getSelectorBoxSize, selector);
       } catch (error) {
-        if (error.message === 'Unable to find selector') {
+        if (error.message === 'No visible elements found') {
           throw new Error(
             `Unable to get position of selector "${selector}". Review the \`chromeSelector\` option and make sure your story doesn't crash.`
           );
