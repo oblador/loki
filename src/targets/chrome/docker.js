@@ -190,8 +190,8 @@ function createChromeDockerTarget({
 
   process.on('SIGINT', () => {
     if (dockerId) {
-      const maybeSudo = dockerWithSudo ? 'sudo' : '';
-      execSync(`${maybeSudo}${dockerPath} docker kill ${dockerId}`);
+      const maybeSudo = dockerWithSudo ? 'sudo ' : '';
+      execSync(`${maybeSudo}${dockerPath} kill ${dockerId}`);
     }
   });
 
