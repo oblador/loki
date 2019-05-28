@@ -8,6 +8,7 @@ const {
   ServerError,
   FetchingURLsError,
 } = require('./errors');
+const { unwrapError } = require('./failure-handling');
 
 const getExecutorForCommand = command => {
   switch (command) {
@@ -37,21 +38,25 @@ async function run() {
 
   try {
     await executor(args);
-  } catch (err) {
+  } catch (rawError) {
+    const error = unwrapError(rawError);
+
     if (
-      err instanceof MissingDependencyError ||
-      err instanceof ServerError ||
-      err instanceof FetchingURLsError
+      error instanceof MissingDependencyError ||
+      error instanceof ServerError ||
+      error instanceof FetchingURLsError
     ) {
-      die(err.message, err.instructions);
+      die(error.message, error.instructions);
     }
 
     const childProcessFailed =
-      err.cmd && err.stderr && err.message.indexOf('Command failed: ') === 0;
+      error.cmd &&
+      error.stderr &&
+      error.message.indexOf('Command failed: ') === 0;
     if (childProcessFailed) {
-      die(err.stderr);
+      die(error.stderr);
     }
-    die(err);
+    die(error);
   }
 }
 
