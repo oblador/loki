@@ -19,7 +19,7 @@ jobs:
       script: npm run test-ci
     - stage: deploy
       script: skip
-      if: (repo = "oblador/loki") AND (branch = master) AND (type = push) AND (tag =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+.*$)
+      if: (repo = "oblador/loki") AND (branch = "master") AND (tag =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+.*$)
       name: 'NPM'
       deploy:
         - provider: npm
@@ -28,7 +28,7 @@ jobs:
             secure: 'MxsN+ekEiSPTDT0GG4aZkYNGtIdAx71/EuN4sygE1prI2K8h162xW9MrkYn4H7TyN7WPk3JxeKiKDJWJnumf65BUNxpxAkQpfJjWESzYt/q0i/hdhB6KJb/32ooyB0lgS921QgcT5Zm1iz+sEj+4SjrScBoovp885Y+Ya5oTpXtei5x8i/RI7qtViSTLbRwRcPLyrR5Btd5SqS7B7tlvEPeni1SryvyM7t1dhQ+Mbe77NQ+rFws7C6TZ67bjw5eZi7GcSKDr9lDF1M/RAUcF6OndslZiNjEObgHs8jmnM9f8MJn85QD5ubvy1Wpwv82Nu1fDCmDY6rbRRpNhqNERoNe5twhhG7uGtueSf++q2DLR4o9LAASh9m/aicfzv+tQfMGg1YYevWblqijh/cp4P8o7vBWA+ppfSFUBFFf5cePncWQdz/Inl5pWieRZ03EymmTzrzjSD6jI7xtyRZPNQAzJrqSAIGlnHkKutf+rUk6GKaFAubwNDRl7z03oLKKHYoTebVIJk4M4kcbeH97ygZTuzb9Igkf759mpJQA4eq6WU5fw22Fvn51bEbttOe2iWGyRBFC7WsJgOY7I/7gffyaA+XpzbvAMhE4ssGpdj6t+JDhhfpICAbLFsSXdgXknqXKjq/yDZGHpv52oS6P3wW3k1tAMyFWy/xiFGgFxdfI='
     - stage: deploy
       script: skip
-      if: (repo = "oblador/loki") AND (branch = master) AND (type = push) AND (tag =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+.*$)
+      if: (repo = "oblador/loki") AND (branch = "master") AND (tag =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+.*$)
       name: 'Documentation'
       before_deploy: 'npm run build-docs'
       deploy:
