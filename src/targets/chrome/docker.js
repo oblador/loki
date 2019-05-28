@@ -9,8 +9,8 @@ const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const createChromeTarget = require('./create-chrome-target');
 
-const getExecutor = dockerAsSudo => (dockerPath, args) => {
-  if (dockerAsSudo) {
+const getExecutor = dockerWithSudo => (dockerPath, args) => {
+  if (dockerWithSudo) {
     return execa('sudo', [dockerPath, ...args]);
   }
 
@@ -80,7 +80,7 @@ function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
   chromeDockerImage = 'yukinying/chrome-headless',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
-  dockerAsSudo = false,
+  dockerWithSudo = false,
 }) {
   let port;
   let dockerId;
@@ -88,7 +88,7 @@ function createChromeDockerTarget({
   let dockerUrl = baseUrl;
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
-  const execute = getExecutor(dockerAsSudo);
+  const execute = getExecutor(dockerWithSudo);
 
   if (!process.env.CI) {
     runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
@@ -190,7 +190,7 @@ function createChromeDockerTarget({
 
   process.on('SIGINT', () => {
     if (dockerId) {
-      const maybeSudo = dockerAsSudo ? 'sudo' : '';
+      const maybeSudo = dockerWithSudo ? 'sudo' : '';
       execSync(`${maybeSudo}${dockerPath} docker kill ${dockerId}`);
     }
   });

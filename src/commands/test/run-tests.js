@@ -180,7 +180,7 @@ async function runTests(flatConfigurations, options) {
             baseUrl: options.reactUri,
             chromeDockerImage: options.chromeDockerImage,
             chromeFlags: options.chromeFlags,
-            dockerAsSudo: options.dockerAsSudo,
+            dockerWithSudo: options.dockerWithSudo,
           }),
           configurations,
           options.chromeConcurrency,

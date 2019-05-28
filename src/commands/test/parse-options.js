@@ -11,7 +11,7 @@ function parseOptions(args, config) {
       'requireReference',
       'chromeEnableAnimations',
       'verboseRenderer',
-      'dockerAsSudo',
+      'dockerWithSudo',
     ],
   });
 
@@ -45,7 +45,7 @@ function parseOptions(args, config) {
     updateReference: argv._[0] === 'update',
     targetFilter: argv.targetFilter,
     configurationFilter: argv.configurationFilter || argv._[1],
-    dockerAsSudo: $('dockerAsSudo'),
+    dockerWithSudo: $('dockerWithSudo'),
   };
 }
 
