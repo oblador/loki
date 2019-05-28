@@ -10,6 +10,7 @@ const {
   withTimeout,
   TimeoutError,
   withRetries,
+  unwrapError,
 } = require('../../failure-handling');
 const { FetchingURLsError, ServerError } = require('../../errors');
 
@@ -203,17 +204,26 @@ function createChromeTarget(
       kind
     )}&selectedStory=${encodeURIComponent(story)}`;
 
+  const launchStoriesTab = withTimeout(LOADING_STORIES_TIMEOUT)(
+    withRetries(2)(async url => {
+      const tab = await launchNewTab({
+        width: 100,
+        height: 100,
+        chromeEnableAnimations: true,
+        clearBrowserCookies: false,
+      });
+      await tab.loadUrl(url);
+      return tab;
+    })
+  );
+
   async function getStorybook() {
-    const tab = await launchNewTab({
-      width: 100,
-      height: 100,
-      chromeEnableAnimations: true,
-      clearBrowserCookies: false,
-    });
     const url = `${baseUrl}/iframe.html`;
     try {
-      await withTimeout(LOADING_STORIES_TIMEOUT)(tab.loadUrl(url));
-    } catch (error) {
+      const tab = await launchStoriesTab(url);
+      return tab.executeFunctionWithWindow(getStories);
+    } catch (rawError) {
+      const error = unwrapError(rawError);
       if (
         error instanceof TimeoutError ||
         (error instanceof FetchingURLsError && error.failedURLs.includes(url))
@@ -225,7 +235,6 @@ function createChromeTarget(
       }
       throw error;
     }
-    return tab.executeFunctionWithWindow(getStories);
   }
 
   async function captureScreenshotForStory(

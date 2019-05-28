@@ -54,10 +54,8 @@ describe('createChromeTarget', () => {
     it(
       'throws if not configured',
       async () => {
-        await expect(fetchStorybookFixture('unconfigured')).rejects.toEqual(
-          new Error(
-            "Loki addon not registered. Add `import 'loki/configure-react'` to your config.js file."
-          )
+        await expect(fetchStorybookFixture('unconfigured')).rejects.toThrow(
+          "Loki addon not registered. Add `import 'loki/configure-react'` to your config.js file."
         );
       },
       DOCKER_TEST_TIMEOUT
@@ -68,9 +66,7 @@ describe('createChromeTarget', () => {
       async () => {
         await expect(
           fetchStorybookUrl('http://localhost:23456')
-        ).rejects.toEqual(
-          new Error('Failed fetching stories because the server is down')
-        );
+        ).rejects.toThrow('Failed fetching stories because the server is down');
       },
       DOCKER_TEST_TIMEOUT
     );

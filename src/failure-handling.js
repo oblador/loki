@@ -40,9 +40,21 @@ const withRetries = (maxRetries = 3) => fn => async (...args) => {
       lastError = err;
     }
   }
-  const error = new Error(`Failed with "${lastError}" after ${tries} tries`);
+  const message = lastError.message || lastError.toString();
+  const error = new Error(`Failed with "${message}" after ${tries} tries`);
   error.originalError = lastError;
   throw error;
 };
 
-module.exports = { withTimeout, withRetries, TimeoutError };
+function unwrapError(rawError) {
+  let error = rawError;
+
+  // Unwrap retry/timeout errors
+  while (error.originalError) {
+    error = error.originalError;
+  }
+
+  return error;
+}
+
+module.exports = { withTimeout, withRetries, unwrapError, TimeoutError };
