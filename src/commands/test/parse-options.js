@@ -7,7 +7,12 @@ const getAbsoluteURL = require('./get-absolute-url');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
-    boolean: ['requireReference', 'chromeEnableAnimations', 'verboseRenderer'],
+    boolean: [
+      'requireReference',
+      'chromeEnableAnimations',
+      'verboseRenderer',
+      'dockerWithSudo',
+    ],
   });
 
   const $ = key => argv[key] || config[key] || defaults[key];
@@ -40,6 +45,7 @@ function parseOptions(args, config) {
     updateReference: argv._[0] === 'update',
     targetFilter: argv.targetFilter,
     configurationFilter: argv.configurationFilter || argv._[1],
+    dockerWithSudo: $('dockerWithSudo'),
   };
 }
 
