@@ -6,6 +6,7 @@ const { version } = require('../package.json');
 const {
   MissingDependencyError,
   ServerError,
+  ChromeError,
   FetchingURLsError,
 } = require('./errors');
 const { unwrapError } = require('./failure-handling');
@@ -44,6 +45,7 @@ async function run() {
     if (
       error instanceof MissingDependencyError ||
       error instanceof ServerError ||
+      error instanceof ChromeError ||
       error instanceof FetchingURLsError
     ) {
       die(error.message, error.instructions);

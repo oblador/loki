@@ -55,11 +55,18 @@ function NativeError(message, stack, isFatal = true) {
   this.isFatal = isFatal;
 }
 
+function ChromeError(message, instructions) {
+  this.name = this.constructor.name;
+  this.message = message;
+  this.instructions = instructions;
+}
+
 util.inherits(ReferenceImageError, Error);
 util.inherits(TimeoutError, Error);
 util.inherits(MissingDependencyError, Error);
 util.inherits(ServerError, Error);
 util.inherits(NativeError, Error);
+util.inherits(ChromeError, Error);
 
 module.exports = {
   ReferenceImageError,
@@ -68,4 +75,5 @@ module.exports = {
   FetchingURLsError,
   ServerError,
   NativeError,
+  ChromeError,
 };

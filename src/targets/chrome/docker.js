@@ -7,6 +7,7 @@ const CDP = require('chrome-remote-interface');
 const fs = require('fs-extra');
 const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
+const { ChromeError } = require('../../errors');
 const createChromeTarget = require('./create-chrome-target');
 
 const getExecutor = dockerWithSudo => (dockerPath, args) => {
@@ -157,8 +158,32 @@ function createChromeDockerTarget({
     const { code, stdout, stderr } = await execute(dockerPath, args);
     if (code === 0) {
       dockerId = stdout;
-      host = await getNetworkHost(execute, dockerId);
-      await waitOnCDPAvailable(host, port);
+      const logs = execute(dockerPath, ['logs', dockerId, '--follow']);
+      let errorLogs = [];
+      logs.stderr.on('data', chunk => {
+        errorLogs.push(chunk);
+      });
+
+      host = await getNetworkHost(dockerId);
+      try {
+        await waitOnCDPAvailable(host, port);
+      } catch (error) {
+        if (error.message === 'Timeout' && errorLogs.length !== 0) {
+          throw new ChromeError(
+            `Chrome failed to start with ${
+              errorLogs.length === 1 ? 'error' : 'errors'
+            } ${errorLogs
+              .map(e => `"${e.toString('utf8').trim()}"`)
+              .join(', ')}`
+          );
+        }
+        throw error;
+      } finally {
+        if (logs.exitCode === null && !logs.killed) {
+          logs.kill();
+        }
+        errorLogs = null;
+      }
       debug(`Docker started with id ${dockerId}`);
     } else {
       throw new Error(`Failed starting docker, ${stderr}`);
