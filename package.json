@@ -82,7 +82,7 @@
     "gitbook-plugin-prism": "^2.3.0",
     "gitbook-plugin-theme-gestalt": "^1.0.2",
     "jest": "^23.6.0",
-    "prettier": "^1.15.3"
+    "prettier": "^1.17.1"
   },
   "jest": {
     "testPathIgnorePatterns": [
