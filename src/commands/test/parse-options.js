@@ -12,6 +12,7 @@ function parseOptions(args, config) {
       'chromeEnableAnimations',
       'verboseRenderer',
       'dockerWithSudo',
+      'chromeDockerWithoutSeccomp',
     ],
   });
 
@@ -46,6 +47,7 @@ function parseOptions(args, config) {
     targetFilter: argv.targetFilter,
     configurationFilter: argv.configurationFilter || argv._[1],
     dockerWithSudo: $('dockerWithSudo'),
+    chromeDockerWithoutSeccomp: $('chromeDockerWithoutSeccomp'),
   };
 }
 

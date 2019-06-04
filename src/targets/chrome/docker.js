@@ -82,6 +82,7 @@ function createChromeDockerTarget({
   chromeDockerImage = 'yukinying/chrome-headless',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
   dockerWithSudo = false,
+  chromeDockerWithoutSeccomp = false,
 }) {
   let port;
   let dockerId;
@@ -91,7 +92,7 @@ function createChromeDockerTarget({
   const runArgs = ['run', '--rm', '-d', '-P'];
   const execute = getExecutor(dockerWithSudo);
 
-  if (!process.env.CI) {
+  if (!chromeDockerWithoutSeccomp) {
     runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
   }
 
