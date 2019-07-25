@@ -30,6 +30,8 @@ class ReadyStateEmittingImage extends React.Component {
     }
   }
 
+  static propTypes = Image.propTypes
+
   componentWillUnmount() {
     clearTimeout(this.timer);
   }
