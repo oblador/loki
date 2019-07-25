@@ -11,6 +11,8 @@ const { registerPendingPromise } = require('../ready-state-manager');
 const IMAGE_LOAD_TIMEOUT = 20000;
 
 class ReadyStateEmittingImage extends React.Component {
+  static propTypes = Image.propTypes;
+
   constructor(props) {
     super(props);
 
