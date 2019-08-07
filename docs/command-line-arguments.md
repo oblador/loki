@@ -38,6 +38,7 @@ yarn loki test -- --port 9009
 | **`--requireReference`**           | Fail stories without reference image, useful for CI.                                                                                            | _False, true for CI_                         |
 | **`--verboseRenderer`**            | Plain text renderer, useful for CI.                                                                                                             | _False, true for CI_                         |
 | **`--dockerWithSudo`**             | Run docker commands with sudo.                                                                                                                  | `false`                                      |
+| **`--outputFilenamesLowercase`**   | Output all filenames in lowercase format.                                                                                                       | `false`                                      |
 
 ## `loki update`
 

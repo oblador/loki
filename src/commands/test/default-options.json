@@ -10,6 +10,7 @@
   "output": "./.loki/current",
   "difference": "./.loki/difference",
   "reference": "./.loki/reference",
+  "outputFilenamesLowercase": false,
   "reactPort": "6006",
   "reactNativePort": "7007",
   "looksSame": {},

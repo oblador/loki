@@ -43,6 +43,7 @@ describe('testStory', () => {
     it('adds reference image if requireReference option is false', async () => {
       const options = {
         requireReference: false,
+        outputFilenamesLowercase: false,
         outputDir: `${__dirname}/outputDir`,
         referenceDir: `${__dirname}/referenceDir`,
         differenceDir: `${__dirname}/differenceDir`,
@@ -51,6 +52,30 @@ describe('testStory', () => {
       await executeWithOptions(options);
 
       const referencePath = `${options.referenceDir}/${filename}`;
+
+      expect(target.captureScreenshotForStory).toHaveBeenCalledWith(
+        kind,
+        story,
+        referencePath,
+        options,
+        configuration
+      );
+    });
+
+    it('output filename is lowercase if outputFilenamesLowercase is set to true', async () => {
+      const options = {
+        outputFilenamesLowercase: true,
+        requireReference: false,
+        outputDir: `${__dirname}/outputDir`,
+        referenceDir: `${__dirname}/referenceDir`,
+        differenceDir: `${__dirname}/differenceDir`,
+      };
+
+      await executeWithOptions(options);
+
+      const referencePath = `${
+        options.referenceDir
+      }/configuration_kind_story.png`;
 
       expect(target.captureScreenshotForStory).toHaveBeenCalledWith(
         kind,
@@ -81,6 +106,7 @@ describe('testStory', () => {
       const options = {
         updateReference: false,
         requireReference: false,
+        outputFilenamesLowercase: false,
         outputDir: `${__dirname}/outputDir`,
         referenceDir: `${__dirname}/referenceDir`,
         differenceDir: `${__dirname}/differenceDir`,

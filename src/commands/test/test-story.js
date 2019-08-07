@@ -4,13 +4,16 @@ const { slugify } = require('transliteration');
 const { ReferenceImageError } = require('../../errors');
 const { getImageDiffer } = require('../../diffing');
 
-const SLUGIFY_OPTIONS = {
-  lowercase: false,
-  separator: '_',
-};
-
-const getBaseName = (configurationName, kind, story) =>
-  slugify(`${configurationName} ${kind} ${story}`, SLUGIFY_OPTIONS);
+const getBaseName = (
+  configurationName,
+  kind,
+  story,
+  outputFilenamesLowercase
+) =>
+  slugify(`${configurationName} ${kind} ${story}`, {
+    lowercase: outputFilenamesLowercase,
+    separator: '_',
+  });
 
 async function testStory(
   target,
@@ -21,7 +24,12 @@ async function testStory(
   kind,
   story
 ) {
-  const basename = getBaseName(configurationName, kind, story);
+  const basename = getBaseName(
+    configurationName,
+    kind,
+    story,
+    options.outputFilenamesLowercase
+  );
   const filename = `${basename}.png`;
   const outputPath = `${options.outputDir}/${filename}`;
   const referencePath = `${options.referenceDir}/${filename}`;
