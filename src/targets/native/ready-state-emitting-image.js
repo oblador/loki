@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /**
  * This replaces the React Native Image component to register when it's finished
  * loading to avoid race conditions in visual tests.
