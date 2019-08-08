@@ -7,6 +7,7 @@ const CDP = require('chrome-remote-interface');
 const fs = require('fs-extra');
 const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
+const { withRetries } = require('../../failure-handling');
 const { ChromeError } = require('../../errors');
 const createChromeTarget = require('./create-chrome-target');
 
@@ -200,7 +201,7 @@ function createChromeDockerTarget({
     }
   }
 
-  async function createNewDebuggerInstance() {
+  const createNewDebuggerInstance = withRetries(3, 500)(async () => {
     debug(`Launching new tab with debugger at port ${host}:${port}`);
     const target = await CDP.New({ host, port });
     debug(`Launched with target id ${target.id}`);
@@ -212,7 +213,7 @@ function createChromeDockerTarget({
     };
 
     return client;
-  }
+  });
 
   process.on('SIGINT', () => {
     if (dockerId) {

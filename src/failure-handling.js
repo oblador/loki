@@ -28,7 +28,9 @@ const withTimeout = (timeout, operationName) => fnOrPromise => {
   return awaitPromise(fnOrPromise);
 };
 
-const withRetries = (maxRetries = 3) => fn => async (...args) => {
+const sleep = duration => new Promise(resolve => setTimeout(resolve, duration));
+
+const withRetries = (maxRetries = 3, backoff = 0) => fn => async (...args) => {
   let tries = 0;
   let lastError;
   while (tries <= maxRetries) {
@@ -38,6 +40,9 @@ const withRetries = (maxRetries = 3) => fn => async (...args) => {
       return result;
     } catch (err) {
       lastError = err;
+    }
+    if (backoff) {
+      await sleep(backoff * tries);
     }
   }
   const message = lastError.message || lastError.toString();
