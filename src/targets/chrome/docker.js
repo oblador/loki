@@ -165,7 +165,7 @@ function createChromeDockerTarget({
         errorLogs.push(chunk);
       });
 
-      host = await getNetworkHost(dockerId);
+      host = await getNetworkHost(execute, dockerId);
       try {
         await waitOnCDPAvailable(host, port);
       } catch (error) {
