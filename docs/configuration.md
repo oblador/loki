@@ -92,6 +92,7 @@ Opposite to `skipStories`.
 | **`userAgent`**         | _string_  | Custom user agent.                                                                                                                                        | `chrome.*`   |
 | **`width`**             | _integer_ | Browser viewport width.                                                                                                                                   | `chrome.*`   |
 | **`height`**            | _integer_ | Browser viewport height.                                                                                                                                  | `chrome.*`   |
+| **`autoExpandHeight`**  | _boolean_ | If the content goes below the viewport then expand the height so that it fits.                                                                            | `chrome.*`   |
 | **`deviceScaleFactor`** | _integer_ | Browser pixel density multiple, use `2` for retina, not supported in docker.                                                                              | `chrome.app` |
 | **`mobile`**            | _boolean_ | Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.                                          | `chrome.*`   |
 | **`media`**             | _string_  | Emulates the given media for CSS media queries.                                                                                                           | _None_       |
