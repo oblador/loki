@@ -1,0 +1,7 @@
+{
+  "docs": {
+    "Introduction": ["getting-started"],
+    "API Reference": ["configuration", "command-line-arguments"],
+    "Guides": ["continuous-integration", "flaky-tests"]
+  }
+}

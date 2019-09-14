@@ -1,4 +1,7 @@
-# Configuration
+---
+id: configuration
+title: Configuration
+---
 
 The init command will add a `loki` section to your `package.json`, but you can edit it to your wishes. _NOTE_: Any command line argument that `loki test` accepts can also be added to the `loki` config object.
 
@@ -51,20 +54,19 @@ There are two currently available options to choose from when comparing images i
 
 ### [`gm`](https://github.com/aheckmann/gm)
 
-
 Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. This is default if available. `chromeTolerance` percentage is based on overall image, meaning you'd likely want a low threshold.
 
 The configuration is parsed to the `options` argument in `gm.compare`
 
-### ['looks-same'](https://github.com/gemini-testing/looks-same)
+### [`looks-same`](https://github.com/gemini-testing/looks-same)
 
 A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. `chromeTolerance` percentage is based on neighboring pixels which makes it ideal when you have different pixel densities.
 
-|                | `gm`                                            | `looks-same`             |
-| -------------- | ----------------------------------------------- | ------------------------ |
-| **Dependency** | [GraphicsMagick](http://www.graphicsmagick.org) | None                     |
-| **Speed**      | 🏃Fast                                          | 🚶Slower                 |
-| **Output**     | ![](gm-diff.png)                                | ![](looks-same-diff.png) |
+|                | `gm`                                            | `looks-same`                  |
+| -------------- | ----------------------------------------------- | ----------------------------- |
+| **Dependency** | [GraphicsMagick](http://www.graphicsmagick.org) | None                          |
+| **Speed**      | 🏃Fast                                          | 🚶Slower                      |
+| **Output**     | ![](/img/gm-diff.png)                           | ![](/img/looks-same-diff.png) |
 
 ## `verboseRenderer`
 
