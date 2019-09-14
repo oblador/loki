@@ -40,11 +40,13 @@
       },
       "chrome.iphone7": {
         "target": "chrome.docker",
-        "preset": "iPhone 7"
+        "preset": "iPhone 7",
+        "autoExpandHeight": true
       },
       "chrome.a4": {
         "target": "chrome.docker",
-        "preset": "A4 Paper"
+        "preset": "A4 Paper",
+        "autoExpandHeight": true
       }
     }
   },
