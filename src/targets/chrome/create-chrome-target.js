@@ -31,7 +31,6 @@ function createChromeTarget(
       height: options.height,
       deviceScaleFactor: options.deviceScaleFactor || 1,
       mobile: options.mobile || false,
-      fitWindow: options.fitWindow || false,
     };
   }
 
@@ -185,10 +184,25 @@ function createChromeTarget(
 
           debug('Capturing screenshot');
           const clip = Object.assign({ scale: 1 }, position);
+          let resetDeviceMetrics = false;
+          if (
+            !options.disableAutomaticViewportHeight &&
+            position.y + position.height > deviceMetrics.height
+          ) {
+            resetDeviceMetrics = true;
+            await Emulation.setDeviceMetricsOverride(
+              Object.assign({}, deviceMetrics, {
+                height: position.y + position.height,
+              })
+            );
+          }
           const screenshot = await Page.captureScreenshot({
             format: 'png',
             clip,
           });
+          if (resetDeviceMetrics) {
+            await Emulation.setDeviceMetricsOverride(deviceMetrics);
+          }
           const buffer = Buffer.from(screenshot.data, 'base64');
 
           return buffer;
