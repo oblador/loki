@@ -65,24 +65,25 @@
     "ws": "^6.1.2"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
-    "eslint": "^5.3.0",
-    "eslint-config-airbnb": "17.1.0",
-    "eslint-config-prettier": "^3.3.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jest": "^22.1.0",
-    "eslint-plugin-jsx-a11y": "^6.1.1",
-    "eslint-plugin-prettier": "^3.0.0",
-    "eslint-plugin-react": "^7.11.0",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "eslint": "6.1.0",
+    "eslint-config-airbnb": "17.1.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.14.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0",
     "gitbook-cli": "^2.3.2",
     "gitbook-plugin-anchorjs": "^1.1.1",
     "gitbook-plugin-edit-link": "^2.0.2",
     "gitbook-plugin-github": "^2.0.0",
     "gitbook-plugin-prism": "^2.3.0",
     "gitbook-plugin-theme-gestalt": "^1.0.2",
-    "jest": "^23.6.0",
-    "prettier": "^1.17.1"
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2"
   },
   "jest": {
     "testPathIgnorePatterns": [
