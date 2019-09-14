@@ -96,4 +96,3 @@ Opposite to `skipStories`.
 | **`deviceScaleFactor`**              | _integer_ | Browser pixel density multiple, use `2` for retina, not supported in docker.                                                                              | `chrome.app` |
 | **`mobile`**                         | _boolean_ | Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.                                          | `chrome.*`   |
 | **`media`**                          | _string_  | Emulates the given media for CSS media queries.                                                                                                           | _None_       |
-| **`fitWindow`**                      | _boolean_ | Whether a view that exceeds the available browser window area should be scaled down to fit.                                                               | `chrome.*`   |

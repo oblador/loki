@@ -31,7 +31,6 @@ function createChromeTarget(
       height: options.height,
       deviceScaleFactor: options.deviceScaleFactor || 1,
       mobile: options.mobile || false,
-      fitWindow: options.fitWindow || false,
     };
   }
 
