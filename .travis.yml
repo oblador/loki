@@ -13,7 +13,7 @@ jobs:
     - stage: test
       services:
         - docker
-      before_install:
+      before_script:
         - cd examples/react && npm install
       name: 'Visual tests: React DOM'
       script: npm run test-ci
