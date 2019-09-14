@@ -11,6 +11,7 @@ import CursiveText from '../CursiveText';
 import MediaAwareComponent from '../MediaAwareComponent';
 import StackedElements from '../StackedElements';
 import StackedInvisibleElements from '../StackedInvisibleElements';
+import LongElement from '../LongElement';
 
 storiesOf('Welcome', module).lokiSkip('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -50,3 +51,5 @@ storiesOf('Multiple elements', module)
     </div>
   ))
   .add('Invisible elements', () => <StackedInvisibleElements />);
+
+storiesOf('Long Element', module).add('default', () => <LongElement />);
