@@ -187,7 +187,7 @@ function createChromeTarget(
           const clip = Object.assign({ scale: 1 }, position);
           let resetDeviceMetrics = false;
           if (
-            options.autoExpandHeight !== false &&
+            !options.disableAutomaticViewportHeight &&
             position.y + position.height > deviceMetrics.height
           ) {
             resetDeviceMetrics = true;
