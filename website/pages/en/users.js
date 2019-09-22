@@ -10,8 +10,19 @@ function Users(props) {
 
   const editUrl = `${siteConfig.repoUrl}/edit/master/website/siteConfig.js`;
   const showcase = siteConfig.users.map(user => (
-    <a href={user.infoLink} key={user.infoLink}>
-      <img src={user.image} alt={user.caption} title={user.caption} />
+    <a
+      href={user.infoLink}
+      key={user.infoLink}
+      className={user.image ? 'has-logo' : 'no-logo'}
+    >
+      {user.image ? (
+        <img src={user.image} alt={user.caption} title={user.caption} />
+      ) : (
+        <React.Fragment>
+          <strong>{user.caption}</strong>{' '}
+          <span className="description">{user.description}</span>
+        </React.Fragment>
+      )}
     </a>
   ));
 

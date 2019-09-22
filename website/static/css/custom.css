@@ -86,6 +86,30 @@ body
   max-height: 150px;
   width: 150px;
 }
+.logos .no-logo {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.logos .no-logo {
+  color: #24292e;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.logos .no-logo strong {
+  font-size: 2.5rem;
+  letter-spacing: 3px;
+  display: block;
+  line-height: 1.2;
+}
+.logos .no-logo .description {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.5em;
+}
+
+.logos .no-logo:hover {
+  color: $primaryColor;
+}
 .productShowcaseSection .logos .button {
   margin-left: 20px;
 }

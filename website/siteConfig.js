@@ -11,7 +11,7 @@ const users = [
   },
   {
     caption: 'BBC',
-    image: '/img/users/bbc.svg',
+    description: 'British Broadcasting Corporation',
     infoLink: 'https://www.bbc.com',
     pinned: true,
   },
