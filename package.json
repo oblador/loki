@@ -7,10 +7,7 @@
     "loki": "bin/loki"
   },
   "scripts": {
-    "serve-docs": "gitbook serve",
-    "build-docs": "(gitbook install || (npm rebuild node-sass && gitbook install)) && gitbook build",
-    "publish-docs": "./bin/publish-docs",
-    "format": "prettier '{,src/**/,examples/**/}*.{js,json}' --write",
+    "format": "prettier '{,src/**/,examples/**/,website/**/,docs/**/}*.{md,js,json}' --write",
     "lint": "eslint *.js src",
     "test": "jest"
   },
@@ -76,12 +73,6 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "gitbook-cli": "^2.3.2",
-    "gitbook-plugin-anchorjs": "^1.1.1",
-    "gitbook-plugin-edit-link": "^2.0.2",
-    "gitbook-plugin-github": "^2.0.0",
-    "gitbook-plugin-prism": "^2.3.0",
-    "gitbook-plugin-theme-gestalt": "^1.0.2",
     "jest": "^24.9.0",
     "prettier": "^1.18.2"
   },

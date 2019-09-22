@@ -8,25 +8,26 @@
 
 ## Rationale
 
-There are a few visual regression tools for the web, but most either cannot be run headless or use phantomjs which is deprecated and a browser nobody is _actually_ using. They usually also require you to maintain fixtures. With react-native it's now possible to target multiple platforms with a single code base, but there's no single tool to test all to my knowledge. 
+There are a few visual regression tools for the web, but most either cannot be run headless or use phantomjs which is deprecated and a browser nobody is _actually_ using. They usually also require you to maintain fixtures. With react-native it's now possible to target multiple platforms with a single code base, but there's no single tool to test all to my knowledge.
 
 Loki aims to have easy setup, no to low maintenance cost, reproducible tests independent of which OS they are run on, runnable on CI and support all platforms storybook does.
 
 ## Supported platforms
 
-* Chrome in docker (recommended)
-* Local Chrome application
-* iOS simulator
-* Android emulator
+- Chrome in docker (recommended)
+- Local Chrome application
+- iOS simulator
+- Android emulator
 
 ## Prerequsites
 
-* Node 7.6 or higher
+- Node 7.6 or higher
 
 ### Optional dependencies
-* [GraphicsMagick](http://www.graphicsmagick.org) for gm diffing engine, `brew install graphicsmagick`
-* [Docker](https://www.docker.com/community-edition#/download) for the `chrome.docker` target.
-* [Chrome 59+](https://www.google.se/chrome/browser/desktop/) for the `chrome.app` target, `brew cask install google-chrome-canary`. 
+
+- [GraphicsMagick](http://www.graphicsmagick.org) for gm diffing engine, `brew install graphicsmagick`
+- [Docker](https://www.docker.com/community-edition#/download) for the `chrome.docker` target.
+- [Chrome 59+](https://www.google.se/chrome/browser/desktop/) for the `chrome.app` target, `brew cask install google-chrome-canary`.
 
 ## Installation
 
@@ -46,22 +47,22 @@ Loki will not start any servers for you, so ensure storybook and any simulator/e
 3.  Do some changes to your components
 4.  Test against references
     `yarn loki test`
-4.  Review changes in diff folder
-5.  Approve changes and update references
+5.  Review changes in diff folder
+6.  Approve changes and update references
     `yarn loki approve`
 
 ## Documentation
 
-* [Introduction](https://loki.js.org/)
-* [Getting started](https://loki.js.org/getting-started.html)
-* [Configuration](https://loki.js.org/configuration.html)
-* [Command line arguments](https://loki.js.org/command-line-arguments.html)
+- [Introduction](https://loki.js.org/)
+- [Getting started](https://loki.js.org/getting-started.html)
+- [Configuration](https://loki.js.org/configuration.html)
+- [Command line arguments](https://loki.js.org/command-line-arguments.html)
 
 ## Examples
 
-* [React example](https://github.com/oblador/loki/tree/master/examples/react)
-* [React Native example](https://github.com/oblador/loki/tree/master/examples/react-native)
+- [React example](https://github.com/oblador/loki/tree/master/examples/react)
+- [React Native example](https://github.com/oblador/loki/tree/master/examples/react-native)
 
 ## License
 
-[MIT License](http://opensource.org/licenses/mit-license.html). © Joel Arvidsson 2017
+[MIT License](http://opensource.org/licenses/mit-license.html). © Joel Arvidsson 2017-present

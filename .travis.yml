@@ -32,11 +32,11 @@ jobs:
       script: skip
       if: (repo = "oblador/loki") AND (branch = "master") AND (type = push) AND (tag =~ ^v[0-9]+\.[0-9]+\.[0-9]+.*$)
       name: 'Documentation'
-      before_deploy: 'npm run build-docs'
+      before_deploy: 'cd website && yarn install && yarn build'
       deploy:
         - provider: pages
           skip_cleanup: true
-          local_dir: '_book'
+          local_dir: 'website/build/loki'
           fqdn: 'loki.js.org'
           github_token:
             secure: 'NILrfGIHnp8p2cunceKlWV5pdgItD7c/BiNtD4S+BnV5UyyBG9fQph5xcKoh/vwlAepMOuEpFvzBc5iVrlXZB40aXJa5iXqqADJrV6Kwc1dlvV3/emR4Yfhb3qQDzebdpMamy8F3ScgdovOl48GvBwnM0PCTCR3PnHNqeqp3Up+0nwSmxJTh06kcv7uoFsKjW09kIsE4+E60xi0KZr12JBpAaz6rQ/Wz0zEPE1Aa0lPyD4eAwNSUOlS1HuozOZt03ly3c24IZs2hzrpC9jJj5hGzkqGcnxFESCjoNtat1fNeASODzQZbLY+p5blBkYN1icCRkX4GdXzFpg/wMNcyazJMf8eybJTNVOZ4FIIIzR0zKEu/cGTV6xFxvkr7EpBGlX/H5YcIaZrw9Mhix8ww9tcoviTJicaahM+sNKV3IppssSMSNjM7BG+JXSGvOwkDyAHgT64zoShKJ/G02wKpJpXH1deh/k0XztmkJlac05O8es8HXa7RUF9H8+07ZfETjOz7mh+JCSattMqVkquooFwcW8tbhI0x9N5qJhzR45KnSpupyi0Cp7j3MB6sZ6UmcN0C8om+wwtrVGqubMdwgNYNPQdQDf4uPBzHhn5BwBRNLSXVpn0lR7awZ6ef0OmRX2OkoFT+iPxYUbuIEB2LM2iNTE+O6fcvcf7Isk7d8L4='

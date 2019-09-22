@@ -1,8 +1,11 @@
-# Handling Flaky Tests
+---
+id: flaky-tests
+title: Handling Flaky Tests
+---
 
 ## Skipping Tests
 
-In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by using `add.skip()`: 
+In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by using `add.skip()`:
 
 ```js
 storiesOf('MyComponent', module)
@@ -24,13 +27,13 @@ storiesOf('MyComponent', module)
 
 Animations cause the your component to be highly time sensitive and unless conditions are _exactly_ the same for each test instance they will yield different screenshots. Loki takes care of the most common web transitions out of the box by disabling CSS transitions/animations and `requestAnimationFrame`. The screenshot will be paused at the end state of the transition. To disable this use the `chromeEnableAnimations` option.
 
-However known limitations include: 
+However known limitations include:
 
-* Looped `requestAnimationFrame` animations
-* GIFs
-* SVG animations
-* Native Lottie animations
-* React Native `Animated` library
+- Looped `requestAnimationFrame` animations
+- GIFs
+- SVG animations
+- Native Lottie animations
+- React Native `Animated` library
 
 It's up to you to disable these kind of animations. A simple way would be to use context with [`recompose`](https://github.com/acdlite/recompose):
 
@@ -55,7 +58,7 @@ addDecorator(withDisabledAnimations);
 import { getContext } from 'recompose';
 
 const MyComponent = ({ disableAnimations }) => (
-  disableAnimations 
+  disableAnimations
   ? /* Something without animations */
   : /* Something with animations */
 )

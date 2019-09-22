@@ -1,4 +1,7 @@
-# Command line arguments
+---
+id: command-line-arguments
+title: Command line arguments
+---
 
 If you run loki via `yarn` or `npm`, you need to make sure to prepend your argument list with `--` so that yarn passes them though to loki. You can also add `./node_modules/.bin` to your `PATH` to be able to run `loki` directly.
 
@@ -6,7 +9,7 @@ If you run loki via `yarn` or `npm`, you need to make sure to prepend your argum
 
 Capture screenshots and compare them against the reference files.
 
-```
+```bash
 yarn loki test -- --port 9009
 ```
 
@@ -56,7 +59,7 @@ Prunes old and updates reference files with the images generated in the last run
 
 ## `loki init`
 
-```
+```bash
 yarn run loki init path/to/storybook -- --force
 ```
 
