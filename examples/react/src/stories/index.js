@@ -12,6 +12,7 @@ import MediaAwareComponent from '../MediaAwareComponent';
 import StackedElements from '../StackedElements';
 import StackedInvisibleElements from '../StackedInvisibleElements';
 import LongElement from '../LongElement';
+import NonIntViewport from '../NonIntViewport';
 
 storiesOf('Welcome', module).lokiSkip('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -53,3 +54,10 @@ storiesOf('Multiple elements', module)
   .add('Invisible elements', () => <StackedInvisibleElements />);
 
 storiesOf('Long Element', module).add('default', () => <LongElement />);
+
+storiesOf('Non-Int Viewport', module)
+  .add('default', () => (
+    <NonIntViewport>
+      <LongElement />
+    </NonIntViewport>
+));

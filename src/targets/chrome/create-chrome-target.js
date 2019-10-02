@@ -192,7 +192,7 @@ function createChromeTarget(
             resetDeviceMetrics = true;
             await Emulation.setDeviceMetricsOverride(
               Object.assign({}, deviceMetrics, {
-                height: position.y + position.height,
+                height: Math.ceil(position.y + position.height),
               })
             );
           }
