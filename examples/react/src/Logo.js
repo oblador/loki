@@ -18,7 +18,7 @@ Logo.propTypes = {
 
 Logo.defaultProps = {
   delay: 0,
-  logoUrl: 'https://loki.js.org/favicon.png',
+  logoUrl: 'https://loki.js.org/img/favicon.png',
 };
 
 export default Logo;
