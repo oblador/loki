@@ -3,7 +3,7 @@ const minimist = require('minimist');
 const ciInfo = require('ci-info');
 const { dependencyAvailable } = require('../../dependency-detection');
 const defaults = require('./default-options');
-const getAbsoluteURL = require('./get-absolute-url');
+const getReactUri = require('./get-react-uri');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
@@ -13,6 +13,7 @@ function parseOptions(args, config) {
       'verboseRenderer',
       'dockerWithSudo',
       'chromeDockerWithoutSeccomp',
+      'useRelativePath',
     ],
   });
 
@@ -22,9 +23,12 @@ function parseOptions(args, config) {
     outputDir: path.resolve($('output')),
     referenceDir: path.resolve($('reference')),
     differenceDir: path.resolve($('difference')),
-    reactUri:
-      getAbsoluteURL($('reactUri')) ||
-      `http://${$('host')}:${argv.port || $('reactPort')}`,
+    reactUri: getReactUri(
+      $('reactUri'),
+      $('host'),
+      argv.port || $('reactPort'),
+      $('useRelativePath')
+    ),
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
     chromeConcurrency: parseInt($('chromeConcurrency'), 10),
     chromeDockerImage: $('chromeDockerImage'),

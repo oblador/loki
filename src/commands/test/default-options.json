@@ -13,5 +13,6 @@
   "reactPort": "6006",
   "reactNativePort": "7007",
   "looksSame": {},
-  "gm": {}
+  "gm": {},
+  "useRelativePath": false
 }
