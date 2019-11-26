@@ -9,6 +9,7 @@ const getRandomPort = require('get-port');
 const { ensureDependencyAvailable } = require('../../dependency-detection');
 const { ChromeError } = require('../../errors');
 const createChromeTarget = require('./create-chrome-target');
+const url = require('url');
 
 const getExecutor = dockerWithSudo => (dockerPath, args) => {
   if (dockerWithSudo) {
@@ -72,7 +73,7 @@ const getNetworkHost = async (execute, dockerId) => {
     // chrome will be launched on a remote docker
 
     debug('Running against external docker context');
-    host = new URL(stdoutContext).hostname;
+    host = url.parse(stdoutContext).hostname;
   } else {
     // we could be running nativly, about to run docker as is
     // or as a sibling of ourselves
