@@ -67,6 +67,8 @@ const getNetworkHost = async (execute, dockerId) => {
 
   if (stdoutContext !== 'unix:///var/run/docker.sock') {
     // chrome will be launched on a remote docker
+
+    debug('Running against external docker context');
     host = stdoutContext;
   } else {
     // we could be running nativly, about to run docker as is
@@ -186,10 +188,13 @@ function createChromeDockerTarget({
       });
 
       host = await getNetworkHost(execute, dockerId);
+      debug(`Docker target is ${host}`);
       try {
         await waitOnCDPAvailable(host, port);
       } catch (error) {
         if (error.message === 'Timeout' && errorLogs.length !== 0) {
+          debug(JSON.stringify(error));
+
           throw new ChromeError(
             `Chrome failed to start with ${
               errorLogs.length === 1 ? 'error' : 'errors'
