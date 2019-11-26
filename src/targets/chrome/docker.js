@@ -50,7 +50,7 @@ const waitOnCDPAvailable = (host, port) =>
   });
 
 const getNetworkHost = async (execute, dockerId) => {
-  let host = '127.0.0.1';
+  let host = '';
 
   // find the Host location
   const { code: codeContext, stdout: stdoutContext } = await execute('docker', [
@@ -65,11 +65,14 @@ const getNetworkHost = async (execute, dockerId) => {
     throw new Error('Unable to determine context of docker');
   }
 
+  // we could use DOCKER_HOST but that doesn't work when 
+  // the configuration is stored in ~/.docker/config
+  // this is the most foolproof way
   if (stdoutContext !== 'unix:///var/run/docker.sock') {
     // chrome will be launched on a remote docker
 
     debug('Running against external docker context');
-    host = stdoutContext;
+    host = new URL(stdoutContext).hostname;
   } else {
     // we could be running nativly, about to run docker as is
     // or as a sibling of ourselves
@@ -96,7 +99,7 @@ const getNetworkHost = async (execute, dockerId) => {
     }
   }
   // normal traffic will flow over 127.0.0.1
-  return host;
+  return host || '127.0.0.1';
 };
 
 function createChromeDockerTarget({
