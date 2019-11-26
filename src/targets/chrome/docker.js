@@ -52,28 +52,48 @@ const waitOnCDPAvailable = (host, port) =>
 const getNetworkHost = async (execute, dockerId) => {
   let host = '127.0.0.1';
 
-  // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
-  const runningInsideDocker =
-    fs.existsSync('/proc/1/cgroup') &&
-    /docker/.test(fs.readFileSync('/proc/1/cgroup', 'utf8'));
+  // find the Host location
+  const { code: codeContext, stdout: stdoutContext } = await execute('docker', [
+    'context',
+    'inspect',
+    'default',
+    '--format',
+    '{{.Endpoints.docker.Host}}',
+  ]);
 
-  // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
-  // bridge, which means we can talk directly to it via its IP address.
-  if (runningInsideDocker) {
-    const { code, stdout } = await execute('docker', [
-      'inspect',
-      '-f',
-      '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
-      dockerId,
-    ]);
-
-    if (code !== 0) {
-      throw new Error('Unable to determine IP of docker container');
-    }
-
-    host = stdout;
+  if (codeContext !== 0) {
+    throw new Error('Unable to determine context of docker');
   }
 
+  if (stdoutContext !== 'unix:///var/run/docker.sock') {
+    // chrome will be launched on a remote docker
+    host = stdoutContext;
+  } else {
+    // we could be running nativly, about to run docker as is
+    // or as a sibling of ourselves
+    // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
+    const runningInsideDocker =
+      fs.existsSync('/proc/1/cgroup') &&
+      /docker/.test(fs.readFileSync('/proc/1/cgroup', 'utf8'));
+
+    // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
+    // bridge, which means we should talk directly to it via its IP address.
+    if (runningInsideDocker) {
+      const { code, stdout } = await execute('docker', [
+        'inspect',
+        '--format',
+        '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
+        dockerId,
+      ]);
+
+      if (code !== 0) {
+        throw new Error('Unable to determine IP of docker container');
+      }
+
+      host = stdout;
+    }
+  }
+  // normal traffic will flow over 127.0.0.1
   return host;
 };
 
