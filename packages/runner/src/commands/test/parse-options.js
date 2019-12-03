@@ -39,6 +39,7 @@ function parseOptions(args, config) {
     storiesFilter: $('storiesFilter'),
     diffingEngine:
       $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
+    fetchFailIgnore: $('fetchFailIgnore'),
     looksSame: $('looksSame'),
     gm: $('gm'),
     verboseRenderer: $('verboseRenderer'),

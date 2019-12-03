@@ -82,6 +82,10 @@ This setting is deprecated, use `storiesOf().add.skip()` instead on the stories 
 
 Opposite to `skipStories`.
 
+## `fetchFailIgnore`
+
+The default behaviour of Loki is to fail a test if the story makes a network requests that fails. This setting is a regular expression, if the URL of a failed request matches it, the test will not fail, overriding the default behaviour.
+
 ## `configurations`
 
 | Name                                 | Type      | Description                                                                                                                                               | Targets      |

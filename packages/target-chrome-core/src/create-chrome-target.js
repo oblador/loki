@@ -41,6 +41,8 @@ function createChromeTarget(
   }
 
   async function launchNewTab(options) {
+    const fetchFailIgnore =
+      options.fetchFailIgnore && new RegExp(options.fetchFailIgnore, 'i');
     const client = await createNewDebuggerInstance();
     const deviceMetrics = getDeviceMetrics(options);
 
@@ -93,7 +95,10 @@ function createChromeTarget(
         };
 
         const requestFailed = requestId => {
-          failedURLs.push(pendingRequestURLMap[requestId]);
+          const failedURL = pendingRequestURLMap[requestId];
+          if (!fetchFailIgnore || !fetchFailIgnore.test(failedURL)) {
+            failedURLs.push(failedURL);
+          }
           requestEnded(requestId);
         };
 
@@ -277,7 +282,10 @@ function createChromeTarget(
     configuration
   ) {
     let tabOptions = Object.assign(
-      { media: options.chromeEmulatedMedia },
+      {
+        media: options.chromeEmulatedMedia,
+        fetchFailIgnore: options.fetchFailIgnore,
+      },
       configuration
     );
     if (configuration.preset) {

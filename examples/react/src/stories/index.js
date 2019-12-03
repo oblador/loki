@@ -13,6 +13,7 @@ import StackedElements from '../StackedElements';
 import StackedInvisibleElements from '../StackedInvisibleElements';
 import LongElement from '../LongElement';
 import NonIntViewport from '../NonIntViewport';
+import FetchComponent from '../FetchComponent';
 
 storiesOf('Welcome', module).lokiSkip('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -60,3 +61,6 @@ storiesOf('Non-Int Viewport', module).add('default', () => (
     <LongElement />
   </NonIntViewport>
 ));
+
+storiesOf('Fetch Components', module)
+  .add('fetch fail', () => <FetchComponent />)

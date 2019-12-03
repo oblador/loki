@@ -44,7 +44,8 @@
         "target": "chrome.docker",
         "preset": "A4 Paper"
       }
-    }
+    },
+    "fetchFailIgnore": "localhost:1234/get"
   },
   "eslintConfig": {
     "extends": "react-app"
