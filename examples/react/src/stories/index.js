@@ -55,9 +55,8 @@ storiesOf('Multiple elements', module)
 
 storiesOf('Long Element', module).add('default', () => <LongElement />);
 
-storiesOf('Non-Int Viewport', module)
-  .add('default', () => (
-    <NonIntViewport>
-      <LongElement />
-    </NonIntViewport>
+storiesOf('Non-Int Viewport', module).add('default', () => (
+  <NonIntViewport>
+    <LongElement />
+  </NonIntViewport>
 ));

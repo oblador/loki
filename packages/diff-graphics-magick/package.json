@@ -1,0 +1,29 @@
+{
+  "name": "@loki/diff-graphics-magick",
+  "version": "0.18.1",
+  "description": "Loki graphics magick image differ",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/diff-graphics-magick",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/diff-graphics-magick"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "gm": "^1.23.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

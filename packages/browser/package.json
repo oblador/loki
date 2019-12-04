@@ -1,0 +1,28 @@
+{
+  "name": "@loki/browser",
+  "version": "0.18.1",
+  "description": "Loki browser integration",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/browser",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/browser"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@loki/integration-core": "0.18.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

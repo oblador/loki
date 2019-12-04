@@ -1,0 +1,30 @@
+{
+  "name": "@loki/diff-looks-same",
+  "version": "0.18.1",
+  "description": "Loki vue integration",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/diff-looks-same",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/diff-looks-same"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@loki/browser": "0.18.1",
+    "fs-extra": "^8.1.0",
+    "looks-same": "^7.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

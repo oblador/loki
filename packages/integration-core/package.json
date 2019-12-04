@@ -1,0 +1,25 @@
+{
+  "name": "@loki/integration-core",
+  "version": "0.18.1",
+  "description": "Loki storybook integration core lib",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/integration-core",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/integration-core"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "publishConfig": {
+    "access": "public"
+  }
+}
