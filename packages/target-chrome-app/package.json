@@ -1,0 +1,31 @@
+{
+  "name": "@loki/target-chrome-app",
+  "version": "0.18.1",
+  "description": "Loki Chrome app target",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/target-chrome-app",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/target-chrome-app"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@loki/target-chrome-core": "0.18.1",
+    "chrome-launcher": "^0.12.0",
+    "chrome-remote-interface": "^0.28.0",
+    "debug": "^4.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

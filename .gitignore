@@ -3,4 +3,4 @@ npm-debug.log
 yarn-error.log
 .DS_Store
 _book
-loki
+.loki

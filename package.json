@@ -1,32 +1,20 @@
 {
-  "name": "loki",
+  "name": "@loki/root",
   "version": "0.18.1",
   "description": "Visual Regression Testing for react-storybook",
   "main": "index.js",
+  "private": true,
   "bin": {
     "loki": "bin/loki"
   },
   "scripts": {
-    "format": "prettier '{,src/**/,examples/**/,website/**/,docs/**/}*.{md,js,json}' --write",
-    "lint": "eslint *.js src",
+    "format": "prettier '{,packages/**/,examples/**/,website/**/,docs/**/}*.{md,js,json}' --write",
+    "lint": "eslint packages/*/src",
     "test": "jest"
   },
   "engines": {
     "node": ">=7.6"
   },
-  "keywords": [
-    "storybook",
-    "react-storybook",
-    "testing",
-    "visual testing",
-    "visual testing",
-    "react-native",
-    "react",
-    "mobile",
-    "ios",
-    "android",
-    "web"
-  ],
   "author": {
     "name": "Joel Arvidsson",
     "email": "joel@oblador.se"
@@ -40,26 +28,12 @@
     "url": "git://github.com/oblador/loki.git"
   },
   "license": "MIT",
-  "dependencies": {
-    "chalk": "^2.4.1",
-    "chrome-launcher": "^0.10.5",
-    "chrome-remote-interface": "^0.27.0",
-    "ci-info": "^1.6.0",
-    "debug": "^4.1.0",
-    "execa": "^1.0.0",
-    "fs-extra": "^7.0.1",
-    "get-port": "^4.0.0",
-    "gm": "^1.23.1",
-    "hoist-non-react-statics": "^3.2.1",
-    "listr": "^0.14.3",
-    "looks-same": "^4.0.0",
-    "minimist": "^1.2.0",
-    "osnap": "^1.1.0",
-    "ramda": "^0.26.1",
-    "shelljs": "^0.8.3",
-    "transliteration": "^1.6.6",
-    "wait-on": "^3.2.0",
-    "ws": "^6.1.2"
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "website",
+      "examples/react"
+    ]
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
@@ -74,9 +48,11 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
     "jest": "^24.9.0",
+    "lerna": "^3.19.0",
     "prettier": "^1.18.2"
   },
   "jest": {
+    "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/examples/"

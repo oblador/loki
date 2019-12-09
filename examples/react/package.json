@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@loki/example-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,12 +12,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "loki",
-    "pretest-ci": "npm run update-loki",
-    "test-ci": "build-storybook && loki --requireReference --reactUri file:./storybook-static",
+    "pretest-ci": "build-storybook",
+    "test-ci": "loki --requireReference --reactUri file:./storybook-static",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public",
-    "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save --no-package-lock && rm $LOKI_FILE"
+    "build-storybook": "build-storybook -s public"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^5.0.0",
@@ -26,7 +25,7 @@
     "@storybook/cli": "^5.0.0",
     "@storybook/react": "^5.0.0",
     "babel-loader": "^8.0.5",
-    "loki": "*"
+    "loki": "0.18.1"
   },
   "loki": {
     "chromeSelector": ".wrapper > *, #root > *",

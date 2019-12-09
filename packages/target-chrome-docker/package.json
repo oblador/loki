@@ -1,0 +1,35 @@
+{
+  "name": "@loki/target-chrome-docker",
+  "version": "0.18.1",
+  "description": "Loki Chrome docker target",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/target-chrome-docker",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/target-chrome-docker"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@loki/core": "0.18.1",
+    "@loki/target-chrome-core": "0.18.1",
+    "chrome-remote-interface": "^0.28.0",
+    "debug": "^4.1.1",
+    "execa": "^1.0.0",
+    "fs-extra": "^8.1.0",
+    "get-port": "^5.0.0",
+    "wait-on": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

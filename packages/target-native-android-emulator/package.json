@@ -1,0 +1,30 @@
+{
+  "name": "@loki/target-native-android-emulator",
+  "version": "0.18.1",
+  "description": "Loki Android simulator target",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/target-native-android-emulator",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/target-native-android-emulator"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@loki/core": "0.18.1",
+    "@loki/target-native-core": "0.18.1",
+    "osnap": "^1.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
