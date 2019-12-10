@@ -185,25 +185,29 @@ function createChromeTarget(
             );
           }
 
-          debug('Capturing screenshot');
           const clip = Object.assign({ scale: 1 }, position);
-          let resetDeviceMetrics = false;
-          if (
+          const contentEndY = Math.ceil(position.y + position.height);
+          const shouldResizeWindowToFit =
             !options.disableAutomaticViewportHeight &&
-            position.y + position.height > deviceMetrics.height
-          ) {
-            resetDeviceMetrics = true;
+            contentEndY > deviceMetrics.height;
+
+          if (shouldResizeWindowToFit) {
+            debug('Resizing window to fit tall content');
             await Emulation.setDeviceMetricsOverride(
               Object.assign({}, deviceMetrics, {
-                height: Math.ceil(position.y + position.height),
+                height: contentEndY,
               })
             );
+            await Page.frameResized();
           }
+
+          debug('Capturing screenshot');
           const screenshot = await Page.captureScreenshot({
             format: 'png',
             clip,
           });
-          if (resetDeviceMetrics) {
+
+          if (shouldResizeWindowToFit) {
             await Emulation.setDeviceMetricsOverride(deviceMetrics);
           }
           const buffer = Buffer.from(screenshot.data, 'base64');
