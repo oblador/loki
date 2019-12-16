@@ -29,6 +29,10 @@
     "*.js"
   ],
   "dependencies": {
+    "@loki/integration-react-native": "0.18.1",
+    "@loki/integration-react": "0.18.1",
+    "@loki/integration-vue": "0.18.1",
+    "@loki/runner": "0.18.1",
     "@loki/target-chrome-app": "0.18.1",
     "@loki/target-chrome-docker": "0.18.1",
     "@loki/target-native-android-emulator": "0.18.1",
