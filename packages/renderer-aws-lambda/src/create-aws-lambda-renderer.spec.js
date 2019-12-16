@@ -8,24 +8,28 @@ const PROJECT_ROOT = path.dirname(path.dirname(path.dirname(__dirname)));
 
 const DEBUG = false;
 
-const executeLambda = (handlerName, event) =>
+const executeLambda = event =>
   dockerLambda({
     event,
     dockerArgs: ['-m', '1024M'].concat(DEBUG ? ['-e', 'DEBUG=*'] : []),
     dockerImage: 'lambci/lambda:nodejs8.10',
     taskDir: PROJECT_ROOT,
-    handler: `examples/renderer-aws-lambda/index.${handlerName}`,
+    handler: 'examples/renderer-aws-lambda/index.handler',
     returnSpawnResult: DEBUG,
   });
 
 const fetchStorybookUrl = async baseUrl =>
-  executeLambda('getStorybook', { baseUrl });
+  executeLambda({
+    command: 'getStorybook',
+    baseUrl,
+  });
 
 const getStorybookFixtureUrl = fixture =>
   `file:./fixtures/storybook-${fixture}`;
 
 const fetchStorybookScreenshot = async (fixture, kind, story) =>
-  executeLambda('captureScreenshotForStory', {
+  executeLambda({
+    command: 'captureScreenshotForStory',
     baseUrl: getStorybookFixtureUrl(fixture),
     kind,
     story,

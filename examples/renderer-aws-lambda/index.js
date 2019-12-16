@@ -1,3 +1,5 @@
 const { createChromeAWSLambdaRenderer } = require('@loki/renderer-aws-lambda');
 
-module.exports = createChromeAWSLambdaRenderer();
+module.exports = {
+  handler: createChromeAWSLambdaRenderer(),
+};
