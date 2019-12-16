@@ -40,7 +40,7 @@ function createChromeAppTarget({
     const client = await CDP({ port, target });
 
     client.close = () => {
-      debug('New closing tab');
+      debug('Closing tab');
       return CDP.Close({ port, id: target.id });
     };
 

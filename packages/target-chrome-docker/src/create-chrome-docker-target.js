@@ -171,7 +171,7 @@ function createChromeDockerTarget({
     const client = await CDP({ host, port, target });
 
     client.close = () => {
-      debug('New closing tab');
+      debug('Closing tab');
       return CDP.Close({ host, port, id: target.id });
     };
 
