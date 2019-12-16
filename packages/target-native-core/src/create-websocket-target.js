@@ -6,7 +6,7 @@ const createMessageQueue = require('./create-message-queue');
 const MESSAGE_PREFIX = 'loki:';
 const NATIVE_ERROR_TYPE = `${MESSAGE_PREFIX}error`;
 
-const sanitize = (string) => {
+const sanitize = string => {
   return (
     string
       .toLowerCase()
@@ -21,7 +21,9 @@ const sanitize = (string) => {
 const sanitizeSafe = (string, part) => {
   const sanitized = sanitize(string);
   if (sanitized === '') {
-    throw new Error(`Invalid ${part} '${string}', must include alphanumeric characters`);
+    throw new Error(
+      `Invalid ${part} '${string}', must include alphanumeric characters`
+    );
   }
   return sanitized;
 };
