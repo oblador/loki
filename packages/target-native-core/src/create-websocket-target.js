@@ -6,6 +6,31 @@ const createMessageQueue = require('./create-message-queue');
 const MESSAGE_PREFIX = 'loki:';
 const NATIVE_ERROR_TYPE = `${MESSAGE_PREFIX}error`;
 
+const sanitize = string => {
+  return (
+    string
+      .toLowerCase()
+      // eslint-disable-next-line no-useless-escape
+      .replace(/[ ’–—―′¿'`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '')
+  );
+};
+
+const sanitizeSafe = (string, part) => {
+  const sanitized = sanitize(string);
+  if (sanitized === '') {
+    throw new Error(
+      `Invalid ${part} '${string}', must include alphanumeric characters`
+    );
+  }
+  return sanitized;
+};
+
+const toId = (kind, name) =>
+  `${sanitizeSafe(kind, 'kind')}--${sanitizeSafe(name, 'name')}`;
+
 function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
   let socket;
   const messageQueue = createMessageQueue(NATIVE_ERROR_TYPE);
@@ -121,8 +146,9 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
       await prepare();
       lastStoryCrashed = false;
     }
-    debug('captureScreenshotForStory', kind, story);
-    send('setCurrentStory', { kind, story });
+    const storyId = toId(kind, story);
+    debug('captureScreenshotForStory', kind, story, storyId);
+    send('setCurrentStory', { kind, story, storyId });
     try {
       await waitForLokiMessage('ready', 30000);
     } catch (error) {
