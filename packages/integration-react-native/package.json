@@ -1,0 +1,28 @@
+{
+  "name": "@loki/integration-react-native",
+  "version": "0.18.1",
+  "description": "Loki react-native integration",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/integration-react-native",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/integration-react-native"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@loki/integration-core": "0.18.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

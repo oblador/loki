@@ -1,0 +1,30 @@
+{
+  "name": "@loki/target-native-core",
+  "version": "0.18.1",
+  "description": "Loki native target core lib",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/target-native-core",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/target-native-core"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@loki/core": "0.18.1",
+    "debug": "^4.1.1",
+    "ws": "^7.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

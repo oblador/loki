@@ -1,0 +1,28 @@
+{
+  "name": "@loki/target-chrome-core",
+  "version": "0.18.1",
+  "description": "Loki Chrome target core lib",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/target-chrome-core",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/target-chrome-core"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@loki/core": "0.18.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "loki",
+  "version": "0.18.1",
+  "description": "Visual Regression Testing for react-storybook",
+  "keywords": [
+    "storybook",
+    "react-storybook",
+    "testing",
+    "visual testing",
+    "visual testing",
+    "react-native",
+    "react",
+    "mobile",
+    "ios",
+    "android",
+    "web"
+  ],
+  "homepage": "https://loki.js.org",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/loki"
+  },
+  "license": "MIT",
+  "files": [
+    "*.js"
+  ],
+  "dependencies": {
+    "@loki/target-chrome-app": "0.18.1",
+    "@loki/target-chrome-docker": "0.18.1",
+    "@loki/target-native-android-emulator": "0.18.1",
+    "@loki/target-native-ios-simulator": "0.18.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
