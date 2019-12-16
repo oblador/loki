@@ -30,12 +30,16 @@ async function testStory(
   const shouldUpdateReference =
     options.updateReference || (!options.requireReference && !referenceExists);
 
-  await target.captureScreenshotForStory(
+  const screenshot = await target.captureScreenshotForStory(
     kind,
     story,
-    shouldUpdateReference ? referencePath : outputPath,
     options,
     configuration
+  );
+
+  await fs.outputFile(
+    shouldUpdateReference ? referencePath : outputPath,
+    screenshot
   );
 
   if (shouldUpdateReference) {

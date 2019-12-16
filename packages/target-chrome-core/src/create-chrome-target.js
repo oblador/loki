@@ -1,4 +1,3 @@
-const fs = require('fs-extra');
 const debug = require('debug')('loki:chrome');
 const {
   disableAnimations,
@@ -272,7 +271,6 @@ function createChromeTarget(
   async function captureScreenshotForStory(
     kind,
     story,
-    outputPath,
     options,
     configuration
   ) {
@@ -294,7 +292,6 @@ function createChromeTarget(
     try {
       await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
       screenshot = await tab.captureScreenshot(selector);
-      await fs.outputFile(outputPath, screenshot);
     } catch (err) {
       if (err instanceof TimeoutError) {
         debug(`Timed out waiting for "${url}" to load`);

@@ -5,8 +5,14 @@ const testStory = require('./test-story');
 jest.mock('fs-extra');
 jest.mock('./get-image-differ');
 
+const MOCK_SCREENSHOT = 'mock-screenshot';
+
+beforeEach(jest.clearAllMocks);
+
 describe('testStory', () => {
-  const target = { captureScreenshotForStory: jest.fn() };
+  const target = {
+    captureScreenshotForStory: jest.fn(() => Promise.resolve(MOCK_SCREENSHOT)),
+  };
   const tolerance = 'mock tolerance';
   const configuration = 'mock configuration';
   const configurationName = 'Configuration';
@@ -24,8 +30,6 @@ describe('testStory', () => {
       kind,
       story
     );
-
-  beforeEach(target.captureScreenshotForStory.mockReset);
 
   describe('reference image is missing', () => {
     beforeEach(() => {
@@ -55,9 +59,12 @@ describe('testStory', () => {
       expect(target.captureScreenshotForStory).toHaveBeenCalledWith(
         kind,
         story,
-        referencePath,
         options,
         configuration
+      );
+      expect(fs.outputFile).toHaveBeenCalledWith(
+        referencePath,
+        MOCK_SCREENSHOT
       );
     });
   });
@@ -93,10 +100,10 @@ describe('testStory', () => {
       expect(target.captureScreenshotForStory).toHaveBeenCalledWith(
         kind,
         story,
-        outputPath,
         options,
         configuration
       );
+      expect(fs.outputFile).toHaveBeenCalledWith(outputPath, MOCK_SCREENSHOT);
     });
   });
 });

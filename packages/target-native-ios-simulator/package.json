@@ -23,7 +23,8 @@
     "@loki/core": "0.18.1",
     "@loki/target-native-core": "0.18.1",
     "fs-extra": "^8.1.0",
-    "osnap": "^1.1.0"
+    "osnap": "^1.1.0",
+    "tempy": "^0.3.0"
   },
   "publishConfig": {
     "access": "public"
