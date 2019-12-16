@@ -4,7 +4,11 @@ const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
 const getRandomPort = require('get-port');
-const { ChromeError, ensureDependencyAvailable } = require('@loki/core');
+const {
+  ChromeError,
+  ensureDependencyAvailable,
+  getAbsoluteURL,
+} = require('@loki/core');
 const { createChromeTarget } = require('@loki/target-chrome-core');
 const { getLocalIPAddress } = require('./get-local-ip-address');
 const { getNetworkHost } = require('./get-network-host');
@@ -46,7 +50,7 @@ function createChromeDockerTarget({
   let port;
   let dockerId;
   let host;
-  let dockerUrl = baseUrl;
+  let dockerUrl = getAbsoluteURL(baseUrl);
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
   const execute = getExecutor(dockerWithSudo);
@@ -55,16 +59,16 @@ function createChromeDockerTarget({
     runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
   }
 
-  if (baseUrl.indexOf('http://localhost') === 0) {
+  if (dockerUrl.indexOf('http://localhost') === 0) {
     const ip = getLocalIPAddress();
     if (!ip) {
       throw new Error(
         'Unable to detect local IP address, try passing --host argument'
       );
     }
-    dockerUrl = baseUrl.replace('localhost', ip);
-  } else if (baseUrl.indexOf('file:') === 0) {
-    const staticPath = baseUrl.substr('file:'.length);
+    dockerUrl = dockerUrl.replace('localhost', ip);
+  } else if (dockerUrl.indexOf('file:') === 0) {
+    const staticPath = dockerUrl.substr('file:'.length);
     const staticMountPath = '/var/loki';
     runArgs.push('-v');
     runArgs.push(`${staticPath}:${staticMountPath}`);

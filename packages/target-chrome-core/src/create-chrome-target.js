@@ -13,6 +13,7 @@ const {
   withTimeout,
   withRetries,
   unwrapError,
+  getAbsoluteURL,
 } = require('@loki/core');
 const presets = require('./presets.json');
 
@@ -30,6 +31,8 @@ function createChromeTarget(
   baseUrl,
   prepare
 ) {
+  const resolvedBaseUrl = getAbsoluteURL(baseUrl);
+
   function getDeviceMetrics(options) {
     return {
       width: options.width,
@@ -231,7 +234,7 @@ function createChromeTarget(
   }
 
   const getStoryUrl = (kind, story) =>
-    `${baseUrl}/iframe.html?selectedKind=${encodeURIComponent(
+    `${resolvedBaseUrl}/iframe.html?selectedKind=${encodeURIComponent(
       kind
     )}&selectedStory=${encodeURIComponent(story)}`;
 
@@ -249,7 +252,7 @@ function createChromeTarget(
   );
 
   async function getStorybook() {
-    const url = `${baseUrl}/iframe.html`;
+    const url = `${resolvedBaseUrl}/iframe.html`;
     try {
       const tab = await launchStoriesTab(url);
       return tab.executeFunctionWithWindow(getStories);
@@ -261,7 +264,7 @@ function createChromeTarget(
       ) {
         throw new ServerError(
           'Failed fetching stories because the server is down',
-          `Try starting it with "yarn storybook" or pass the --port or --host arguments if it's not running at ${baseUrl}`
+          `Try starting it with "yarn storybook" or pass the --port or --host arguments if it's not running at ${resolvedBaseUrl}`
         );
       }
       throw error;
