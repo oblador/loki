@@ -1,0 +1,9 @@
+{
+  "name": "@loki/example-renderer-aws-lambda",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@loki/renderer-aws-lambda": "0.18.1",
+    "chrome-aws-lambda": "^2.0.1"
+  }
+}
