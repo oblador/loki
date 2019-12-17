@@ -1,0 +1,29 @@
+{
+  "name": "@loki/target-chrome-aws-lambda",
+  "version": "0.18.1",
+  "description": "Loki Chrome AWS Lambda target",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/target-chrome-aws-lambda",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/target-chrome-aws-lambda"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "aws-sdk": "^2.588.0",
+    "debug": "^4.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -9,6 +9,9 @@ const mapObjIndexed = require('ramda/src/mapObjIndexed');
 const { createChromeAppTarget } = require('@loki/target-chrome-app');
 const { createChromeDockerTarget } = require('@loki/target-chrome-docker');
 const {
+  createChromeAWSLambdaTarget,
+} = require('@loki/target-chrome-aws-lambda');
+const {
   createIOSSimulatorTarget,
 } = require('@loki/target-native-ios-simulator');
 const {
@@ -208,6 +211,18 @@ async function runTests(flatConfigurations, options) {
           createChromeAppTarget({
             baseUrl: options.reactUri,
             chromeFlags: options.chromeFlags,
+          }),
+          configurations,
+          options.chromeConcurrency,
+          options.chromeTolerance
+        );
+      }
+      case 'chrome.aws-lambda': {
+        return getTargetTasks(
+          'Chrome (AWS Lambda)',
+          createChromeAWSLambdaTarget({
+            baseUrl: options.reactUri,
+            chromeAwsLambdaFunctionName: options.chromeAwsLambdaFunctionName,
           }),
           configurations,
           options.chromeConcurrency,

@@ -30,6 +30,7 @@
     "@loki/diff-graphics-magick": "0.18.1",
     "@loki/diff-looks-same": "0.18.1",
     "@loki/target-chrome-app": "0.18.1",
+    "@loki/target-chrome-aws-lambda": "0.18.1",
     "@loki/target-chrome-docker": "0.18.1",
     "@loki/target-native-android-emulator": "0.18.1",
     "@loki/target-native-ios-simulator": "0.18.1",
