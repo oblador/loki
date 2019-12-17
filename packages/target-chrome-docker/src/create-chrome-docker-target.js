@@ -128,6 +128,9 @@ function createChromeDockerTarget({
       logs.stderr.on('data', chunk => {
         errorLogs.push(chunk);
       });
+      logs.stderr.on('end', () => {
+        errorLogs = null;
+      });
 
       host = await getNetworkHost(execute, dockerId);
       try {
@@ -147,7 +150,6 @@ function createChromeDockerTarget({
         if (logs.code === null && !logs.killed) {
           logs.kill();
         }
-        errorLogs = null;
       }
       debug(`Docker started with id ${dockerId}`);
     } else {
