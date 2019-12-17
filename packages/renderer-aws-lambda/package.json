@@ -20,6 +20,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
+    "@loki/core": "0.18.1",
     "@loki/target-chrome-app": "0.18.1"
   },
   "devDependencies": {

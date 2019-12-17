@@ -1,5 +1,6 @@
 const chromium = require('chrome-aws-lambda');
 const { createChromeAppTarget } = require('@loki/target-chrome-app');
+const { serializeError, unwrapError } = require('@loki/core');
 
 const getStorybook = async target => {
   const stories = await target.getStorybook();
@@ -35,6 +36,8 @@ const createChromeAWSLambdaRenderer = () => async event => {
       chromePath: await chromium.executablePath,
     });
     return await command(target, event);
+  } catch (error) {
+    throw serializeError(unwrapError(error));
   } finally {
     await target.stop();
   }

@@ -20,6 +20,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
+    "@loki/core": "0.18.1",
     "aws-sdk": "^2.588.0",
     "debug": "^4.1.1"
   },
