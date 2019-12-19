@@ -14,8 +14,10 @@
     "jest/globals": true,
   },
   "rules": {
-    "import/extensions": [2, { "js": "never", "json": "always" }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/prop-types": [0],
+    "react/destructuring-assignment": [0],
+    "import/extensions": [2, { "js": "never", "json": "always" }],
     "import/no-extraneous-dependencies": [0],
     "import/no-unresolved": [2, { ignore: ['^react(-native)?$'] }],
     "no-plusplus": [0],
