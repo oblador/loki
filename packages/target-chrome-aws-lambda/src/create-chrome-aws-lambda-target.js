@@ -7,7 +7,7 @@ function createChromeAWSLambdaTarget({
   chromeAwsLambdaFunctionName,
   chromeAwsLambdaRetries = 0,
 }) {
-  const invoke = withRetries(chromeAwsLambdaRetries)(async payload => {
+  const invoke = withRetries(chromeAwsLambdaRetries, 1000)(async payload => {
     const lambda = new AWS.Lambda();
 
     const params = {
