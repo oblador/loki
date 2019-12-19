@@ -41,7 +41,7 @@ function parseOptions(args, config) {
       $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
     looksSame: $('looksSame'),
     gm: $('gm'),
-    verboseRenderer: $('verboseRenderer') || ciInfo.isCI,
+    verboseRenderer: $('verboseRenderer'),
     requireReference: $('requireReference') || ciInfo.isCI,
     updateReference: argv._[0] === 'update',
     targetFilter: argv.targetFilter,

@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
-const Listr = require('listr');
+const ciInfo = require('ci-info');
 const map = require('ramda/src/map');
 const groupBy = require('ramda/src/groupBy');
 const toPairs = require('ramda/src/toPairs');
@@ -16,6 +16,23 @@ const {
 } = require('@loki/target-native-android-emulator');
 const { die } = require('../../console');
 const testStory = require('./test-story');
+const { TaskRunner } = require('./task-runner');
+const {
+  renderInteractive,
+  renderVerbose,
+  renderNonInteractive,
+} = require('./renderers');
+const {
+  TASK_TYPE_TARGET,
+  TASK_TYPE_PREPARE,
+  TASK_TYPE_START,
+  TASK_TYPE_FETCH_STORIES,
+  TASK_TYPE_TESTS,
+  TASK_TYPE_TEST,
+  TASK_TYPE_STOP,
+} = require('./constants');
+
+const defaultRenderer = ciInfo.isCI ? renderNonInteractive : renderInteractive;
 
 async function placeGitignore(pathsToIgnore) {
   const parentDir = path.dirname(pathsToIgnore[0]);
@@ -56,14 +73,6 @@ const filterStorybook = (storybook, excludePattern, includePattern) => {
     .filter(({ stories }) => stories.length !== 0);
 };
 
-const getListr = options => (tasks, listrOptions = {}) => {
-  const newOptions = listrOptions;
-  if (options.verboseRenderer) {
-    newOptions.renderer = 'verbose';
-  }
-  return new Listr(tasks, newOptions);
-};
-
 async function runTests(flatConfigurations, options) {
   if (options.updateReference) {
     await fs.ensureDir(options.referenceDir);
@@ -74,7 +83,7 @@ async function runTests(flatConfigurations, options) {
   }
 
   const getTargetTasks = (
-    name,
+    targetName,
     target,
     configurations,
     concurrency = 1,
@@ -83,25 +92,40 @@ async function runTests(flatConfigurations, options) {
     let storybook;
 
     return {
-      title: name,
+      id: targetName,
+      meta: {
+        type: TASK_TYPE_TARGET,
+      },
       task: () =>
-        getListr(options)([
+        new TaskRunner([
           {
-            title: 'Prepare environment',
+            id: `${targetName}/${TASK_TYPE_PREPARE}`,
+            meta: {
+              target: targetName,
+              type: TASK_TYPE_PREPARE,
+            },
             task: async () => {
               await target.prepare();
             },
-            enabled: () => !!target.prepare,
+            enabled: !!target.prepare,
           },
           {
-            title: 'Start',
+            id: `${targetName}/${TASK_TYPE_START}`,
+            meta: {
+              target: targetName,
+              type: TASK_TYPE_START,
+            },
             task: async ({ activeTargets }) => {
               await target.start();
               activeTargets.push(target);
             },
           },
           {
-            title: 'Fetch list of stories',
+            id: `${targetName}/${TASK_TYPE_FETCH_STORIES}`,
+            meta: {
+              target: targetName,
+              type: TASK_TYPE_FETCH_STORIES,
+            },
             task: async () => {
               storybook = await target.getStorybook();
               if (storybook.length === 0) {
@@ -109,24 +133,34 @@ async function runTests(flatConfigurations, options) {
               }
             },
           },
-          ...Object.values(
-            mapObjIndexed(
-              (configuration, configurationName) => ({
-                title: `Test ${configurationName}`,
-                task: () =>
-                  getListr(options)(
-                    filterStorybook(
+          {
+            id: `${targetName}/${TASK_TYPE_TESTS}`,
+            meta: {
+              target: targetName,
+              type: TASK_TYPE_TESTS,
+            },
+            task: () =>
+              new TaskRunner(
+                Object.keys(configurations).reduce(
+                  (tasks, configurationName) => {
+                    const configuration = configurations[configurationName];
+                    const kinds = filterStorybook(
                       storybook,
                       options.skipStoriesPattern || configuration.skipStories,
                       options.storiesFilter || configuration.storiesFilter
-                    ).map(({ kind, stories }) => ({
-                      title: kind,
-                      task: () =>
-                        getListr(options)(
+                    );
+                    return tasks.concat(
+                      kinds
+                        .map(({ kind, stories }) =>
                           stories.map(story => ({
-                            title: options.verboseRenderer
-                              ? `${kind}: ${story}`
-                              : story,
+                            id: `${targetName}/${TASK_TYPE_TEST}/${configurationName}/${kind}/${story}`,
+                            meta: {
+                              target: targetName,
+                              configuration: configurationName,
+                              kind,
+                              story,
+                              type: TASK_TYPE_TEST,
+                            },
                             task: () =>
                               testStory(
                                 target,
@@ -138,16 +172,21 @@ async function runTests(flatConfigurations, options) {
                                 story
                               ),
                           }))
-                        ),
-                    })),
-                    { concurrent: concurrency, exitOnError: false }
-                  ),
-              }),
-              configurations
-            )
-          ),
+                        )
+                        .reduce((acc, array) => acc.concat(array), [])
+                    );
+                  },
+                  []
+                ),
+                { concurrency, exitOnError: false }
+              ),
+          },
           {
-            title: 'Stop',
+            id: `${targetName}/${TASK_TYPE_STOP}`,
+            meta: {
+              target: targetName,
+              type: TASK_TYPE_STOP,
+            },
             task: async ({ activeTargets }) => {
               await target.stop();
               const index = activeTargets.indexOf(target);
@@ -165,7 +204,7 @@ async function runTests(flatConfigurations, options) {
     switch (target) {
       case 'chrome.app': {
         return getTargetTasks(
-          'Chrome (app)',
+          target,
           createChromeAppTarget({
             baseUrl: options.reactUri,
             chromeFlags: options.chromeFlags,
@@ -177,7 +216,7 @@ async function runTests(flatConfigurations, options) {
       }
       case 'chrome.docker': {
         return getTargetTasks(
-          'Chrome (docker)',
+          target,
           createChromeDockerTarget({
             baseUrl: options.reactUri,
             chromeDockerImage: options.chromeDockerImage,
@@ -192,14 +231,14 @@ async function runTests(flatConfigurations, options) {
       }
       case 'ios.simulator': {
         return getTargetTasks(
-          'iOS Simulator',
+          target,
           createIOSSimulatorTarget(options.reactNativeUri),
           configurations
         );
       }
       case 'android.emulator': {
         return getTargetTasks(
-          'Android Emulator',
+          target,
           createAndroidEmulatorTarget(options.reactNativeUri),
           configurations
         );
@@ -210,14 +249,19 @@ async function runTests(flatConfigurations, options) {
     }
   };
 
-  const tasks = getListr(options)(
+  const tasks = new TaskRunner(
     Object.values(map(createTargetTask, groupByTarget(flatConfigurations)))
   );
 
   const context = { activeTargets: [] };
+  const render = options.verboseRenderer ? renderVerbose : defaultRenderer;
+  const stopRendering = render(tasks);
+
   try {
     await tasks.run(context);
+    stopRendering();
   } catch (err) {
+    stopRendering();
     await Promise.all(context.activeTargets.map(target => target.stop()));
     throw err;
   }

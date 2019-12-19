@@ -67,7 +67,7 @@ async function test(args) {
   try {
     await runTests(configurations, options);
   } catch (err) {
-    if (err.name === 'ListrError') {
+    if (err.name === 'TaskRunnerError') {
       const imageErrors = err.errors.filter(
         e => e instanceof ReferenceImageError
       );
