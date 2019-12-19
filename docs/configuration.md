@@ -20,8 +20,12 @@ Example `package.json`:
         "height": 768
       },
       "chrome.iphone7": {
-        "target": "chrome.app",
+        "target": "chrome.docker",
         "preset": "iPhone 7"
+      },
+      "chrome.a4": {
+        "target": "chrome.aws-lambda",
+        "preset": "A4 Paper"
       },
       "ios": {
         "target": "ios.simulator"
@@ -70,7 +74,7 @@ A JavaScript only solution that will work out of the box on every machine, howev
 
 ## `verboseRenderer`
 
-Plain text output, useful for CI.
+Plain text output, useful for debugging CI.
 
 ## ~~`skipStories`~~ **DEPRECATED**
 
@@ -86,7 +90,7 @@ Opposite to `skipStories`.
 
 | Name                                 | Type      | Description                                                                                                                                               | Targets      |
 | ------------------------------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| **`target`**                         | _string_  | Target platform, possible values are `chrome.app`, `chrome.docker`, `ios.simulator`, `android.emulator`.                                                  | All          |
+| **`target`**                         | _string_  | Target platform, possible values are `chrome.app`, `chrome.docker`, `chrome.aws-lambda`, `ios.simulator`, `android.emulator`.                             | All          |
 | **`skipStories`**                    | _string_  | **DEPRECATED** Same as `loki.skipStories`, but applied to only this configuration.                                                                        | All          |
 | **`storiesFilter`**                  | _string_  | Same as `loki.storiesFilter`, but applied to only this configuration.                                                                                     | All          |
 | **`chromeSelector`**                 | _string_  | Same as `loki.chromeSelector`, but applied to only this configuration.                                                                                    | `chrome.*`   |
