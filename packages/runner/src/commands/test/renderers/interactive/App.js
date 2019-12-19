@@ -23,7 +23,7 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.taskRunner.off(EVENT_CHANGE, this.handleChange);
+    this.props.taskRunner.removeListener(EVENT_CHANGE, this.handleChange);
   }
 
   render() {

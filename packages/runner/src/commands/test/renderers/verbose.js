@@ -19,7 +19,8 @@ const renderVerbose = taskRunner => {
     }
   };
   taskRunner.on(EVENT_CHANGE, handleChange);
-  const stopRendering = () => taskRunner.off(EVENT_CHANGE, handleChange);
+  const stopRendering = () =>
+    taskRunner.removeListener(EVENT_CHANGE, handleChange);
   return stopRendering;
 };
 
