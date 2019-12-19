@@ -219,10 +219,11 @@ async function runTests(flatConfigurations, options) {
       }
       case 'chrome.aws-lambda': {
         return getTargetTasks(
-          'Chrome (AWS Lambda)',
+          target,
           createChromeAWSLambdaTarget({
             baseUrl: options.reactUri,
             chromeAwsLambdaFunctionName: options.chromeAwsLambdaFunctionName,
+            chromeAwsLambdaRetries: options.chromeAwsLambdaRetries,
           }),
           configurations,
           options.chromeConcurrency,

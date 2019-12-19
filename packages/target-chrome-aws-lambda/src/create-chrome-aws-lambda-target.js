@@ -1,12 +1,13 @@
 const debug = require('debug')('loki:chrome:aws-lambda');
 const AWS = require('aws-sdk');
-const { parseError } = require('@loki/core');
+const { parseError, withRetries } = require('@loki/core');
 
 function createChromeAWSLambdaTarget({
   baseUrl = 'http://localhost:6006',
   chromeAwsLambdaFunctionName,
+  chromeAwsLambdaRetries = 0,
 }) {
-  const invoke = async payload => {
+  const invoke = withRetries(chromeAwsLambdaRetries)(async payload => {
     const lambda = new AWS.Lambda();
 
     const params = {
@@ -21,7 +22,7 @@ function createChromeAWSLambdaTarget({
       throw parseError(response.errorMessage);
     }
     return response;
-  };
+  });
 
   const start = () => {};
   const stop = () => {};
