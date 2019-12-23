@@ -12,11 +12,10 @@ const SLUGIFY_OPTIONS = {
 const getBaseName = (configurationName, kind, story) =>
   slugify(`${configurationName} ${kind} ${story}`, SLUGIFY_OPTIONS);
 
-async function testStory(
-  target,
+async function compareScreenshot(
+  screenshot,
   options,
   tolerance,
-  configuration,
   configurationName,
   kind,
   story
@@ -29,13 +28,6 @@ async function testStory(
   const referenceExists = await fs.pathExists(referencePath);
   const shouldUpdateReference =
     options.updateReference || (!options.requireReference && !referenceExists);
-
-  const screenshot = await target.captureScreenshotForStory(
-    kind,
-    story,
-    options,
-    configuration
-  );
 
   await fs.outputFile(
     shouldUpdateReference ? referencePath : outputPath,
@@ -67,4 +59,4 @@ async function testStory(
   }
 }
 
-module.exports = testStory;
+module.exports = compareScreenshot;

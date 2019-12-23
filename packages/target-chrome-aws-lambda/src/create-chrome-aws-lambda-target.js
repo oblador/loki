@@ -50,11 +50,27 @@ function createChromeAWSLambdaTarget({
     return Buffer.from(screenshot, 'base64');
   };
 
+  const captureScreenshotsForStories = async (stories, options) => {
+    const screenshots = await invoke({
+      command: 'captureScreenshotsForStories',
+      baseUrl,
+      stories,
+      options,
+    });
+    return screenshots.map(screenshot => {
+      if (screenshot.errorMessage) {
+        return parseError(screenshot.errorMessage);
+      }
+      return Buffer.from(screenshot, 'base64');
+    });
+  };
+
   return {
     start,
     stop,
     getStorybook,
     captureScreenshotForStory,
+    captureScreenshotsForStories,
   };
 }
 

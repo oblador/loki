@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const { getImageDiffer } = require('./get-image-differ');
-const testStory = require('./test-story');
+const compareScreenshot = require('./compare-screenshot');
 
 jest.mock('fs-extra');
 jest.mock('./get-image-differ');
@@ -9,23 +9,18 @@ const MOCK_SCREENSHOT = 'mock-screenshot';
 
 beforeEach(jest.clearAllMocks);
 
-describe('testStory', () => {
-  const target = {
-    captureScreenshotForStory: jest.fn(() => Promise.resolve(MOCK_SCREENSHOT)),
-  };
+describe('compareScreenshot', () => {
   const tolerance = 'mock tolerance';
-  const configuration = 'mock configuration';
   const configurationName = 'Configuration';
   const kind = 'Kind';
   const story = 'Story';
   const filename = `${configurationName}_${kind}_${story}.png`;
 
   const executeWithOptions = options =>
-    testStory(
-      target,
+    compareScreenshot(
+      MOCK_SCREENSHOT,
       options,
       tolerance,
-      configuration,
       configurationName,
       kind,
       story
@@ -56,12 +51,6 @@ describe('testStory', () => {
 
       const referencePath = `${options.referenceDir}/${filename}`;
 
-      expect(target.captureScreenshotForStory).toHaveBeenCalledWith(
-        kind,
-        story,
-        options,
-        configuration
-      );
       expect(fs.outputFile).toHaveBeenCalledWith(
         referencePath,
         MOCK_SCREENSHOT
@@ -97,12 +86,6 @@ describe('testStory', () => {
 
       const outputPath = `${options.outputDir}/${filename}`;
 
-      expect(target.captureScreenshotForStory).toHaveBeenCalledWith(
-        kind,
-        story,
-        options,
-        configuration
-      );
       expect(fs.outputFile).toHaveBeenCalledWith(outputPath, MOCK_SCREENSHOT);
     });
   });

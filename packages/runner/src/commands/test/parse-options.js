@@ -26,6 +26,11 @@ function parseOptions(args, config) {
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
     chromeAwsLambdaFunctionName: $('chromeAwsLambdaFunctionName'),
     chromeAwsLambdaRetries: parseInt($('chromeAwsLambdaRetries'), 10),
+    chromeAwsLambdaBatchSize: parseInt($('chromeAwsLambdaBatchSize'), 10),
+    chromeAwsLambdaBatchConcurrency: parseInt(
+      $('chromeAwsLambdaBatchConcurrency'),
+      10
+    ),
     chromeConcurrency: parseInt($('chromeConcurrency'), 10),
     chromeDockerImage: $('chromeDockerImage'),
     chromeEnableAnimations: $('chromeEnableAnimations'),

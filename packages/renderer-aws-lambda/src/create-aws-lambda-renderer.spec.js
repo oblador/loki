@@ -116,4 +116,38 @@ describe('createChromeAWSLambdaRenderer', () => {
       DOCKER_TEST_TIMEOUT
     );
   });
+
+  describe('.captureScreenshotsForStories', () => {
+    it(
+      'captures screenshots',
+      async () => {
+        const [screenshot] = await executeLambda({
+          command: 'captureScreenshotsForStories',
+          baseUrl: getStorybookFixtureUrl('static'),
+          stories: [
+            {
+              kind: 'Welcome',
+              story: 'to Storybook',
+              configuration: {
+                preset: 'iPhone 7',
+                chromeRetries: 0,
+              },
+            },
+          ],
+          options: {
+            chromeLoadTimeout: 60000,
+            chromeSelector: '#root > *',
+          },
+        });
+
+        const referencePath = path.resolve(
+          __dirname,
+          '../__snapshots__/welcome-to-storybook.png'
+        );
+        const reference = fs.readFileSync(referencePath);
+        expect(screenshot).toEqual(reference.toString('base64'));
+      },
+      DOCKER_TEST_TIMEOUT
+    );
+  });
 });

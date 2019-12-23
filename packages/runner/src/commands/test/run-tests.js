@@ -18,7 +18,7 @@ const {
   createAndroidEmulatorTarget,
 } = require('@loki/target-native-android-emulator');
 const { die } = require('../../console');
-const testStory = require('./test-story');
+const testBatch = require('./test-batch');
 const { TaskRunner } = require('./task-runner');
 const {
   renderInteractive,
@@ -90,7 +90,8 @@ async function runTests(flatConfigurations, options) {
     target,
     configurations,
     concurrency = 1,
-    tolerance = 0
+    tolerance = 0,
+    batchSize = 1
   ) => {
     let storybook;
 
@@ -164,16 +165,12 @@ async function runTests(flatConfigurations, options) {
                               story,
                               type: TASK_TYPE_TEST,
                             },
-                            task: () =>
-                              testStory(
-                                target,
-                                options,
-                                tolerance,
-                                configuration,
-                                configurationName,
-                                kind,
-                                story
-                              ),
+                            task: {
+                              configuration,
+                              configurationName,
+                              kind,
+                              story,
+                            },
                           }))
                         )
                         .reduce((acc, array) => acc.concat(array), [])
@@ -181,7 +178,18 @@ async function runTests(flatConfigurations, options) {
                   },
                   []
                 ),
-                { concurrency, exitOnError: false }
+                {
+                  concurrency: Math.ceil(concurrency / batchSize),
+                  exitOnError: false,
+                  batchSize,
+                  batchExector: batch =>
+                    testBatch(
+                      target,
+                      batch.map(({ task }) => task),
+                      options,
+                      tolerance
+                    ),
+                }
               ),
           },
           {
@@ -227,7 +235,8 @@ async function runTests(flatConfigurations, options) {
           }),
           configurations,
           options.chromeConcurrency,
-          options.chromeTolerance
+          options.chromeTolerance,
+          options.chromeAwsLambdaBatchSize
         );
       }
       case 'chrome.docker': {

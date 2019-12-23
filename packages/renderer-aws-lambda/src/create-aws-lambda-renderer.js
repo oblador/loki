@@ -1,4 +1,5 @@
 const chromium = require('chrome-aws-lambda');
+const mapLimit = require('async/mapLimit');
 const { createChromeAppTarget } = require('@loki/target-chrome-app');
 const { serializeError, unwrapError } = require('@loki/core');
 
@@ -17,15 +18,33 @@ const captureScreenshotForStory = async (target, event) => {
   return screenshot.toString('base64');
 };
 
+const captureScreenshotsForStories = async (target, event) => {
+  const concurrency =
+    (event.options && event.options.chromeAwsLambdaBatchConcurrency) || 1;
+  return mapLimit(event.stories, concurrency, async task => {
+    try {
+      return captureScreenshotForStory(target, {
+        kind: task.kind,
+        story: task.story,
+        configuration: task.configuration,
+        options: event.options,
+      });
+    } catch (error) {
+      return { errorMessage: serializeError(unwrapError(error)) };
+    }
+  });
+};
+
 const commands = {
   getStorybook,
   captureScreenshotForStory,
+  captureScreenshotsForStories,
 };
 
 const createChromeAWSLambdaRenderer = () => async event => {
   const command = commands[event.command];
   if (!command) {
-    throw new Error(`Unknown command "${event.command}"`);
+    throw serializeError(new Error(`Unknown command "${event.command}"`));
   }
   const target = createChromeAppTarget({
     baseUrl: event.baseUrl,

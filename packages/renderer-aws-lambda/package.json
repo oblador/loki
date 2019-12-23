@@ -21,7 +21,8 @@
   "main": "src/index.js",
   "dependencies": {
     "@loki/core": "0.18.1",
-    "@loki/target-chrome-app": "0.18.1"
+    "@loki/target-chrome-app": "0.18.1",
+    "async": "^3.0.1"
   },
   "devDependencies": {
     "docker-lambda": "^0.15.3"
