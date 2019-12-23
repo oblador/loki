@@ -87,9 +87,10 @@ class TaskRunner extends EventEmitter {
   }
 
   createTaskIterator(context) {
-    return async (batch, index) =>
+    return async (batch, batchNumber) =>
       Promise.all(
-        this.batchExector(batch, context).map(async work => {
+        this.batchExector(batch, context).map(async (work, i) => {
+          const index = this.batchSize * batchNumber + i;
           try {
             const hasSubTasks = work instanceof TaskRunner;
             this.mergeTaskState(index, {
