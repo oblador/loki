@@ -23,12 +23,13 @@ const captureScreenshotsForStories = async (target, event) => {
     (event.options && event.options.chromeAwsLambdaBatchConcurrency) || 1;
   return mapLimit(event.stories, concurrency, async task => {
     try {
-      return captureScreenshotForStory(target, {
+      const screenshot = await captureScreenshotForStory(target, {
         kind: task.kind,
         story: task.story,
         configuration: task.configuration,
         options: event.options,
       });
+      return screenshot;
     } catch (error) {
       return { errorMessage: serializeError(unwrapError(error)) };
     }
