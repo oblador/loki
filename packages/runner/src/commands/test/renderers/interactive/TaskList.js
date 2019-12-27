@@ -2,6 +2,7 @@ const React = require('react');
 const importJsx = require('import-jsx');
 const { Static, Box } = require('ink');
 const {
+  STATUS_NOT_STARTED,
   STATUS_RUNNING,
   STATUS_SUCCEEDED,
   STATUS_FAILED,
@@ -68,7 +69,11 @@ const TARGET_TASK_TITLE_MAP = {
 };
 const TargetTask = ({ status, target, tasks }) => {
   const currentTask =
-    tasks && tasks.find(task => task.status === STATUS_RUNNING);
+    tasks &&
+    tasks.find(
+      task =>
+        task.status === STATUS_NOT_STARTED || task.status === STATUS_RUNNING
+    );
   const taskTitle = currentTask && TARGET_TASK_TITLE_MAP[currentTask.meta.type];
 
   return (
