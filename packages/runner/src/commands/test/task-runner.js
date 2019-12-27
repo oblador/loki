@@ -6,6 +6,7 @@ const STATUS_RUNNING = 'RUNNING';
 const STATUS_SUCCEEDED = 'SUCCEEDED';
 const STATUS_FAILED = 'FAILED';
 const EVENT_CHANGE = 'change';
+const EVENT_END = 'end';
 
 class TaskRunnerError extends Error {
   constructor(message, errors) {
@@ -119,6 +120,7 @@ class TaskRunner extends EventEmitter {
       // Errors might not be thrown due to exitOnError option,
       // so collect all errors by status instead
     }
+    this.emit(EVENT_END);
     const errors = this.tasks
       .filter(task => task.status === STATUS_FAILED)
       .map(task => task.error)
@@ -135,6 +137,7 @@ module.exports = {
   STATUS_SUCCEEDED,
   STATUS_FAILED,
   EVENT_CHANGE,
+  EVENT_END,
   TaskRunner,
   TaskRunnerError,
 };

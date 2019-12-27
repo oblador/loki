@@ -45,4 +45,4 @@ const Task = ({ status, prefix, title }) => (
   </Box>
 );
 
-module.exports = Task;
+module.exports = React.memo(Task);
