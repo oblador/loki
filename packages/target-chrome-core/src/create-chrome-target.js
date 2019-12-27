@@ -20,6 +20,9 @@ const presets = require('./presets.json');
 const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
 const REQUEST_STABILIZATION_TIMEOUT = 100;
+const RESIZE_DELAY = 500;
+
+const delay = duration => new Promise(resolve => setTimeout(resolve, duration));
 
 function createChromeTarget(
   start,
@@ -185,20 +188,28 @@ function createChromeTarget(
             );
           }
 
-          const clip = Object.assign({ scale: 1 }, position);
-          const contentEndY = Math.ceil(position.y + position.height);
+          const clip = {
+            scale: 1,
+            x: Math.floor(position.x),
+            y: Math.floor(position.y),
+            width: Math.ceil(position.width),
+            height: Math.ceil(position.height),
+          };
+          const contentEndY = clip.y + clip.height;
           const shouldResizeWindowToFit =
             !options.disableAutomaticViewportHeight &&
             contentEndY > deviceMetrics.height;
 
           if (shouldResizeWindowToFit) {
+            const override = Object.assign({}, deviceMetrics, {
+              height: contentEndY,
+            });
             debug('Resizing window to fit tall content');
-            await Emulation.setDeviceMetricsOverride(
-              Object.assign({}, deviceMetrics, {
-                height: contentEndY,
-              })
-            );
-            await Page.frameResized();
+            await Emulation.setDeviceMetricsOverride(override);
+            // This number is arbitrary and probably excessive,
+            // but there are no other events or values to observe
+            // that I could find indicating when chrome is done resizing
+            await delay(RESIZE_DELAY);
           }
 
           debug('Capturing screenshot');
