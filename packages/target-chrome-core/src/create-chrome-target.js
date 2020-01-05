@@ -219,11 +219,11 @@ function createChromeTarget(
             format: 'png',
             clip,
           });
+          const buffer = Buffer.from(screenshot.data, 'base64');
 
           if (shouldResizeWindowToFit) {
             await Emulation.setDeviceMetricsOverride(deviceMetrics);
           }
-          const buffer = Buffer.from(screenshot.data, 'base64');
 
           return buffer;
         }

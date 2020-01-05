@@ -15,6 +15,11 @@ const captureScreenshotForStory = async (target, event) => {
     event.options || {},
     event.configuration || {}
   );
+  if (!screenshot) {
+    throw new Error(
+      'Unexpectedly failed to capture screenshot, try to reduce concurrency'
+    );
+  }
   return screenshot.toString('base64');
 };
 
