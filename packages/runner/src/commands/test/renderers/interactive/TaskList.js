@@ -35,11 +35,12 @@ const collectRecursively = (predicate, tasks, collection = []) => {
 const isRunningTest = task =>
   task.status === STATUS_RUNNING && task.meta.type === TASK_TYPE_TEST;
 
+const isCompletedTest = task =>
+  (task.status === STATUS_FAILED || task.status === STATUS_SUCCEEDED) &&
+  task.meta.type === TASK_TYPE_TEST;
+
 const isFailedTest = task =>
   task.status === STATUS_FAILED && task.meta.type === TASK_TYPE_TEST;
-
-const isPassingTest = task =>
-  task.status === STATUS_SUCCEEDED && task.meta.type === TASK_TYPE_TEST;
 
 const groupByKind = testTasks =>
   testTasks.reduce((acc, task) => {
@@ -86,59 +87,58 @@ const TargetTask = ({ status, target, tasks }) => {
   );
 };
 
+const renderFailedTasks = tasks =>
+  tasks
+    .filter(isFailedTest)
+    .map(task => (
+      <FailedTest key={task.id} title={task.meta.story} error={task.error} />
+    ));
+
+const renderKinds = kinds =>
+  kinds.map(({ key, status, target, configuration, kind, tasks }) => (
+    <React.Fragment key={key}>
+      <KindTask
+        status={status}
+        target={target}
+        configuration={configuration}
+        kind={kind}
+      />
+      {renderFailedTasks(tasks)}
+    </React.Fragment>
+  ));
+
 const TaskList = ({ tasks }) => {
-  const passedTests = collectRecursively(isPassingTest, tasks);
-  const runningTests = collectRecursively(isRunningTest, tasks);
-  const failedTests = collectRecursively(isFailedTest, tasks);
-  const passedKinds = groupByKind(passedTests);
-  const runningKinds = groupByKind(runningTests);
-  const failedKinds = groupByKind(failedTests);
-  const fullyFailedKindKeys = Object.keys(failedKinds).filter(
-    key => !runningKinds[key]
+  const runningGrouped = groupByKind(collectRecursively(isRunningTest, tasks));
+  const running = Object.keys(runningGrouped).map(key => ({
+    key,
+    ...runningGrouped[key],
+    status: STATUS_RUNNING,
+  }));
+
+  const completedGrouped = groupByKind(
+    collectRecursively(isCompletedTest, tasks)
   );
-  const fullyPassedKindKeys = Object.keys(passedKinds).filter(
-    key => !runningKinds[key] && !failedKinds[key]
-  );
+  const completed = Object.keys(completedGrouped)
+    .filter(key => !runningGrouped[key])
+    .map(key => ({
+      key,
+      ...completedGrouped[key],
+      status: completedGrouped[key].tasks.find(
+        test => test.status === STATUS_FAILED
+      )
+        ? STATUS_FAILED
+        : STATUS_SUCCEEDED,
+      completedAt: completedGrouped[key].tasks.reduce(
+        (acc, task) => Math.max(acc, task.completedAt),
+        0
+      ),
+    }))
+    .sort((a, b) => a.completedAt - b.completedAt);
 
   return (
     <Box flexDirection="column">
-      <Static>
-        {fullyPassedKindKeys
-          .map(key => (
-            <KindTask
-              key={key}
-              status={STATUS_SUCCEEDED}
-              {...passedKinds[key]}
-            />
-          ))
-          .concat(
-            fullyFailedKindKeys.map(key => (
-              <React.Fragment key={key}>
-                <KindTask status={STATUS_FAILED} {...failedKinds[key]} />
-                {failedKinds[key].tasks.map(task => (
-                  <FailedTest
-                    key={task.id}
-                    title={task.meta.story}
-                    error={task.error}
-                  />
-                ))}
-              </React.Fragment>
-            ))
-          )}
-      </Static>
-      {Object.keys(runningKinds).map(key => (
-        <React.Fragment key={key}>
-          <KindTask status={STATUS_RUNNING} {...runningKinds[key]} />
-          {failedKinds[key] &&
-            failedKinds[key].tasks.map(task => (
-              <FailedTest
-                key={task.id}
-                title={task.meta.story}
-                error={task.error}
-              />
-            ))}
-        </React.Fragment>
-      ))}
+      <Static>{renderKinds(completed)}</Static>
+      {renderKinds(running)}
       {tasks.map(task => (
         <TargetTask
           key={task.id}
