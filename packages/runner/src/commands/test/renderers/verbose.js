@@ -11,11 +11,19 @@ const renderVerbose = taskRunner => {
     const message = renderTask(task);
     switch (task.status) {
       case STATUS_FAILED:
-        return console.error(message);
+        console.error(message);
+        if (task.error && task.error.instructions) {
+          console.info(task.error.instructions);
+        }
+        break;
+
       case STATUS_SUCCEEDED:
-        return console.log(message);
+        console.log(message);
+        break;
+
       default:
-        return console.info(message);
+        console.info(message);
+        break;
     }
   };
   taskRunner.on(EVENT_CHANGE, handleChange);

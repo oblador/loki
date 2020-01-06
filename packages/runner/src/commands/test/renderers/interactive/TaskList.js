@@ -42,6 +42,9 @@ const isCompletedTest = task =>
 const isFailedTest = task =>
   task.status === STATUS_FAILED && task.meta.type === TASK_TYPE_TEST;
 
+const isFailedTask = task =>
+  task.status === STATUS_FAILED && task.meta.type !== TASK_TYPE_TESTS;
+
 const groupByKind = testTasks =>
   testTasks.reduce((acc, task) => {
     const key = `${task.meta.target}/${task.meta.configuration}/${task.meta.kind}`;
@@ -76,14 +79,24 @@ const TargetTask = ({ status, target, tasks }) => {
         task.status === STATUS_NOT_STARTED || task.status === STATUS_RUNNING
     );
   const taskTitle = currentTask && TARGET_TASK_TITLE_MAP[currentTask.meta.type];
+  const failedTasks = (tasks || []).filter(isFailedTask);
 
   return (
-    <Task
-      status={status}
-      title={`${target}${
-        status !== STATUS_FAILED && taskTitle ? `: ${taskTitle}` : ''
-      }`}
-    />
+    <React.Fragment>
+      <Task
+        status={status}
+        title={`${target}${
+          status !== STATUS_FAILED && taskTitle ? `: ${taskTitle}` : ''
+        }`}
+      />
+      {failedTasks.map(task => (
+        <FailedTest
+          key={task.id}
+          title={TARGET_TASK_TITLE_MAP[task.meta.type]}
+          error={task.error}
+        />
+      ))}
+    </React.Fragment>
   );
 };
 

@@ -1,19 +1,24 @@
+/* eslint-disable no-console */
+
 const {
   EVENT_CHANGE,
   STATUS_FAILED,
   STATUS_SUCCEEDED,
 } = require('../task-runner');
-const { TASK_TYPE_TEST } = require('../constants');
+const { TASK_TYPE_TESTS, TASK_TYPE_TARGET } = require('../constants');
 const { renderTask } = require('./render-task');
 
 const renderNonInteractive = taskRunner => {
   const handleChange = task => {
     if (
       (task.status === STATUS_FAILED || task.status === STATUS_SUCCEEDED) &&
-      task.meta.type === TASK_TYPE_TEST
+      task.meta.type !== TASK_TYPE_TESTS &&
+      task.meta.type !== TASK_TYPE_TARGET
     ) {
-      // eslint-disable-next-line no-console
       console.error(renderTask(task));
+      if (task.error && task.error.instructions) {
+        console.info(task.error.instructions);
+      }
     }
   };
   taskRunner.on(EVENT_CHANGE, handleChange);
