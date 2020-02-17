@@ -40,7 +40,7 @@ This setting is a CSS selector to the part of the page you want screenshots of. 
 
 ## `diffingEngine`
 
-There are two currently available options to choose from when comparing images in loki. These are both configurable by passing in a JSON block to them with their name in the configuration. This block will be passed through to the library and you can use their specific reference documentation. Example `pacakge.json`:
+There are two currently available options to choose from when comparing images in loki. These are both configurable by passing in a JSON block to them with their name in the configuration. This block will be passed through to the library and you can use their specific reference documentation. Example `package.json`:
 
 ```json
 {
