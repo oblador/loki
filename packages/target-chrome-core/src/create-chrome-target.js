@@ -19,6 +19,7 @@ const presets = require('./presets.json');
 
 const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
+const CAPTURING_SCREENSHOT_RETRY_BACKOFF = 500;
 const REQUEST_STABILIZATION_TIMEOUT = 100;
 const RESIZE_DELAY = 500;
 
@@ -178,7 +179,10 @@ function createChromeTarget(
       }
     };
 
-    client.captureScreenshot = withRetries(options.chromeRetries, 500)(
+    client.captureScreenshot = withRetries(
+      options.chromeRetries,
+      CAPTURING_SCREENSHOT_RETRY_BACKOFF
+    )(
       withTimeout(CAPTURING_SCREENSHOT_TIMEOUT, 'captureScreenshot')(
         async (selector = 'body') => {
           debug(`Getting viewport position of "${selector}"`);
