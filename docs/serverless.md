@@ -92,7 +92,7 @@ In the `loki` section of `package.json` in your main project, add an appropriate
 
 ### 2. Upload storybook build
 
-In since the lambda cannot access your local file system, you must make the available in some way. Easiest way is to simply upload it to S3 and access it over HTTPS.
+Since the lambda cannot access your local file system, you must make the storybook build available in some way. Easiest way is to simply upload it to S3 and access it over HTTPS.
 
 ### 3. Run tests
 
