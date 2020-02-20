@@ -40,7 +40,7 @@ function parseOptions(args, config) {
     diffingEngine:
       $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
     fetchFailIgnore: $('fetchFailIgnore'),
-    looksSame: $('looksSame'),
+    'looks-same': $('looks-same'),
     gm: $('gm'),
     verboseRenderer: $('verboseRenderer'),
     requireReference: $('requireReference') || ciInfo.isCI,
