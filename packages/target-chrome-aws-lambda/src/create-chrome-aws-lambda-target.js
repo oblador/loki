@@ -19,6 +19,9 @@ function createChromeAWSLambdaTarget({
     const data = await lambda.invoke(params).promise();
     const response = JSON.parse(data.Payload);
     if (response.errorMessage) {
+      debug(
+        `Invocation failed due to ${response.errorType} with message "${response.errorMessage}"`
+      );
       throw parseError(response.errorMessage);
     }
     return response;
