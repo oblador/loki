@@ -29,6 +29,12 @@ describe('parseError', () => {
     expect(error.message).toBe('lol');
   });
 
+  it('parses Error.toString()', () => {
+    const error = parseError(new Error('lol').toString());
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toBe('lol');
+  });
+
   it('parses stringified ChromeError', () => {
     const originalError = new ChromeError('lol', 'dont do that');
     const error = parseError(serializeError(originalError));
@@ -38,9 +44,8 @@ describe('parseError', () => {
     expect(error.instructions).toBe(originalError.instructions);
   });
 
-  it('returns non stringified errors without parsing', () => {
+  it('returns non string errors without parsing', () => {
     expect(parseError(null)).toEqual(null);
     expect(parseError({})).toEqual({});
-    expect(parseError('lol')).toEqual('lol');
   });
 });

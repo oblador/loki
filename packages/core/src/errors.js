@@ -104,7 +104,7 @@ const parseError = jsonString => {
   try {
     jsonObject = JSON.parse(jsonString);
   } catch (_) {
-    return jsonString;
+    return new Error(jsonString.replace(/^[a-zA-Z]*Error: /, ''));
   }
   if (!jsonObject.isSerializedError) {
     return jsonString;
