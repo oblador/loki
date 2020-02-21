@@ -1,6 +1,6 @@
 {
   "name": "@loki/integration-vue",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "description": "Loki vue integration",
   "keywords": [
     "loki"
@@ -20,7 +20,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/browser": "^0.19.0"
+    "@loki/browser": "^0.19.1"
   },
   "publishConfig": {
     "access": "public"

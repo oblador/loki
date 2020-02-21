@@ -1,6 +1,6 @@
 {
   "name": "@loki/target-chrome-app",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "description": "Loki Chrome app target",
   "keywords": [
     "loki"
@@ -20,7 +20,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/target-chrome-core": "^0.19.0",
+    "@loki/target-chrome-core": "^0.19.1",
     "chrome-launcher": "^0.12.0",
     "chrome-remote-interface": "^0.28.0",
     "debug": "^4.1.1"
