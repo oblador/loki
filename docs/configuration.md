@@ -92,6 +92,20 @@ Opposite to `skipStories`.
 
 The default behaviour of Loki is to fail a test if the story makes a network requests that fails. This setting is a regular expression, if the URL of a failed request matches it, the test will not fail, overriding the default behaviour.
 
+## `fileNameFormatter`
+
+By default loki will produce a flat file structure, but if you want to have hiearchy or make all names lower case you can pass a custom formatter function. It should return a string _without_ an extension and takes an object with these properties: `configurationName, kind, story`.
+
+Since JSON doesn't support functions, you need to be using the `loki.config.js` to configure your project, like so:
+
+```js
+module.exports = {
+  // ...other config goes here
+  fileNameFormatter: ({ configurationName, kind, story }) =>
+    `${configurationName}/${kind} ${story}`.toLowerCase(),
+};
+```
+
 ## `configurations`
 
 | Name                                 | Type      | Description                                                                                                                                               | Targets      |
