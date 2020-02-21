@@ -1,6 +1,6 @@
 {
   "name": "@loki/target-chrome-aws-lambda",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "Loki Chrome AWS Lambda target",
   "keywords": [
     "loki"
@@ -20,7 +20,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/core": "^0.19.0",
+    "@loki/core": "^0.20.0",
     "aws-sdk": "^2.588.0",
     "debug": "^4.1.1"
   },

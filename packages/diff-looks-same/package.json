@@ -1,6 +1,6 @@
 {
   "name": "@loki/diff-looks-same",
-  "version": "0.19.1",
+  "version": "0.20.0",
   "description": "Loki vue integration",
   "keywords": [
     "loki"
@@ -20,7 +20,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/browser": "^0.19.1",
+    "@loki/browser": "^0.20.0",
     "fs-extra": "^8.1.0",
     "looks-same": "^7.2.2"
   },
