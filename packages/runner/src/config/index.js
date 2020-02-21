@@ -1,3 +1,4 @@
+const { cosmiconfigSync } = require('cosmiconfig');
 const { warn } = require('../console');
 const getDefaults = require('./get-defaults');
 const {
@@ -6,11 +7,15 @@ const {
 } = require('./project-package');
 
 function getConfig() {
-  const pkg = getProjectPackage();
-  if (!pkg.loki) {
-    warn('No loki configuration found in package.json, using defaults');
+  const explorer = cosmiconfigSync('loki');
+  const exploration = explorer.search();
+  if (!exploration) {
+    warn('No loki configuration found, using defaults');
   }
-  const config = pkg.loki || getDefaults();
+
+  const config = exploration ? exploration.config : getDefaults();
+
+  const pkg = getProjectPackage();
   if (pkg.scripts && pkg.scripts.storybook) {
     const matches = pkg.scripts.storybook.match(/(-p|--port) ([0-9]+)/);
     if (matches) {

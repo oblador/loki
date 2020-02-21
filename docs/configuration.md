@@ -38,6 +38,8 @@ Example `package.json`:
 }
 ```
 
+You may also use a file named `.lokirc`, `.lokirc.json` or `loki.config.js` if you don't want to pollute your `package.json`.
+
 ## `chromeSelector`
 
 This setting is a CSS selector to the part of the page you want screenshots of. This is useful if you have decorators that's not really part of the component itself. Note that it doesn't screenshot the DOM element itself but rather the crops the screenshot to those dimensions, so if you have any elements absolutely positioned above they will be included.
