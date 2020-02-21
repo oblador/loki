@@ -31,7 +31,7 @@ const sanitizeSafe = (string, part) => {
 const toId = (kind, name) =>
   `${sanitizeSafe(kind, 'kind')}--${sanitizeSafe(name, 'name')}`;
 
-function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
+function createWebsocketTarget(socketUri, platform, captureScreenshot) {
   let socket;
   const messageQueue = createMessageQueue(NATIVE_ERROR_TYPE);
 
@@ -139,7 +139,7 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
   }
 
   let lastStoryCrashed = false;
-  async function captureScreenshotForStory(kind, story, outputPath) {
+  async function captureScreenshotForStory(kind, story) {
     if (lastStoryCrashed) {
       // Try to recover from previous crash. App should automatically restart after 1000 ms
       await messageQueue.waitFor('setStories');
@@ -158,7 +158,8 @@ function createWebsocketTarget(socketUri, platform, saveScreenshotToFile) {
       throw error;
     }
 
-    await withTimeout(10000)(saveScreenshotToFile(outputPath));
+    const screenshot = await withTimeout(10000)(captureScreenshot());
+    return screenshot;
   }
 
   return { start, stop, getStorybook, captureScreenshotForStory };

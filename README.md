@@ -15,6 +15,7 @@ Loki aims to have easy setup, no to low maintenance cost, reproducible tests ind
 ## Supported platforms
 
 - Chrome in docker (recommended)
+- Chrome in AWS Lambda
 - Local Chrome application
 - iOS simulator
 - Android emulator

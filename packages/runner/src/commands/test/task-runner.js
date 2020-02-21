@@ -16,18 +16,28 @@ class TaskRunnerError extends Error {
   }
 }
 
+const getArrayChunks = (array, chunkSize) =>
+  Array(Math.ceil(array.length / chunkSize))
+    .fill()
+    .map((_, index) => index * chunkSize)
+    .map(begin => array.slice(begin, begin + chunkSize));
+
 class TaskRunner extends EventEmitter {
   constructor(tasks, options = {}) {
     super();
     const defaultOptions = {
       concurrency: 1,
+      batchSize: 1,
+      batchExector: (batch, context) => batch.map(task => task.task(context)),
       exitOnError: true,
     };
-    const { concurrency, exitOnError } = Object.assign(
+    const { batchExector, batchSize, concurrency, exitOnError } = Object.assign(
       {},
       defaultOptions,
       options
     );
+    this.batchExector = batchExector;
+    this.batchSize = batchSize;
     this.concurrency = concurrency;
     this.exitOnError = exitOnError;
     if (!Array.isArray(tasks)) {
@@ -77,48 +87,56 @@ class TaskRunner extends EventEmitter {
   }
 
   createTaskIterator(context) {
-    return async (task, index) => {
-      try {
-        const work = task.task(context);
-        const hasSubTasks = work instanceof TaskRunner;
-        this.mergeTaskState(index, {
-          status: STATUS_RUNNING,
-          startedAt: Date.now(),
-          subTaskRunner: hasSubTasks ? work : null,
-        });
-        if (hasSubTasks) {
-          work.on(EVENT_CHANGE, changedTask => this.emitChange(changedTask));
-          await Promise.resolve(work.run(context));
-        } else {
-          await work;
-        }
-        this.mergeTaskState(index, {
-          status: STATUS_SUCCEEDED,
-          completedAt: Date.now(),
-        });
-      } catch (error) {
-        this.mergeTaskState(index, {
-          status: STATUS_FAILED,
-          completedAt: Date.now(),
-          error,
-        });
-        if (this.exitOnError) {
-          throw error;
-        }
-      }
-    };
+    return async (batch, batchNumber) =>
+      Promise.all(
+        this.batchExector(batch, context).map(async (work, i) => {
+          const index = this.batchSize * batchNumber + i;
+          try {
+            const hasSubTasks = work instanceof TaskRunner;
+            this.mergeTaskState(index, {
+              status: STATUS_RUNNING,
+              startedAt: Date.now(),
+              subTaskRunner: hasSubTasks ? work : null,
+            });
+            if (hasSubTasks) {
+              work.on(EVENT_CHANGE, changedTask =>
+                this.emitChange(changedTask)
+              );
+              await Promise.resolve(work.run(context));
+            } else {
+              await work;
+            }
+            this.mergeTaskState(index, {
+              status: STATUS_SUCCEEDED,
+              completedAt: Date.now(),
+            });
+          } catch (error) {
+            this.mergeTaskState(index, {
+              status: STATUS_FAILED,
+              completedAt: Date.now(),
+              error,
+            });
+            if (this.exitOnError) {
+              throw error;
+            }
+          }
+        })
+      );
   }
 
   async run(context) {
+    let caughtError;
     try {
       await eachOfLimit(
-        this.tasks,
+        getArrayChunks(this.tasks, this.batchSize),
         this.concurrency,
         this.createTaskIterator(context)
       );
-    } catch (_) {
+    } catch (error) {
       // Errors might not be thrown due to exitOnError option,
-      // so collect all errors by status instead
+      // so collect all errors by status instead, but keep reference
+      // in case error is thrown by the task runner itself
+      caughtError = error;
     }
     this.emit(EVENT_END);
     const errors = this.tasks
@@ -127,6 +145,8 @@ class TaskRunner extends EventEmitter {
       .reduce((acc, error) => acc.concat(error.errors || error), []);
     if (errors.length !== 0) {
       throw new TaskRunnerError('Some tasks failed to run', errors);
+    } else if (caughtError) {
+      throw caughtError;
     }
   }
 }

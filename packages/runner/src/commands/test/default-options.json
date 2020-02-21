@@ -1,4 +1,8 @@
 {
+  "chromeAwsLambdaFunctionName": "loki",
+  "chromeAwsLambdaRetries": "0",
+  "chromeAwsLambdaBatchSize": "1",
+  "chromeAwsLambdaBatchConcurrency": "1",
   "chromeConcurrency": "4",
   "chromeDockerImage": "yukinying/chrome-headless:63.0.3230.2",
   "chromeFlags": "--headless --disable-gpu --hide-scrollbars",

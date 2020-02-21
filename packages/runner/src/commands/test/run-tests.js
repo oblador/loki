@@ -9,13 +9,16 @@ const mapObjIndexed = require('ramda/src/mapObjIndexed');
 const { createChromeAppTarget } = require('@loki/target-chrome-app');
 const { createChromeDockerTarget } = require('@loki/target-chrome-docker');
 const {
+  createChromeAWSLambdaTarget,
+} = require('@loki/target-chrome-aws-lambda');
+const {
   createIOSSimulatorTarget,
 } = require('@loki/target-native-ios-simulator');
 const {
   createAndroidEmulatorTarget,
 } = require('@loki/target-native-android-emulator');
 const { die } = require('../../console');
-const testStory = require('./test-story');
+const testBatch = require('./test-batch');
 const { TaskRunner } = require('./task-runner');
 const {
   renderInteractive,
@@ -87,7 +90,8 @@ async function runTests(flatConfigurations, options) {
     target,
     configurations,
     concurrency = 1,
-    tolerance = 0
+    tolerance = 0,
+    batchSize = 1
   ) => {
     let storybook;
 
@@ -161,16 +165,12 @@ async function runTests(flatConfigurations, options) {
                               story,
                               type: TASK_TYPE_TEST,
                             },
-                            task: () =>
-                              testStory(
-                                target,
-                                options,
-                                tolerance,
-                                configuration,
-                                configurationName,
-                                kind,
-                                story
-                              ),
+                            task: {
+                              configuration,
+                              configurationName,
+                              kind,
+                              story,
+                            },
                           }))
                         )
                         .reduce((acc, array) => acc.concat(array), [])
@@ -178,7 +178,18 @@ async function runTests(flatConfigurations, options) {
                   },
                   []
                 ),
-                { concurrency, exitOnError: false }
+                {
+                  concurrency: Math.ceil(concurrency / batchSize),
+                  exitOnError: false,
+                  batchSize,
+                  batchExector: batch =>
+                    testBatch(
+                      target,
+                      batch.map(({ task }) => task),
+                      options,
+                      tolerance
+                    ),
+                }
               ),
           },
           {
@@ -212,6 +223,20 @@ async function runTests(flatConfigurations, options) {
           configurations,
           options.chromeConcurrency,
           options.chromeTolerance
+        );
+      }
+      case 'chrome.aws-lambda': {
+        return getTargetTasks(
+          target,
+          createChromeAWSLambdaTarget({
+            baseUrl: options.reactUri,
+            chromeAwsLambdaFunctionName: options.chromeAwsLambdaFunctionName,
+            chromeAwsLambdaRetries: options.chromeAwsLambdaRetries,
+          }),
+          configurations,
+          options.chromeConcurrency,
+          options.chromeTolerance,
+          options.chromeAwsLambdaBatchSize
         );
       }
       case 'chrome.docker': {

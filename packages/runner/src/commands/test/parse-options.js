@@ -3,7 +3,6 @@ const minimist = require('minimist');
 const ciInfo = require('ci-info');
 const { dependencyAvailable } = require('@loki/core');
 const defaults = require('./default-options');
-const getAbsoluteURL = require('./get-absolute-url');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
@@ -23,9 +22,15 @@ function parseOptions(args, config) {
     referenceDir: path.resolve($('reference')),
     differenceDir: path.resolve($('difference')),
     reactUri:
-      getAbsoluteURL($('reactUri')) ||
-      `http://${$('host')}:${argv.port || $('reactPort')}`,
+      $('reactUri') || `http://${$('host')}:${argv.port || $('reactPort')}`,
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
+    chromeAwsLambdaFunctionName: $('chromeAwsLambdaFunctionName'),
+    chromeAwsLambdaRetries: parseInt($('chromeAwsLambdaRetries'), 10),
+    chromeAwsLambdaBatchSize: parseInt($('chromeAwsLambdaBatchSize'), 10),
+    chromeAwsLambdaBatchConcurrency: parseInt(
+      $('chromeAwsLambdaBatchConcurrency'),
+      10
+    ),
     chromeConcurrency: parseInt($('chromeConcurrency'), 10),
     chromeDockerImage: $('chromeDockerImage'),
     chromeEnableAnimations: $('chromeEnableAnimations'),

@@ -1,4 +1,3 @@
-const fs = require('fs-extra');
 const debug = require('debug')('loki:chrome');
 const {
   disableAnimations,
@@ -14,11 +13,13 @@ const {
   withTimeout,
   withRetries,
   unwrapError,
+  getAbsoluteURL,
 } = require('@loki/core');
 const presets = require('./presets.json');
 
 const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
+const CAPTURING_SCREENSHOT_RETRY_BACKOFF = 500;
 const REQUEST_STABILIZATION_TIMEOUT = 100;
 const RESIZE_DELAY = 500;
 
@@ -31,6 +32,8 @@ function createChromeTarget(
   baseUrl,
   prepare
 ) {
+  const resolvedBaseUrl = getAbsoluteURL(baseUrl);
+
   function getDeviceMetrics(options) {
     return {
       width: options.width,
@@ -181,7 +184,10 @@ function createChromeTarget(
       }
     };
 
-    client.captureScreenshot = withRetries(options.chromeRetries)(
+    client.captureScreenshot = withRetries(
+      options.chromeRetries,
+      CAPTURING_SCREENSHOT_RETRY_BACKOFF
+    )(
       withTimeout(CAPTURING_SCREENSHOT_TIMEOUT, 'captureScreenshot')(
         async (selector = 'body') => {
           debug(`Getting viewport position of "${selector}"`);
@@ -222,11 +228,11 @@ function createChromeTarget(
             format: 'png',
             clip,
           });
+          const buffer = Buffer.from(screenshot.data, 'base64');
 
           if (shouldResizeWindowToFit) {
             await Emulation.setDeviceMetricsOverride(deviceMetrics);
           }
-          const buffer = Buffer.from(screenshot.data, 'base64');
 
           return buffer;
         }
@@ -237,7 +243,7 @@ function createChromeTarget(
   }
 
   const getStoryUrl = (kind, story) =>
-    `${baseUrl}/iframe.html?selectedKind=${encodeURIComponent(
+    `${resolvedBaseUrl}/iframe.html?selectedKind=${encodeURIComponent(
       kind
     )}&selectedStory=${encodeURIComponent(story)}`;
 
@@ -255,7 +261,7 @@ function createChromeTarget(
   );
 
   async function getStorybook() {
-    const url = `${baseUrl}/iframe.html`;
+    const url = `${resolvedBaseUrl}/iframe.html`;
     try {
       const tab = await launchStoriesTab(url);
       return tab.executeFunctionWithWindow(getStories);
@@ -267,7 +273,7 @@ function createChromeTarget(
       ) {
         throw new ServerError(
           'Failed fetching stories because the server is down',
-          `Try starting it with "yarn storybook" or pass the --port or --host arguments if it's not running at ${baseUrl}`
+          `Try starting it with "yarn storybook" or pass the --port or --host arguments if it's not running at ${resolvedBaseUrl}`
         );
       }
       throw error;
@@ -277,7 +283,6 @@ function createChromeTarget(
   async function captureScreenshotForStory(
     kind,
     story,
-    outputPath,
     options,
     configuration
   ) {
@@ -302,7 +307,6 @@ function createChromeTarget(
     try {
       await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
       screenshot = await tab.captureScreenshot(selector);
-      await fs.outputFile(outputPath, screenshot);
     } catch (err) {
       if (err instanceof TimeoutError) {
         debug(`Timed out waiting for "${url}" to load`);

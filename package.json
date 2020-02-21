@@ -32,7 +32,8 @@
     "packages": [
       "packages/*",
       "website",
-      "examples/react"
+      "examples/react",
+      "examples/renderer-aws-lambda"
     ]
   },
   "devDependencies": {
