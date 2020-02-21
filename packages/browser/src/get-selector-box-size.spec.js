@@ -15,6 +15,7 @@ const createMockWindow = elements => ({
     return Object.assign({}, style, {
       width: `${width}px`,
       height: `${height}px`,
+      padding: '0px',
     });
   },
 });
