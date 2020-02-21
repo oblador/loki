@@ -13,8 +13,8 @@ const getSelectorBoxSize = (window, selector) => {
       style.visibility === 'hidden' ||
       style.display === 'none' ||
       style.opacity === '0' ||
-      style.width === '0px' ||
-      style.height === '0px'
+      ((style.width === '0px' || style.height === '0px') &&
+        style.padding === '0px')
     );
   };
 
