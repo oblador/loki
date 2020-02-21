@@ -3,10 +3,13 @@
   "version": "0.19.1",
   "private": true,
   "dependencies": {
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-motion": "^0.5.2",
-    "react-scripts": "2.1.5"
+    "react-scripts": "3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -19,12 +22,11 @@
     "build-storybook": "build-storybook -s public"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^5.0.0",
-    "@storybook/addon-links": "^5.0.0",
-    "@storybook/addons": "^5.0.0",
-    "@storybook/cli": "^5.0.0",
-    "@storybook/react": "^5.0.0",
-    "babel-loader": "^8.0.5",
+    "@storybook/addon-actions": "^5.3.13",
+    "@storybook/addon-links": "^5.3.13",
+    "@storybook/addons": "^5.3.13",
+    "@storybook/preset-create-react-app": "^1.5.2",
+    "@storybook/react": "^5.3.13",
     "loki": "^0.19.1"
   },
   "loki": {
@@ -50,10 +52,16 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
