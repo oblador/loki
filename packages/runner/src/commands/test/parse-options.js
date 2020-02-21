@@ -21,6 +21,7 @@ function parseOptions(args, config) {
     outputDir: path.resolve($('output')),
     referenceDir: path.resolve($('reference')),
     differenceDir: path.resolve($('difference')),
+    fileNameFormatter: config.fileNameFormatter,
     reactUri:
       $('reactUri') || `http://${$('host')}:${argv.port || $('reactPort')}`,
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,

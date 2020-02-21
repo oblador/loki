@@ -9,7 +9,7 @@ const SLUGIFY_OPTIONS = {
   separator: '_',
 };
 
-const getBaseName = (configurationName, kind, story) =>
+const defaultFileNameFormatter = ({ configurationName, kind, story }) =>
   slugify(`${configurationName} ${kind} ${story}`, SLUGIFY_OPTIONS);
 
 async function compareScreenshot(
@@ -20,7 +20,8 @@ async function compareScreenshot(
   kind,
   story
 ) {
-  const basename = getBaseName(configurationName, kind, story);
+  const getBaseName = options.fileNameFormatter || defaultFileNameFormatter;
+  const basename = getBaseName({ configurationName, kind, story });
   const filename = `${basename}.png`;
   const outputPath = `${options.outputDir}/${filename}`;
   const referencePath = `${options.referenceDir}/${filename}`;
