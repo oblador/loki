@@ -22,7 +22,7 @@
   "dependencies": {
     "@loki/browser": "^0.20.0",
     "fs-extra": "^8.1.0",
-    "looks-same": "^7.2.2"
+    "looks-same": "^4.0.0"
   },
   "publishConfig": {
     "access": "public"
