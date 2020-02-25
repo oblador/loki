@@ -1,6 +1,6 @@
 {
   "name": "@loki/diff-looks-same",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "Loki vue integration",
   "keywords": [
     "loki"

@@ -1,6 +1,6 @@
 {
   "name": "loki",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "Visual Regression Testing for react-storybook",
   "keywords": [
     "storybook",
@@ -32,7 +32,7 @@
     "@loki/integration-react": "^0.20.0",
     "@loki/integration-react-native": "^0.20.0",
     "@loki/integration-vue": "^0.20.0",
-    "@loki/runner": "^0.20.0",
+    "@loki/runner": "^0.20.1",
     "@loki/target-chrome-app": "^0.20.0",
     "@loki/target-chrome-docker": "^0.20.0",
     "@loki/target-native-android-emulator": "^0.20.0",
