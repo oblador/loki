@@ -128,9 +128,6 @@ function createChromeDockerTarget({
       logs.stderr.on('data', chunk => {
         errorLogs.push(chunk);
       });
-      logs.stderr.on('end', () => {
-        errorLogs = null;
-      });
 
       host = await getNetworkHost(execute, dockerId);
       try {
