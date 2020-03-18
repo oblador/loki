@@ -124,7 +124,7 @@ function createChromeDockerTarget({
     if (code === 0) {
       dockerId = stdout;
       const logs = execute(dockerPath, ['logs', dockerId, '--follow']);
-      let errorLogs = [];
+      const errorLogs = [];
       logs.stderr.on('data', chunk => {
         errorLogs.push(chunk);
       });
