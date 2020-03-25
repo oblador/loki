@@ -13,6 +13,12 @@ jobs:
       name: 'Unit tests'
       script: yarn test
     - stage: test
+      name: 'Integration tests: CLI'
+      services:
+        - docker
+      before_script: cd test/cli
+      script: yarn test
+    - stage: test
       name: 'Visual tests: React DOM'
       services:
         - docker

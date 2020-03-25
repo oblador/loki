@@ -8,7 +8,7 @@
     "loki": "bin/loki"
   },
   "scripts": {
-    "format": "prettier '{,packages/**/,examples/**/,website/**/,docs/**/}*.{md,js,json}' --write",
+    "format": "prettier '{,packages/**/,examples/**/,website/**/,docs/**/,test/**/}*.{md,js,json}' --write",
     "lint": "eslint packages/*/src",
     "test": "jest"
   },
@@ -31,6 +31,7 @@
   "workspaces": {
     "packages": [
       "packages/*",
+      "test/*",
       "website",
       "examples/react",
       "examples/renderer-aws-lambda"

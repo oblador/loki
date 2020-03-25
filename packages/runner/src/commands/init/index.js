@@ -25,7 +25,7 @@ const insertAfter = (
     )}\n${stringToInsert}${content.substr(insertionIndex)}`;
   }
   if (fallback === 'append') {
-    return `${content}\n${stringToInsert}\n`;
+    return `${content ? `${content}\n` : ''}${stringToInsert}\n`;
   }
   return `${stringToInsert}\n${content}`;
 };
@@ -88,24 +88,35 @@ function init(args) {
       fs.outputFileSync(storybookjsPath, modifiedStorybookjs);
     }
   } else {
-    const configjsPath = `${storybookPath}/config.js`;
-    const configjs = fs.readFileSync(configjsPath, 'utf8');
     const projectType = isVueProject ? 'vue' : 'react';
     const configPackage = `loki/configure-${projectType}`;
     const storybookPackage = `@storybook/${projectType}`;
-    if (configjs.indexOf(configPackage) !== -1) {
+
+    const configjsPath = `${storybookPath}/config.js`;
+    const previewjsPath = `${storybookPath}/preview.js`;
+    const destinationPath = fs.existsSync(configjsPath)
+      ? configjsPath
+      : previewjsPath;
+
+    const configContent = fs.existsSync(destinationPath)
+      ? fs.readFileSync(destinationPath, 'utf8')
+      : '';
+
+    if (configContent.indexOf(configPackage) !== -1) {
       warn(
-        `${relative(configjsPath)} already has loki configuration, skipping...`
+        `${relative(
+          destinationPath
+        )} already has loki configuration, skipping...`
       );
     } else {
-      info(`Adding loki configuration to ${relative(configjsPath)}`);
-      const modifiedConfigjs = insertAfter(
-        configjs,
+      info(`Adding loki configuration to ${relative(destinationPath)}`);
+      const modifiedConfigContent = insertAfter(
+        configContent,
         new RegExp(`(require\\(|from )['"]${storybookPackage}['"]\\)?;?[ \t]*`),
         `import '${configPackage}';`,
         'append'
       );
-      fs.outputFileSync(configjsPath, modifiedConfigjs);
+      fs.outputFileSync(destinationPath, modifiedConfigContent);
     }
   }
 }
