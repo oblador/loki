@@ -18,6 +18,7 @@ const {
 } = require('@loki/core');
 const presets = require('./presets.json');
 
+const RETRY_LOADING_STORIES_TIMEOUT = 10000;
 const LOADING_STORIES_TIMEOUT = 60000;
 const CAPTURING_SCREENSHOT_TIMEOUT = 30000;
 const CAPTURING_SCREENSHOT_RETRY_BACKOFF = 500;
@@ -262,7 +263,7 @@ function createChromeTarget(
     )}&selectedStory=${encodeURIComponent(story)}`;
 
   const launchStoriesTab = withTimeout(LOADING_STORIES_TIMEOUT)(
-    withRetries(2)(async url => {
+    withRetries(5, RETRY_LOADING_STORIES_TIMEOUT)(async url => {
       const tab = await launchNewTab({
         width: 100,
         height: 100,
