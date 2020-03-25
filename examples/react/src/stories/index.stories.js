@@ -15,6 +15,7 @@ import LongElement from '../LongElement';
 import NonIntViewport from '../NonIntViewport';
 import FetchComponent from '../FetchComponent';
 import ZeroHeightWithPadding from '../ZeroHeightWithPadding';
+import Hover from '../Hover';
 
 storiesOf('Welcome', module).lokiSkip('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -70,3 +71,5 @@ storiesOf('Fetch Components', module).add('fetch fail', () => (
 storiesOf('Zero height', module).add('with padding', () => (
   <ZeroHeightWithPadding />
 ));
+
+storiesOf('Hover', module).add('default', () => <Hover />);

@@ -1,6 +1,7 @@
 const debug = require('debug')('loki:chrome');
 const {
   disableAnimations,
+  disablePointerEvents,
   getSelectorBoxSize,
   getStories,
   awaitLokiReady,
@@ -161,6 +162,7 @@ function createChromeTarget(
         debug('Disabling animations');
         await evaluateOnNewDocument(`(${disableAnimations})(window);`);
       }
+      await evaluateOnNewDocument(`(${disablePointerEvents})(window);`);
 
       debug(`Navigating to ${url}`);
       await Promise.all([Page.navigate({ url }), awaitRequestsFinished()]);
@@ -221,6 +223,18 @@ function createChromeTarget(
             // but there are no other events or values to observe
             // that I could find indicating when chrome is done resizing
             await delay(RESIZE_DELAY);
+          }
+
+          // Clamp x/y positions to viewport otherwise chrome
+          // ignores scale
+          if (clip.x < 0) {
+            clip.height += clip.x;
+            clip.x = 0;
+          }
+
+          if (clip.y < 0) {
+            clip.width += clip.y;
+            clip.y = 0;
           }
 
           debug('Capturing screenshot');
