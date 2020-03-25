@@ -2,6 +2,9 @@
   "name": "loki",
   "version": "0.20.1",
   "description": "Visual Regression Testing for react-storybook",
+  "bin": {
+    "loki": "bin/loki"
+  },
   "keywords": [
     "storybook",
     "react-storybook",

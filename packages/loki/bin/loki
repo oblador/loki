@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+
+require('@loki/runner/src/cli')();
