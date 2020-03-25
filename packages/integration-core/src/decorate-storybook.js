@@ -11,7 +11,7 @@ function decorateStorybook(storybook) {
   const skippedStories = {};
 
   function wrapWithSkipStory(add, kind, isDeprecatedCall) {
-    return function skipStory(story, storyFn) {
+    return function skipStory(story, storyFn, parameters) {
       if (isDeprecatedCall && !warnedSkipDeprecation) {
         warnedSkipDeprecation = true;
         console.warn(
@@ -24,12 +24,12 @@ function decorateStorybook(storybook) {
       }
       skippedStories[kind].push(story);
 
-      return add(story, storyFn);
+      return add(story, storyFn, parameters);
     };
   }
 
   function wrapWithAsyncStory(add, isDeprecatedCall) {
-    return function skipStory(story, storyFn) {
+    return function skipStory(story, storyFn, parameters) {
       if (isDeprecatedCall && !warnedAsyncDeprecation) {
         warnedAsyncDeprecation = true;
         console.warn(
@@ -37,24 +37,28 @@ function decorateStorybook(storybook) {
         );
       }
 
-      return add(story, function render(context) {
-        var resolveAsyncStory = null;
-        readyStateManager.resetPendingPromises();
-        readyStateManager.registerPendingPromise(
-          new Promise(function(resolve) {
-            resolveAsyncStory = resolve;
-          })
-        );
+      return add(
+        story,
+        function render(context) {
+          var resolveAsyncStory = null;
+          readyStateManager.resetPendingPromises();
+          readyStateManager.registerPendingPromise(
+            new Promise(function(resolve) {
+              resolveAsyncStory = resolve;
+            })
+          );
 
-        const done = function() {
-          if (resolveAsyncStory) {
-            resolveAsyncStory();
-          }
-          resolveAsyncStory = null;
-        };
+          const done = function() {
+            if (resolveAsyncStory) {
+              resolveAsyncStory();
+            }
+            resolveAsyncStory = null;
+          };
 
-        return storyFn(Object.assign({ done: done }, context));
-      });
+          return storyFn(Object.assign({ done: done }, context));
+        },
+        parameters
+      );
     };
   }
 
