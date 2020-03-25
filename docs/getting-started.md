@@ -21,6 +21,22 @@ yarn add loki --dev
 yarn loki init
 ```
 
+### Manually
+
+Optionally add [loki configuration](/configuration.html) and integrate as follows:
+
+#### React
+
+Add `import 'loki/configure-react'` to `.storybook/preview.js`, create it if it doesn't exist already.
+
+#### Vue
+
+Add `import 'loki/configure-vue'` to `.storybook/preview.js`, create it if it doesn't exist already.
+
+#### React native
+
+Add `import 'loki/configure-react-native'` to `storybook/storybook.js`.
+
 ## Running your first tests
 
 ### 1. Review configuration
