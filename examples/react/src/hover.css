@@ -1,0 +1,10 @@
+.hover {
+  background: blue;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+}
+
+.hover:hover {
+  background: red;
+}
