@@ -209,6 +209,19 @@ function createChromeTarget(
             width: Math.ceil(position.width),
             height: Math.ceil(position.height),
           };
+
+          // Clamp x/y positions to viewport otherwise chrome
+          // ignores scale
+          if (clip.x < 0) {
+            clip.width += clip.x;
+            clip.x = 0;
+          }
+
+          if (clip.y < 0) {
+            clip.height += clip.y;
+            clip.y = 0;
+          }
+
           const contentEndY = clip.y + clip.height;
           const shouldResizeWindowToFit =
             !options.disableAutomaticViewportHeight &&
@@ -224,18 +237,6 @@ function createChromeTarget(
             // but there are no other events or values to observe
             // that I could find indicating when chrome is done resizing
             await delay(RESIZE_DELAY);
-          }
-
-          // Clamp x/y positions to viewport otherwise chrome
-          // ignores scale
-          if (clip.x < 0) {
-            clip.height += clip.x;
-            clip.x = 0;
-          }
-
-          if (clip.y < 0) {
-            clip.width += clip.y;
-            clip.y = 0;
           }
 
           debug('Capturing screenshot');
