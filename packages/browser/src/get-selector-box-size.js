@@ -6,7 +6,7 @@ const getSelectorBoxSize = (window, selector) => {
     return !isWrapper;
   };
 
-  const isVisisble = element => {
+  const isVisible = element => {
     const style = window.getComputedStyle(element);
 
     return !(
@@ -18,9 +18,21 @@ const getSelectorBoxSize = (window, selector) => {
     );
   };
 
+  const findFirstVisibleElements = node => {
+    if (node.children.length > 0 && !isVisible(node)) {
+      return Array.from(node.children)
+        .map(findFirstVisibleElements)
+        .flat();
+    }
+
+    return [node];
+  };
+
   const elements = Array.from(window.document.querySelectorAll(selector))
-    .filter(isVisisble)
-    .filter(isNotWrapperElement);
+    .filter(isNotWrapperElement)
+    .map(findFirstVisibleElements)
+    .flat()
+    .filter(isVisible);
 
   if (elements.length === 0) {
     throw new Error('No visible elements found');
