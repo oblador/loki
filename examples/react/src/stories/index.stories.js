@@ -16,7 +16,6 @@ import NonIntViewport from '../NonIntViewport';
 import FetchComponent from '../FetchComponent';
 import ZeroHeightWithPadding from '../ZeroHeightWithPadding';
 import Hover from '../Hover';
-import Positions from '../Positions';
 
 storiesOf('Welcome', module).lokiSkip('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -74,19 +73,3 @@ storiesOf('Zero height', module).add('with padding', () => (
 ));
 
 storiesOf('Hover', module).add('default', () => <Hover />);
-
-storiesOf('Positions', module)
-  // add a decorator that will not have any width or height
-  // loki should still find the elements inside the story
-  .addDecorator(storyFn => (
-    <div
-      style={{
-        position: 'relative',
-        height: 0,
-        width: 0,
-      }}
-    >
-      {storyFn()}
-    </div>
-  ))
-  .add('default', () => <Positions />);
