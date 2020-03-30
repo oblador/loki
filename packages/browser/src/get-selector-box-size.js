@@ -1,3 +1,12 @@
+const flatten = arr =>
+  arr.reduce(
+    (flat, item) => [
+      ...flat,
+      ...(Array.isArray(item) ? flatten(item) : [item]),
+    ],
+    []
+  );
+
 const getSelectorBoxSize = (window, selector) => {
   const isNotWrapperElement = (element, index, array) => {
     const isWrapper = array.some(node =>
@@ -20,19 +29,17 @@ const getSelectorBoxSize = (window, selector) => {
 
   const findFirstVisibleElements = node => {
     if (node.children.length > 0 && !isVisible(node)) {
-      return Array.from(node.children)
-        .map(findFirstVisibleElements)
-        .flat();
+      return flatten(Array.from(node.children).map(findFirstVisibleElements));
     }
 
     return [node];
   };
 
-  const elements = Array.from(window.document.querySelectorAll(selector))
-    .filter(isNotWrapperElement)
-    .map(findFirstVisibleElements)
-    .flat()
-    .filter(isVisible);
+  const elements = flatten(
+    Array.from(window.document.querySelectorAll(selector))
+      .filter(isNotWrapperElement)
+      .map(findFirstVisibleElements)
+  ).filter(isVisible);
 
   if (elements.length === 0) {
     throw new Error('No visible elements found');

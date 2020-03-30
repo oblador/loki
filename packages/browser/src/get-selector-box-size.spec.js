@@ -7,6 +7,7 @@ const createMockWindow = elements => ({
         Object.assign({}, element, {
           getBoundingClientRect: () => element,
           contains: () => element.class === 'wrapper',
+          children: [],
         })
       ),
   },
