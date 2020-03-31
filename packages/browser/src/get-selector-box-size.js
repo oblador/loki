@@ -1,23 +1,26 @@
-const flatten = arr =>
-  arr.reduce(
-    (flat, item) => [
-      ...flat,
-      ...(Array.isArray(item) ? flatten(item) : [item]),
-    ],
-    []
-  );
-
 const getSelectorBoxSize = (window, selector) => {
-  const isNotWrapperElement = (element, index, array) => {
-    const isWrapper = array.some(node =>
-      node === element ? false : element.contains(node)
-    );
-    return !isWrapper;
+  const isOverflowHidden = element => {
+    const containerStyle = window.getComputedStyle(element.parentElement);
+
+    if (['visible', 'initial', 'inherit'].includes(containerStyle.overflow)) {
+      return false;
+    }
+
+    try {
+      const elementRect = element.getBoundingClientRect();
+      const containerRect = element.parentElement.getBoundingClientRect();
+      const top = elementRect.top < containerRect.top;
+      const bottom = elementRect.bottom > containerRect.bottom;
+      const left = elementRect.left < containerRect.left;
+      const right = elementRect.right > containerRect.right;
+      return top || bottom || left || right;
+    } catch (e) {
+      return false;
+    }
   };
 
   const isVisible = element => {
     const style = window.getComputedStyle(element);
-
     return !(
       style.visibility === 'hidden' ||
       style.display === 'none' ||
@@ -27,19 +30,51 @@ const getSelectorBoxSize = (window, selector) => {
     );
   };
 
-  const findFirstVisibleElements = node => {
-    if (node.children.length > 0 && !isVisible(node)) {
-      return flatten(Array.from(node.children).map(findFirstVisibleElements));
+  const elements = [];
+
+  const walk = (element, isRoot = false) => {
+    let node;
+
+    if (!element) {
+      return;
     }
 
-    return [node];
+    if (isVisible(element) && !isOverflowHidden(element) && !isRoot) {
+      elements.push(element);
+    }
+
+    for (node = element.firstChild; node; node = node.nextSibling) {
+      if (node.nodeType === 1) {
+        walk(node);
+      }
+    }
   };
 
-  const elements = flatten(
-    Array.from(window.document.querySelectorAll(selector))
-      .filter(isNotWrapperElement)
-      .map(findFirstVisibleElements)
-  ).filter(isVisible);
+  const getRootElement = rootSelector => {
+    const roots = Array.from(
+      // Replace all > * from the selector
+      // We want the parent and not all the children
+      window.document.querySelectorAll(
+        rootSelector.replace(/(\s+)?>(\s+)?\*/g, '')
+      )
+    );
+
+    if (roots.length === 1) {
+      return roots[0];
+    }
+
+    return roots.filter(a => {
+      return roots.some(b => b.contains(a) && a !== b);
+    })[0];
+  };
+
+  const root = getRootElement(selector);
+
+  if (!root) {
+    throw new Error('No visible elements found');
+  }
+
+  walk(root, true);
 
   if (elements.length === 0) {
     throw new Error('No visible elements found');

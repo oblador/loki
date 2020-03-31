@@ -125,6 +125,16 @@ export const OverflowHiddenRelative = () => (
           backgroundColor: 'green',
         }}
       ></div>
+      <div
+        style={{
+          position: 'relative',
+          top: '-20px',
+          left: '25px',
+          width: '50px',
+          height: '50px',
+          backgroundColor: 'yellow',
+        }}
+      ></div>
     </div>
   </div>
 );
