@@ -160,6 +160,7 @@ export const OverflowHiddenFixed = () => (
           width: 100,
           height: 100,
           backgroundColor: 'green',
+          overflow: 'hidden',
         }}
       >
         <div
@@ -172,6 +173,78 @@ export const OverflowHiddenFixed = () => (
             backgroundColor: 'yellow',
           }}
         ></div>
+      </div>
+
+      <div
+        style={{
+          position: 'fixed',
+          top: 150,
+          left: 20,
+          width: 100,
+          height: 100,
+          backgroundColor: 'red',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: 75,
+            left: 75,
+            width: 50,
+            height: 50,
+            backgroundColor: 'orange',
+          }}
+        ></div>
+      </div>
+    </div>
+  </div>
+);
+
+export const SliderWithNestedOverflow = () => (
+  <div>
+    <div
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 300,
+        height: 80,
+        overflow: 'hidden',
+        backgroundColor: 'blue',
+        padding: 10,
+      }}
+    >
+      <div
+        style={{
+          overflowX: 'scroll',
+        }}
+      >
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'nowrap',
+            }}
+          >
+            {[...new Array(10)].map((_, index) => (
+              <div
+                className={`slide_${index + 1}`}
+                style={{
+                  flexShrink: 0,
+                  width: 80,
+                  height: 80,
+                  backgroundColor: 'yellow',
+                  marginRight: 10,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  display: 'flex',
+                }}
+              >
+                {index + 1}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </div>
