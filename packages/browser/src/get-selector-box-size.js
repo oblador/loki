@@ -88,7 +88,7 @@ const getSelectorBoxSize = (window, selector) => {
     {
       isRoot = false,
       hasParentOverflowHidden = null,
-      hasParentFixedPosition = false,
+      hasParentFixedPosition = null,
     }
   ) {
     let node;
