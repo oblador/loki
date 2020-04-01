@@ -38,7 +38,7 @@ Example `package.json`:
 }
 ```
 
-You may also use a file named `.lokirc`, `.lokirc.json` or `loki.config.js` if you don't want to pollute your `package.json`.
+You may also use a file named `.lokirc`, `.lokirc.json` or `loki.config.js` (see the react example) if you don't want to pollute your `package.json`.
 
 ## `chromeSelector`
 
