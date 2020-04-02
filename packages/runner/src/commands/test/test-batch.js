@@ -35,10 +35,9 @@ function testBatch(target, batch, options, tolerance) {
     return promises;
   }
   return batch.map(
-    async ({ configuration, configurationName, kind, story }) => {
+    async ({ configuration, configurationName, id, kind, story }) => {
       const screenshot = await target.captureScreenshotForStory(
-        kind,
-        story,
+        id,
         options,
         configuration
       );

@@ -52,7 +52,7 @@ assert_contains ".storybook/preview.js" "import 'loki/configure-react'"
 yarn build-storybook
 mkdir -p .loki/reference
 cp ../../fixtures/chrome_laptop_Welcome_to_Storybook.png ./.loki/reference
-../../../../node_modules/.bin/loki test laptop --requireReference --storiesFilter Welcome --reactUri file:./storybook-static
+yarn loki test laptop --requireReference --storiesFilter Welcome --reactUri file:./storybook-static
 
 # Peace out
 popd > /dev/null

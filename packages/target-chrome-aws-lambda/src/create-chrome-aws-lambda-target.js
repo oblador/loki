@@ -36,17 +36,11 @@ function createChromeAWSLambdaTarget({
       baseUrl,
     });
 
-  const captureScreenshotForStory = async (
-    kind,
-    story,
-    options,
-    configuration
-  ) => {
+  const captureScreenshotForStory = async (id, options, configuration) => {
     const screenshot = await invoke({
       command: 'captureScreenshotForStory',
       baseUrl,
-      kind,
-      story,
+      id,
       options,
       configuration,
     });

@@ -27,12 +27,11 @@ const fetchStorybookUrl = async baseUrl =>
 const getStorybookFixtureUrl = fixture =>
   `file:./fixtures/storybook-${fixture}`;
 
-const fetchStorybookScreenshot = async (fixture, kind, story) =>
+const fetchStorybookScreenshot = async (fixture, id) =>
   executeLambda({
     command: 'captureScreenshotForStory',
     baseUrl: getStorybookFixtureUrl(fixture),
-    kind,
-    story,
+    id,
     options: {
       chromeLoadTimeout: 60000,
       chromeSelector: '#root > *',
@@ -48,13 +47,19 @@ const fetchStorybookFixture = async fixture =>
 
 const storybook = [
   {
+    id: 'welcome--to-storybook',
     kind: 'Welcome',
-    stories: ['to Storybook'],
+    story: 'to Storybook',
   },
   {
+    id: 'button--text',
     kind: 'Button',
-    stories: ['with text', 'with some emoji'],
-    skipped: ['skipped story'],
+    story: 'Text',
+  },
+  {
+    id: 'button--emoji',
+    kind: 'Button',
+    story: 'Emoji',
   },
 ];
 
@@ -95,8 +100,7 @@ describe('createChromeAWSLambdaRenderer', () => {
       async () => {
         const screenshot = await fetchStorybookScreenshot(
           'static',
-          'Welcome',
-          'to Storybook'
+          'welcome--to-storybook'
         );
         const referencePath = path.resolve(
           __dirname,
@@ -118,6 +122,7 @@ describe('createChromeAWSLambdaRenderer', () => {
           baseUrl: getStorybookFixtureUrl('static'),
           stories: [
             {
+              id: 'welcome--to-storybook',
               kind: 'Welcome',
               story: 'to Storybook',
               configuration: {
