@@ -144,9 +144,18 @@ const getSelectorBoxSize = (window, selector) => {
       return roots[0];
     }
 
-    return roots.filter(a => {
-      return roots.some(b => b.contains(a) && a !== b);
-    })[0];
+    // Find the deepest node
+    return roots.reduce((root, node) => {
+      if (!root) {
+        return node;
+      }
+
+      if (root.contains(node) && root !== node) {
+        return node;
+      }
+
+      return root;
+    }, null);
   }
 
   const root = getRootElement(selector);

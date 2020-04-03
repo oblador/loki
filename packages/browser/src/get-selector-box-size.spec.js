@@ -161,12 +161,14 @@ describe('getSelectorBoxSize', () => {
       root.appendChild(wrapper);
       return wrapper;
     });
-    expect(getSelectorBoxSize(window, '.wrapper > *')).toEqual({
-      x: 10,
-      y: 10,
-      width: 90,
-      height: 130,
-    });
+    expect(getSelectorBoxSize(window, '.wrapper > *, #root > *, body')).toEqual(
+      {
+        x: 10,
+        y: 10,
+        width: 90,
+        height: 130,
+      }
+    );
     expect(getSelectorBoxSize(window, '#root > *')).toEqual({
       x: 0,
       y: 0,
