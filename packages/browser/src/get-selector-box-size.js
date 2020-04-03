@@ -1,11 +1,12 @@
 const getSelectorBoxSize = (window, selector) => {
   function hasOverflow(element) {
+    const overflowValues = ['auto', 'hidden', 'scroll'];
     const style = window.getComputedStyle(element);
 
     if (
-      ['auto', 'hidden', 'scroll'].includes(style.overflowY) ||
-      ['auto', 'hidden', 'scroll'].includes(style.overflowX) ||
-      ['auto', 'hidden', 'scroll'].includes(style.overflow)
+      overflowValues.includes(style.overflowY) ||
+      overflowValues.includes(style.overflowX) ||
+      overflowValues.includes(style.overflow)
     ) {
       return true;
     }
@@ -20,7 +21,7 @@ const getSelectorBoxSize = (window, selector) => {
 
   function isElementHiddenByOverflow(
     element,
-    { hasParentFixedPosition, hasParentOverflowHidden }
+    { hasParentFixedPosition, hasParentOverflowHidden, parentNotVisible }
   ) {
     const checkOutOfBounds = () => {
       try {
@@ -39,6 +40,12 @@ const getSelectorBoxSize = (window, selector) => {
     // Has fixed so it should always be visible
     if (hasFixedPosition(element)) {
       return false;
+    }
+
+    // Element is not fixed and parent is hidden by overflow
+    // So this should not be visible
+    if (parentNotVisible) {
+      return true;
     }
 
     // Parent has fixed and overflow hidden
@@ -89,6 +96,7 @@ const getSelectorBoxSize = (window, selector) => {
       isRoot = false,
       hasParentOverflowHidden = null,
       hasParentFixedPosition = null,
+      parentNotVisible = false,
     }
   ) {
     let node;
@@ -97,14 +105,13 @@ const getSelectorBoxSize = (window, selector) => {
       return;
     }
 
-    if (
-      isVisible(element) &&
-      !isRoot &&
-      !isElementHiddenByOverflow(element, {
-        hasParentFixedPosition,
-        hasParentOverflowHidden,
-      })
-    ) {
+    const elementHiddenByOverflow = isElementHiddenByOverflow(element, {
+      hasParentFixedPosition,
+      hasParentOverflowHidden,
+      parentNotVisible,
+    });
+
+    if (isVisible(element) && !isRoot && !elementHiddenByOverflow) {
       elements.push(element);
     }
 
@@ -112,6 +119,7 @@ const getSelectorBoxSize = (window, selector) => {
       if (node.nodeType === 1) {
         walk(node, {
           isRoot: false,
+          parentNotVisible: elementHiddenByOverflow,
           hasParentFixedPosition: hasFixedPosition(element)
             ? element
             : hasParentFixedPosition,

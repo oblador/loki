@@ -249,3 +249,30 @@ export const SliderWithNestedOverflow = () => (
     </div>
   </div>
 );
+
+export const NestedOverflowHidden = () => (
+  <div
+    style={{
+      overflow: 'hidden',
+      width: 200,
+      height: 200,
+      backgroundColor: 'blue',
+    }}
+  >
+    The other box should not be visible
+    <div
+      style={{
+        position: 'relative',
+        top: 0,
+        left: 300,
+        width: 200,
+        height: 200,
+        overflow: 'hidden',
+      }}
+    >
+      <div style={{ backgroundColor: 'yellow', width: 100, height: 100 }}>
+        Hidden box
+      </div>
+    </div>
+  </div>
+);
