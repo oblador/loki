@@ -23,7 +23,7 @@ const getSelectorBoxSize = (window, selector) => {
     element,
     { hasParentFixedPosition, hasParentOverflowHidden, parentNotVisible }
   ) {
-    const checkOutOfBounds = () => {
+    const isElementOutOfBounds = () => {
       try {
         const elementRect = element.getBoundingClientRect();
         const containerRect = hasParentOverflowHidden.getBoundingClientRect();
@@ -55,7 +55,7 @@ const getSelectorBoxSize = (window, selector) => {
       hasParentOverflowHidden &&
       hasParentFixedPosition === hasParentOverflowHidden
     ) {
-      return checkOutOfBounds();
+      return isElementOutOfBounds();
     }
 
     // If we have a fixed element deeper then overflow
@@ -71,7 +71,7 @@ const getSelectorBoxSize = (window, selector) => {
 
     // Parent has overflow so we need to check if this element is out of bounds
     if (hasParentOverflowHidden) {
-      return checkOutOfBounds();
+      return isElementOutOfBounds();
     }
 
     return false;
