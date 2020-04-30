@@ -18,6 +18,10 @@ const users = [
 ];
 
 const siteConfig = {
+  algolia: {
+    apiKey: '5a53968a2a72331b2f3cbffc75d92819',
+    indexName: 'loki'
+  },
   title: 'Loki', // Title for your website.
   tagline: 'Visual Regression Testing for Storybook',
   url: 'https://loki.js.org', // Your website URL
