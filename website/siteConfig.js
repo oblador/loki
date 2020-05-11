@@ -15,6 +15,12 @@ const users = [
     infoLink: 'https://www.bbc.com',
     pinned: true,
   },
+  {
+    caption: 'Toptal',
+    description: 'Toptal',
+    infoLink: 'https://www.toptal.com',
+    pinned: true,
+  },
 ];
 
 const siteConfig = {
