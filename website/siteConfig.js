@@ -17,7 +17,7 @@ const users = [
   },
   {
     caption: 'Toptal',
-    description: 'Toptal',
+    image: '/img/users/toptal.svg',
     infoLink: 'https://www.toptal.com',
     pinned: true,
   },
