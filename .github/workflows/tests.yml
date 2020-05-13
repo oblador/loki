@@ -1,0 +1,75 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
+      - name: Run Jest
+        uses: tangro/actions-test@1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        with:
+          command: test-ci
+
+  static-analysis:
+    name: Static analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
+      - name: Run ESLint
+        run: yarn lint
+
+  integration-cli:
+    name: 'Integration tests: CLI'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
+      - name: Run integration tests
+        run: yarn workspace @loki/test-cli test
+
+  visual-react-dom:
+    name: 'Visual tests: React DOM'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
+      - name: Run loki
+        run: yarn workspace @loki/example-react test-ci
+      - name: Archive screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v1
+        with:
+          name: screenshots
+          path: examples/react/.loki

@@ -60,14 +60,6 @@ const storybook = [
 
 describe('createChromeAWSLambdaRenderer', () => {
   describe('.getStorybook', () => {
-    it.skip(
-      'fetches stories from webpack dynamic bundles',
-      async () => {
-        expect(await fetchStorybookFixture('dynamic')).toEqual(storybook);
-      },
-      DOCKER_TEST_TIMEOUT
-    );
-
     it(
       'fetches stories from static bundles',
       async () => {

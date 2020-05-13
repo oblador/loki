@@ -10,7 +10,8 @@
   "scripts": {
     "format": "prettier '{,packages/**/,examples/**/,website/**/,docs/**/,test/**/}*.{md,js,json}' --write",
     "lint": "eslint packages/*/src",
-    "test": "jest"
+    "test": "jest",
+    "test-ci": "jest --testLocationInResults --ci --outputFile=test_results.json --json"
   },
   "engines": {
     "node": ">=7.6"
@@ -57,7 +58,8 @@
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/examples/"
+      "/examples/",
+      "/test/cli/generated/"
     ]
   }
 }
