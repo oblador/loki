@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Handling Flaky Tests · Loki</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Skipping Tests"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Handling Flaky Tests · Loki"/><meta property="og:type" content="website"/><meta property="og:url" content="https://loki.js.org/index.html"/><meta property="og:description" content="## Skipping Tests"/><meta property="og:image" content="https://loki.js.org/img/favicon.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://loki.js.org/img/favicon.svg"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo.svg" alt="Loki"/><h2 class="headerTitleWithLogo">Loki</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/getting-started.html" target="_self">Getting Started</a></li><li class="siteNavGroupActive"><a href="/configuration.html" target="_self">Configuration</a></li><li class="siteNavGroupActive"><a href="/command-line-arguments.html" target="_self">Command Line Arguments</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/getting-started.html">Getting started</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">API Reference</h3><ul class=""><li class="navListItem"><a class="navItem" href="/configuration.html">Configuration</a></li><li class="navListItem"><a class="navItem" href="/command-line-arguments.html">Command line arguments</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/continuous-integration.html">Continuous Integration</a></li><li class="navListItem"><a class="navItem" href="/serverless.html">Serverless renderer</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/flaky-tests.html">Handling Flaky Tests</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Handling Flaky Tests</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="skipping-tests"></a><a href="#skipping-tests" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Skipping Tests</h2>
+<p>In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by using <code>add.skip()</code>:</p>
+<pre><code class="hljs css language-js">storiesOf(<span class="hljs-string">'MyComponent'</span>, <span class="hljs-built_in">module</span>)
+  .add(<span class="hljs-string">'enabled story'</span>, () =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MyComponent</span> /&gt;</span>)
+  .lokiSkip('skipped story', () =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">MyComponent</span> /&gt;</span>);
+</span></code></pre>
+<h2><a class="anchor" aria-hidden="true" id="asynchronous-stories"></a><a href="#asynchronous-stories" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Asynchronous Stories</h2>
+<p>Some components will do some computing or loading data over the network and then re-render. This can cause flaky tests and incorrect screenshots. Loki handles most cases of network traffic and loading images, but for other cases you can mark your story as async and tell loki when you're done via the <code>context.done</code> function:</p>
+<pre><code class="hljs css language-js">storiesOf(<span class="hljs-string">'MyComponent'</span>, <span class="hljs-built_in">module</span>)
+  .add(<span class="hljs-string">'synchronous story'</span>, () =&gt; &lt;MyComponent /&gt;)
+  .lokiAsync('asynchronous story', ({ done }) =&gt; &lt;MyComponent onDone={done} /&gt;);
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="transitions-and-animations"></a><a href="#transitions-and-animations" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Transitions and Animations</h2>
+<p>Animations cause the your component to be highly time sensitive and unless conditions are <em>exactly</em> the same for each test instance they will yield different screenshots. Loki takes care of the most common web transitions out of the box by disabling CSS transitions/animations and <code>requestAnimationFrame</code>. The screenshot will be paused at the end state of the transition. To disable this use the <code>chromeEnableAnimations</code> option.</p>
+<p>However known limitations include:</p>
+<ul>
+<li>Looped <code>requestAnimationFrame</code> animations</li>
+<li>GIFs</li>
+<li>SVG animations</li>
+<li>Native Lottie animations</li>
+<li>React Native <code>Animated</code> library</li>
+</ul>
+<p>It's up to you to disable these kind of animations. A simple way would be to use context with <a href="https://github.com/acdlite/recompose"><code>recompose</code></a>:</p>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// .storybook/config.js or storybook/storybook.js</span>
+<span class="hljs-keyword">import</span> { addDecorator } <span class="hljs-keyword">from</span> <span class="hljs-string">'@storybook/react'</span>;
+<span class="hljs-keyword">import</span> React, { Children } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> PropTypes <span class="hljs-keyword">from</span> <span class="hljs-string">'prop-types'</span>;
+<span class="hljs-keyword">import</span> { withContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'recompose'</span>;
+
+<span class="hljs-keyword">const</span> DisabledAnimationsProvider = withContext(
+  { <span class="hljs-attr">disableAnimations</span>: PropTypes.bool },
+  () =&gt; ({ <span class="hljs-attr">disableAnimations</span>: <span class="hljs-literal">true</span> })
+)(<span class="hljs-function">(<span class="hljs-params">{ children }</span>) =&gt;</span> Children.only(children));
+
+<span class="hljs-keyword">const</span> withDisabledAnimations = <span class="hljs-function"><span class="hljs-params">getStory</span> =&gt;</span>
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">DisabledAnimationsProvider</span>&gt;</span>{getStory()}<span class="hljs-tag">&lt;/<span class="hljs-name">DisabledAnimationsProvider</span>&gt;</span></span>;
+
+addDecorator(withDisabledAnimations);
+
+<span class="hljs-comment">// MyComponent.js</span>
+<span class="hljs-keyword">import</span> { getContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'recompose'</span>;
+
+<span class="hljs-keyword">const</span> MyComponent = <span class="hljs-function">(<span class="hljs-params">{ disableAnimations }</span>) =&gt;</span> (
+  disableAnimations
+  ? <span class="hljs-comment">/* Something without animations */</span>
+  : <span class="hljs-comment">/* Something with animations */</span>
+)
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> getContext({
+  <span class="hljs-attr">disableAnimations</span>: PropTypes.bool,
+})(MyComponent);
+</code></pre>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 10/2/2019</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/serverless.html"><span class="arrow-prev">← </span><span>Serverless renderer</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#skipping-tests">Skipping Tests</a></li><li><a href="#asynchronous-stories">Asynchronous Stories</a></li><li><a href="#transitions-and-animations">Transitions and Animations</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/favicon.svg" alt="Loki" width="52" height="52"/></a><div><h5>Docs</h5><a href="/getting-started.html">Getting Started</a><a href="/configuration.html">API Reference</a><a href="/continuous-integration.html">Guides</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a></div><div><h5>More</h5><a href="https://github.com/oblador/loki">GitHub</a><a class="github-button" href="https://github.com/oblador/loki" data-icon="octicon-star" data-count-href="/oblador/loki/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><div class="social"><a href="https://twitter.com/trastknast" class="twitter-follow-button">Follow @trastknast</a></div></div></section><section class="copyright">Copyright © 2020 Joel Arvidsson</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>window.twttr=(function(d,s, id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return t;js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, 'script', 'twitter-wjs'));</script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: '5a53968a2a72331b2f3cbffc75d92819',
+                indexName: 'loki',
+                inputSelector: '#search_input_react'
+              });
+            </script></body></html>

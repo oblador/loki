@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang=""><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Loki · Visual Regression Testing for Storybook</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Visual Regression Testing for Storybook"/><meta property="og:title" content="Loki · Visual Regression Testing for Storybook"/><meta property="og:type" content="website"/><meta property="og:url" content="https://loki.js.org/index.html"/><meta property="og:description" content="Visual Regression Testing for Storybook"/><meta property="og:image" content="https://loki.js.org/img/favicon.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://loki.js.org/img/favicon.svg"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo.svg" alt="Loki"/><h2 class="headerTitleWithLogo">Loki</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/getting-started.html" target="_self">Getting Started</a></li><li class=""><a href="/configuration.html" target="_self">Configuration</a></li><li class=""><a href="/command-line-arguments.html" target="_self">Command Line Arguments</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div><div class="index-hero"><div class="index-hero-inner"><h1 class="index-hero-project-tagline"><img alt="Loki logo" class="index-hero-logo" src="/img/favicon.svg"/>Loki makes it easy to test your <span class="index-hero-project-keywords">Storybook</span> project for visual regressions.</h1><div class="index-ctas"><a class="button index-ctas-get-started-button" href="/getting-started.html">Get Started</a><span class="index-ctas-github-button"><iframe src="https://ghbtns.com/github-btn.html?user=oblador&amp;repo=loki&amp;type=star&amp;count=true&amp;size=large" frameBorder="0" scrolling="0" width="160" height="30" title="GitHub Stars"></iframe></span></div></div></div><div class="mainContainer"><div class="container paddingBottom paddingTop" id="rationale"><div class="wrapper"><div class="gridBlock"><div class="blockElement imageAlignSide imageAlignRight twoByGridBlock"><div class="blockContent"><h2><div><span><p>Rationale</p>
+</span></div></h2><div><span><p>There's a few visual regression tools for the web, but most either cannot be run headless or use phantomjs which is deprecated and a browser nobody is <em>actually</em> using. They generally also require you to maintain fixtures and/or only support one platform.</p>
+</span></div></div><div class="blockImage"><img src="/img/undraw_specs.svg"/></div></div></div></div></div><div class="container lightBackground paddingBottom paddingTop"><div class="wrapper"><div class="gridBlock"><div class="blockElement imageAlignSide imageAlignLeft twoByGridBlock"><div class="blockImage"><img src="/img/undraw_target.svg"/></div><div class="blockContent"><h2><div><span><p>Aims</p>
+</span></div></h2><div><span><ul>
+<li>Easy setup</li>
+<li>No additional maintenance cost</li>
+<li>Reproducible tests independent of OS</li>
+<li>Support all platforms storybook does</li>
+</ul>
+</span></div></div></div></div></div></div><div class="container paddingBottom paddingTop"><div class="wrapper"><div class="gridBlock"><div class="blockElement imageAlignSide imageAlignRight twoByGridBlock"><div class="blockContent"><h2><div><span><p>Supported Platforms</p>
+</span></div></h2><div><span><ul>
+<li>Chrome in docker (recommended)</li>
+<li>Local Chrome application</li>
+<li>iOS simulator</li>
+<li>Android emulator</li>
+</ul>
+</span></div></div><div class="blockImage"><img src="/img/undraw_real-time_sync.svg"/></div></div></div></div></div><div class="productShowcaseSection paddingBottom"><h2>Users of Loki</h2><div class="logos"><a href="https://klarna.com" class="has-logo"><img src="/img/users/klarna.svg" alt="Klarna" title="Klarna"/></a><a href="https://www.bbc.com" class="no-logo"><strong>BBC</strong> <span class="description">British Broadcasting Corporation</span></a><a href="https://www.toptal.com" class="has-logo"><img src="/img/users/toptal.svg" alt="Toptal" title="Toptal"/></a> <a href="https://github.com/oblador/loki/edit/master/website/siteConfig.js" class="button">Add your company</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/favicon.svg" alt="Loki" width="52" height="52"/></a><div><h5>Docs</h5><a href="/getting-started.html">Getting Started</a><a href="/configuration.html">API Reference</a><a href="/continuous-integration.html">Guides</a></div><div><h5>Community</h5><a href="/users.html">User Showcase</a></div><div><h5>More</h5><a href="https://github.com/oblador/loki">GitHub</a><a class="github-button" href="https://github.com/oblador/loki" data-icon="octicon-star" data-count-href="/oblador/loki/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><div class="social"><a href="https://twitter.com/trastknast" class="twitter-follow-button">Follow @trastknast</a></div></div></section><section class="copyright">Copyright © 2020 Joel Arvidsson</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>window.twttr=(function(d,s, id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return t;js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, 'script', 'twitter-wjs'));</script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: '5a53968a2a72331b2f3cbffc75d92819',
+                indexName: 'loki',
+                inputSelector: '#search_input_react'
+              });
+            </script></body></html>
