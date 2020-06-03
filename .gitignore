@@ -5,3 +5,4 @@ yarn-error.log
 _book
 .loki
 !examples/*/.loki
+test_results.json
