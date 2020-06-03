@@ -1,0 +1,21 @@
+name: Deploy canary
+
+on: [push]
+
+jobs:
+  publish-gpr:
+    name: 'Publish canary on GPR'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
+      - run: echo "always-auth=true\n@loki:registry=https://npm.pkg.github.com/\n//npm.pkg.github.com/:_authToken=${{ github.token }}" > ~/.npmrc
+      - name: Publish pre-release package
+        run: yarn publish-canary --registry https://npm.pkg.github.com/
+        env:
+          NPM_AUTH_TOKEN: ${{ github.token }}

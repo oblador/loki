@@ -1,6 +1,5 @@
 {
   "name": "@loki/root",
-  "version": "0.18.1",
   "description": "Visual Regression Testing for react-storybook",
   "main": "index.js",
   "private": true,
@@ -10,6 +9,7 @@
   "scripts": {
     "format": "prettier '{,packages/**/,examples/**/,website/**/,docs/**/,test/**/}*.{md,js,json}' --write",
     "lint": "eslint packages/*/src",
+    "publish-canary": "lerna publish prerelease --yes --preid next --dist-tag=next --force-publish=* --no-git-tag-version --no-push",
     "test": "jest",
     "test-ci": "jest --testLocationInResults --ci --outputFile=test_results.json --json"
   },
