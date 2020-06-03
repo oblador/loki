@@ -1,37 +1,49 @@
+/**
+ * @jest-environment jsdom
+ */
+
+/* eslint-env browser */
+
 const getSelectorBoxSize = require('./get-selector-box-size');
 
-const createMockWindow = elements => ({
-  document: {
-    querySelectorAll: () =>
-      elements.map(element =>
-        Object.assign({}, element, {
-          getBoundingClientRect: () => element,
-          contains: () => element.class === 'wrapper',
-        })
-      ),
-  },
-  getComputedStyle: element => {
-    const { width, height, style = {} } = element;
-    return Object.assign({}, style, {
+const addElementsToWrapper = (rects, customMarkup = w => w) => {
+  let wrapper = document.querySelector('#root');
+
+  if (!wrapper) {
+    wrapper = document.createElement('div');
+    wrapper.setAttribute('id', 'root');
+    document.body.appendChild(wrapper);
+  } else {
+    wrapper.innerHTML = '';
+  }
+
+  wrapper = customMarkup(wrapper);
+
+  rects.forEach(({ x, y, width, height, style }) => {
+    const element = document.createElement('div');
+    element.getBoundingClientRect = jest.fn(() => ({
+      x,
+      y,
+      width,
+      height,
+    }));
+    Object.assign(element.style, { padding: '0px', margin: '0px' }, style, {
       width: `${width}px`,
       height: `${height}px`,
-      padding: '0px',
     });
-  },
-});
+    wrapper.appendChild(element);
+  });
+};
 
 describe('getSelectorBoxSize', () => {
   it('should throw an exception when no elements', () => {
-    const mockWindow = createMockWindow([]);
-    expect(() => getSelectorBoxSize(mockWindow, 'any-selector')).toThrow();
+    expect(() => getSelectorBoxSize(window, 'any-selector')).toThrow();
   });
 
   it('should return the box size for a single element', () => {
     const mockElementRect = { x: 0, y: 0, width: 10, height: 10 };
-    const mockWindow = createMockWindow([mockElementRect]);
-    expect(getSelectorBoxSize(mockWindow, 'any-selector')).toEqual(
-      mockElementRect
-    );
+    addElementsToWrapper([mockElementRect]);
+    expect(getSelectorBoxSize(window, '#root > *')).toEqual(mockElementRect);
   });
 
   /**
@@ -66,8 +78,8 @@ describe('getSelectorBoxSize', () => {
       { x: 0, y: 0, width: 30, height: 40 },
       { x: 0, y: 40, width: 30, height: 40 },
     ];
-    const mockWindow = createMockWindow(mockElementRects);
-    expect(getSelectorBoxSize(mockWindow, 'any-selector')).toEqual({
+    addElementsToWrapper(mockElementRects);
+    expect(getSelectorBoxSize(window, '#root > *')).toEqual({
       x: 0,
       y: 0,
       width: 30,
@@ -121,8 +133,8 @@ describe('getSelectorBoxSize', () => {
       { x: 40, y: 40, width: 60, height: 60 },
       { x: 30, y: 120, width: 20, height: 20 },
     ];
-    const mockWindow = createMockWindow(mockElementRects);
-    expect(getSelectorBoxSize(mockWindow, 'any-selector')).toEqual({
+    addElementsToWrapper(mockElementRects);
+    expect(getSelectorBoxSize(window, '#root > *')).toEqual({
       x: 10,
       y: 10,
       width: 90,
@@ -136,14 +148,32 @@ describe('getSelectorBoxSize', () => {
       { x: 10, y: 30, width: 60, height: 20 },
       { x: 40, y: 40, width: 60, height: 60 },
       { x: 30, y: 120, width: 20, height: 20 },
-      { x: 0, y: 0, width: 1000, height: 1000, class: 'wrapper' },
     ];
-    const mockWindow = createMockWindow(mockElementRects);
-    expect(getSelectorBoxSize(mockWindow, 'any-selector')).toEqual({
-      x: 10,
-      y: 10,
-      width: 90,
-      height: 130,
+    addElementsToWrapper(mockElementRects, root => {
+      const wrapper = document.createElement('div');
+      wrapper.setAttribute('class', 'wrapper');
+      wrapper.getBoundingClientRect = jest.fn(() => ({
+        x: 0,
+        y: 0,
+        width: 1000,
+        height: 1000,
+      }));
+      root.appendChild(wrapper);
+      return wrapper;
+    });
+    expect(getSelectorBoxSize(window, '.wrapper > *, #root > *, body')).toEqual(
+      {
+        x: 10,
+        y: 10,
+        width: 90,
+        height: 130,
+      }
+    );
+    expect(getSelectorBoxSize(window, '#root > *')).toEqual({
+      x: 0,
+      y: 0,
+      width: 1000,
+      height: 1000,
     });
   });
 
@@ -156,8 +186,8 @@ describe('getSelectorBoxSize', () => {
       { x: 10, y: 10, width: 0, height: 100 },
       { x: 10, y: 10, width: 100, height: 0 },
     ];
-    const mockWindow = createMockWindow(mockElementRects);
-    expect(getSelectorBoxSize(mockWindow, 'any-selector')).toEqual({
+    addElementsToWrapper(mockElementRects);
+    expect(getSelectorBoxSize(window, '#root > *')).toEqual({
       x: 0,
       y: 0,
       width: 10,
