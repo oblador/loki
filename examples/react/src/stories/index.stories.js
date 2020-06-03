@@ -16,6 +16,7 @@ import NonIntViewport from '../NonIntViewport';
 import FetchComponent from '../FetchComponent';
 import ZeroHeightWithPadding from '../ZeroHeightWithPadding';
 import Hover from '../Hover';
+import FocusedInput from '../FocusedInput';
 
 storiesOf('Welcome', module).lokiSkip('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -73,3 +74,5 @@ storiesOf('Zero height', module).add('with padding', () => (
 ));
 
 storiesOf('Hover', module).add('default', () => <Hover />);
+
+storiesOf('FocusedInput', module).add('default', () => <FocusedInput />);
