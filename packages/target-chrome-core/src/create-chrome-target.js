@@ -1,6 +1,7 @@
 const debug = require('debug')('loki:chrome');
 const {
   disableAnimations,
+  disableInputCaret,
   disablePointerEvents,
   getSelectorBoxSize,
   getStories,
@@ -164,6 +165,7 @@ function createChromeTarget(
         await evaluateOnNewDocument(`(${disableAnimations})(window);`);
       }
       await evaluateOnNewDocument(`(${disablePointerEvents})(window);`);
+      await evaluateOnNewDocument(`(${disableInputCaret})(window);`);
 
       debug(`Navigating to ${url}`);
       await Promise.all([Page.navigate({ url }), awaitRequestsFinished()]);
