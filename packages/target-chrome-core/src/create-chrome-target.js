@@ -6,6 +6,7 @@ const {
   getSelectorBoxSize,
   getStories,
   awaitLokiReady,
+  awaitSelectorPresent,
   addLokiSessionMarker,
 } = require('@loki/browser');
 const {
@@ -71,64 +72,70 @@ function createChromeTarget(
       await Emulation.setEmulatedMedia({ media: options.media });
     }
 
-    const awaitRequestsFinished = () =>
-      new Promise(async (resolve, reject) => {
-        const pendingRequestURLMap = {};
-        const failedURLs = [];
-        let pageLoaded = false;
-        let stabilizationTimer = null;
+    const pendingRequestURLMap = {};
+    const failedURLs = [];
+    let stabilizationTimer = null;
+    let requestsFinishedAwaiter;
 
-        const maybeFulfillPromise = () => {
-          if (pageLoaded && Object.keys(pendingRequestURLMap).length === 0) {
-            if (failedURLs.length !== 0) {
-              reject(new FetchingURLsError(failedURLs));
-            } else {
-              // In some cases such as fonts further requests will only happen after the page has been fully rendered
-              if (stabilizationTimer) {
-                clearTimeout(stabilizationTimer);
-              }
-              stabilizationTimer = setTimeout(
-                resolve,
-                REQUEST_STABILIZATION_TIMEOUT
-              );
-            }
-          }
-        };
+    const maybeFulfillPromise = () => {
+      if (!requestsFinishedAwaiter) {
+        return;
+      }
+      const { reject, resolve } = requestsFinishedAwaiter;
 
-        const requestEnded = requestId => {
-          delete pendingRequestURLMap[requestId];
-          maybeFulfillPromise();
-        };
-
-        const requestFailed = requestId => {
-          const failedURL = pendingRequestURLMap[requestId];
-          if (!fetchFailIgnore || !fetchFailIgnore.test(failedURL)) {
-            failedURLs.push(failedURL);
-          }
-          requestEnded(requestId);
-        };
-
-        Network.requestWillBeSent(({ requestId, request }) => {
+      if (Object.keys(pendingRequestURLMap).length === 0) {
+        if (failedURLs.length !== 0) {
+          reject(new FetchingURLsError(failedURLs));
+        } else {
+          // In some cases such as fonts further requests will only happen after the page has been fully rendered
           if (stabilizationTimer) {
             clearTimeout(stabilizationTimer);
           }
-          pendingRequestURLMap[requestId] = request.url;
-        });
+          stabilizationTimer = setTimeout(
+            resolve,
+            REQUEST_STABILIZATION_TIMEOUT
+          );
+        }
+      }
+    };
 
-        Network.responseReceived(({ requestId, response }) => {
-          if (response.status >= 400) {
-            requestFailed(requestId);
-          } else {
-            requestEnded(requestId);
-          }
-        });
+    const startObservingRequests = () => {
+      const requestEnded = requestId => {
+        delete pendingRequestURLMap[requestId];
+        maybeFulfillPromise();
+      };
 
-        Network.loadingFailed(({ requestId }) => {
+      const requestFailed = requestId => {
+        const failedURL = pendingRequestURLMap[requestId];
+        if (!fetchFailIgnore || !fetchFailIgnore.test(failedURL)) {
+          failedURLs.push(failedURL);
+        }
+        requestEnded(requestId);
+      };
+
+      Network.requestWillBeSent(({ requestId, request }) => {
+        if (stabilizationTimer) {
+          clearTimeout(stabilizationTimer);
+        }
+        pendingRequestURLMap[requestId] = request.url;
+      });
+
+      Network.responseReceived(({ requestId, response }) => {
+        if (response.status >= 400) {
           requestFailed(requestId);
-        });
+        } else {
+          requestEnded(requestId);
+        }
+      });
 
-        await Page.loadEventFired();
-        pageLoaded = true;
+      Network.loadingFailed(({ requestId }) => {
+        requestFailed(requestId);
+      });
+    };
+
+    const awaitRequestsFinished = () =>
+      new Promise((resolve, reject) => {
+        requestsFinishedAwaiter = { resolve, reject };
         maybeFulfillPromise();
       });
 
@@ -159,7 +166,7 @@ function createChromeTarget(
 
     client.executeFunctionWithWindow = executeFunctionWithWindow;
 
-    client.loadUrl = async url => {
+    client.loadUrl = async (url, selectorToBePresent) => {
       if (!options.chromeEnableAnimations) {
         debug('Disabling animations');
         await evaluateOnNewDocument(`(${disableAnimations})(window);`);
@@ -168,7 +175,19 @@ function createChromeTarget(
       await evaluateOnNewDocument(`(${disableInputCaret})(window);`);
 
       debug(`Navigating to ${url}`);
-      await Promise.all([Page.navigate({ url }), awaitRequestsFinished()]);
+      startObservingRequests();
+      await Page.navigate({ url });
+      await Page.loadEventFired();
+
+      if (selectorToBePresent) {
+        debug(`Awaiting selector "${selectorToBePresent}"`);
+        await executeFunctionWithWindow(
+          awaitSelectorPresent,
+          selectorToBePresent
+        );
+      }
+
+      await awaitRequestsFinished();
 
       debug('Awaiting runtime setup');
       await executeFunctionWithWindow(awaitLokiReady);
@@ -323,7 +342,7 @@ function createChromeTarget(
     const tab = await launchNewTab(tabOptions);
     let screenshot;
     try {
-      await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url));
+      await withTimeout(options.chromeLoadTimeout)(tab.loadUrl(url, selector));
       screenshot = await tab.captureScreenshot(selector);
     } catch (err) {
       if (err instanceof TimeoutError) {
