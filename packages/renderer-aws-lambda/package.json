@@ -1,6 +1,6 @@
 {
   "name": "@loki/renderer-aws-lambda",
-  "version": "0.21.0",
+  "version": "0.21.1",
   "description": "Loki AWS Lambda Chrome renderer",
   "keywords": [
     "loki"
@@ -21,7 +21,7 @@
   "main": "src/index.js",
   "dependencies": {
     "@loki/core": "^0.21.0",
-    "@loki/target-chrome-app": "^0.21.0",
+    "@loki/target-chrome-app": "^0.21.1",
     "async": "^3.0.1"
   },
   "devDependencies": {
