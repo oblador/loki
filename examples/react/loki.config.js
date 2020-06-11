@@ -1,5 +1,5 @@
 module.exports = {
-  "chromeSelector": ".wrapper > *, #root > *",
+  "chromeSelector": ".wrapper > *, #root > *, .story-decorator > *",
   "diffingEngine": "looks-same",
   "configurations": {
     "chrome.laptop": {
