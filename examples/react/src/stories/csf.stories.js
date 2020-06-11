@@ -1,8 +1,5 @@
 import React from 'react';
 
-import { storiesOf } from '@storybook/react';
-import { linkTo } from '@storybook/addon-links';
-
 const Box = ({ color }) => (
   <div style={{ width: 100, height: 100, background: color }} />
 );
