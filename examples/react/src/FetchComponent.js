@@ -15,7 +15,7 @@ export const FetchFail = () => {
             .catch((_e) => {
                 setFetchState('ERROR')
             })
-    }, [1]);
+    }, []);
 
     return <div>
         {fetchState === 'LOADING' && <h1>Loading</h1>}

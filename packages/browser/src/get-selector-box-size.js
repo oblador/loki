@@ -97,6 +97,7 @@ const getSelectorBoxSize = (window, selector) => {
       hasParentOverflowHidden = null,
       hasParentFixedPosition = null,
       parentNotVisible = false,
+      root,
     }
   ) {
     let node;
@@ -105,11 +106,15 @@ const getSelectorBoxSize = (window, selector) => {
       return;
     }
 
-    const elementHiddenByOverflow = isElementHiddenByOverflow(element, {
-      hasParentFixedPosition,
-      hasParentOverflowHidden,
-      parentNotVisible,
-    });
+    const ignoreIsElementHiddenByOverflow =
+      element.parentElement === root && hasOverflow(root);
+    const elementHiddenByOverflow = ignoreIsElementHiddenByOverflow
+      ? false
+      : isElementHiddenByOverflow(element, {
+          hasParentFixedPosition,
+          hasParentOverflowHidden,
+          parentNotVisible,
+        });
 
     if (isVisible(element) && !isRoot && !elementHiddenByOverflow) {
       elements.push(element);
@@ -118,6 +123,7 @@ const getSelectorBoxSize = (window, selector) => {
     for (node = element.firstChild; node; node = node.nextSibling) {
       if (node.nodeType === 1) {
         walk(node, {
+          root,
           isRoot: false,
           parentNotVisible: elementHiddenByOverflow,
           hasParentFixedPosition: hasFixedPosition(element)
@@ -164,7 +170,7 @@ const getSelectorBoxSize = (window, selector) => {
     throw new Error('No visible elements found');
   }
 
-  walk(root, { isRoot: true });
+  walk(root, { isRoot: true, root });
 
   if (elements.length === 0) {
     throw new Error('No visible elements found');
