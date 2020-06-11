@@ -1,6 +1,6 @@
 {
   "name": "@loki/target-chrome-docker",
-  "version": "0.20.3",
+  "version": "0.21.0",
   "description": "Loki Chrome docker target",
   "keywords": [
     "loki"
@@ -20,8 +20,8 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/core": "^0.20.0",
-    "@loki/target-chrome-core": "^0.20.3",
+    "@loki/core": "^0.21.0",
+    "@loki/target-chrome-core": "^0.21.0",
     "chrome-remote-interface": "^0.28.0",
     "debug": "^4.1.1",
     "execa": "^1.0.0",

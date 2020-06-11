@@ -1,6 +1,6 @@
 {
   "name": "@loki/browser",
-  "version": "0.20.2",
+  "version": "0.21.0",
   "description": "Loki browser integration",
   "keywords": [
     "loki"
@@ -20,7 +20,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/integration-core": "^0.20.2"
+    "@loki/integration-core": "^0.21.0"
   },
   "publishConfig": {
     "access": "public"
