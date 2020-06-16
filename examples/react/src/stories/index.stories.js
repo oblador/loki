@@ -17,6 +17,7 @@ import FetchComponent from '../FetchComponent';
 import ZeroHeightWithPadding from '../ZeroHeightWithPadding';
 import Hover from '../Hover';
 import FocusedInput from '../FocusedInput';
+import IsLokiRunning, { withDisabledAnimations } from '../IsLokiRunning';
 
 storiesOf('Welcome', module).lokiSkip('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -76,3 +77,7 @@ storiesOf('Zero height', module).add('with padding', () => (
 storiesOf('Hover', module).add('default', () => <Hover />);
 
 storiesOf('FocusedInput', module).add('default', () => <FocusedInput />);
+
+storiesOf('isLokiRunning()', module)
+  .addDecorator(withDisabledAnimations)
+  .add('default', () => <IsLokiRunning />);

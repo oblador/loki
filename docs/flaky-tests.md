@@ -35,35 +35,40 @@ However known limitations include:
 - Native Lottie animations
 - React Native `Animated` library
 
-It's up to you to disable these kind of animations. A simple way would be to use context with [`recompose`](https://github.com/acdlite/recompose):
+It's up to you to disable these kind of animations. A simple way would be to use context:
 
 ```js
 // .storybook/config.js or storybook/storybook.js
+import React from 'react';
 import { addDecorator } from '@storybook/react';
-import React, { Children } from 'react';
-import PropTypes from 'prop-types';
-import { withContext } from 'recompose';
+import isLokiRunning from '@loki/is-loki-running';
 
-const DisabledAnimationsProvider = withContext(
-  { disableAnimations: PropTypes.bool },
-  () => ({ disableAnimations: true })
-)(({ children }) => Children.only(children));
+const DisableAnimationsContext = React.createContext(false);
 
-const withDisabledAnimations = getStory =>
-  <DisabledAnimationsProvider>{getStory()}</DisabledAnimationsProvider>;
+const withDisabledAnimations = getStory => (
+  <DisableAnimationsContext.Provider value={isLokiRunning()}>
+    {getStory()}
+  </DisableAnimationsContext.Provider>
+);
 
 addDecorator(withDisabledAnimations);
 
 // MyComponent.js
-import { getContext } from 'recompose';
+const MyComponent = (props) => {
+  const disableAnimations = React.useContext(DisableAnimationsContext);
 
-const MyComponent = ({ disableAnimations }) => (
-  disableAnimations
-  ? /* Something without animations */
-  : /* Something with animations */
-)
+  return (
+    disableAnimations
+    ? /* Something without animations */
+    : /* Something with animations */
+  )
+}
+```
 
-export default getContext({
-  disableAnimations: PropTypes.bool,
-})(MyComponent);
+It's also possible to do target loki with CSS:
+
+```css
+*[loki-test] .my-component {
+  visibility: hidden;
+}
 ```

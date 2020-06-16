@@ -7,7 +7,8 @@ const {
   getStories,
   awaitLokiReady,
   awaitSelectorPresent,
-  addLokiSessionMarker,
+  setLokiIsRunning,
+  setLokiTestAttribute,
 } = require('@loki/browser');
 const {
   TimeoutError,
@@ -173,6 +174,7 @@ function createChromeTarget(
       }
       await evaluateOnNewDocument(`(${disablePointerEvents})(window);`);
       await evaluateOnNewDocument(`(${disableInputCaret})(window);`);
+      await evaluateOnNewDocument(`(${setLokiIsRunning})(window);`);
 
       debug(`Navigating to ${url}`);
       startObservingRequests();
@@ -190,9 +192,10 @@ function createChromeTarget(
       await awaitRequestsFinished();
 
       debug('Awaiting runtime setup');
-      await executeFunctionWithWindow(awaitLokiReady);
 
-      await executeFunctionWithWindow(addLokiSessionMarker);
+      await executeFunctionWithWindow(setLokiTestAttribute);
+
+      await executeFunctionWithWindow(awaitLokiReady);
     };
 
     const getPositionInViewport = async selector => {

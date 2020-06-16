@@ -1,0 +1,22 @@
+.is-loki-running code {
+  display: inline-block;
+  color: white;
+  margin-right: 1em;
+  padding: 0.5em;
+}
+
+.loki-attribute {
+  background: red;
+}
+
+.loki-attribute::after {
+  content: '=false';
+}
+
+*[loki-test] .loki-attribute {
+  background: green;
+}
+
+*[loki-test] .loki-attribute::after {
+  content: '=true';
+}
