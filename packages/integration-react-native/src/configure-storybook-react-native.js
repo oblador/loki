@@ -112,6 +112,10 @@ async function configureStorybook() {
   };
 
   const restore = () => {
+    if ('loki' in global) {
+      global.loki.isRunning = true;
+    }
+
     customErrorHandler = null;
     ReactNative.StatusBar.setHidden(originalState.statusBarHidden);
     // eslint-disable-next-line no-console
@@ -119,6 +123,11 @@ async function configureStorybook() {
   };
 
   const prepare = () => {
+    if ('loki' in global) {
+      global.loki = {};
+    }
+    global.loki.isRunning = true;
+
     customErrorHandler = async (error, isFatal) => {
       if (isFatal) {
         emit('error', {

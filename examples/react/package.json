@@ -27,7 +27,8 @@
     "@storybook/addons": "^5.3.13",
     "@storybook/preset-create-react-app": "^1.5.2",
     "@storybook/react": "^5.3.13",
-    "loki": "^0.21.1"
+    "loki": "^0.21.1",
+    "@loki/is-loki-running": "0.21.1"
   },
   "eslintConfig": {
     "extends": "react-app"
