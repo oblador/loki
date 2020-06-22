@@ -1,6 +1,6 @@
 {
   "name": "@loki/example-react",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -28,7 +28,7 @@
     "@storybook/addons": "^5.3.13",
     "@storybook/preset-create-react-app": "^1.5.2",
     "@storybook/react": "^5.3.13",
-    "loki": "^0.22.0"
+    "loki": "^0.22.1"
   },
   "eslintConfig": {
     "extends": "react-app"

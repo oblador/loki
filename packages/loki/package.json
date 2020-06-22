@@ -1,6 +1,6 @@
 {
   "name": "loki",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "description": "Visual Regression Testing for react-storybook",
   "bin": {
     "loki": "bin/loki"
@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@loki/integration-react": "^0.22.0",
-    "@loki/integration-react-native": "^0.22.0",
+    "@loki/integration-react-native": "^0.22.1",
     "@loki/integration-vue": "^0.22.0",
     "@loki/runner": "^0.22.0",
     "@loki/target-chrome-app": "^0.22.0",
