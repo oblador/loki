@@ -123,7 +123,7 @@ async function configureStorybook() {
   };
 
   const prepare = () => {
-    if (!'loki' in global) {
+    if (!('loki' in global)) {
       global.loki = {};
     }
     global.loki.isRunning = true;
