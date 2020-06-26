@@ -21,6 +21,12 @@ const users = [
     infoLink: 'https://www.toptal.com',
     pinned: true,
   },
+  {
+    caption: 'Rocket.Chat',
+    image: '/img/users/rocketchat.svg',
+    infoLink: 'https://rocket.chat',
+    pinned: true,
+  },
 ];
 
 const siteConfig = {
