@@ -294,6 +294,7 @@ function createChromeTarget(
         height: 100,
         chromeEnableAnimations: true,
         clearBrowserCookies: false,
+        fetchFailIgnore: '/__webpack_hmr',
       });
       await tab.loadUrl(url);
       return tab;
