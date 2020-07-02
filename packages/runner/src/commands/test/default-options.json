@@ -4,7 +4,7 @@
   "chromeAwsLambdaBatchSize": "1",
   "chromeAwsLambdaBatchConcurrency": "1",
   "chromeConcurrency": "4",
-  "chromeDockerImage": "yukinying/chrome-headless:63.0.3230.2",
+  "chromeDockerImage": "yukinying/chrome-headless-browser:85.0.4181.8",
   "chromeFlags": "--headless --disable-gpu --hide-scrollbars",
   "chromeLoadTimeout": "60000",
   "chromeRetries": "0",
