@@ -1,6 +1,6 @@
 {
   "name": "@loki/example-react",
-  "version": "0.22.1",
+  "version": "0.23.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -22,13 +22,13 @@
     "build-storybook": "build-storybook -s public"
   },
   "devDependencies": {
-    "@loki/is-loki-running": "^0.22.0",
+    "@loki/is-loki-running": "^0.23.0",
     "@storybook/addon-actions": "^5.3.13",
     "@storybook/addon-links": "^5.3.13",
     "@storybook/addons": "^5.3.13",
     "@storybook/preset-create-react-app": "^1.5.2",
     "@storybook/react": "^5.3.13",
-    "loki": "^0.22.1"
+    "loki": "^0.23.0"
   },
   "eslintConfig": {
     "extends": "react-app"
