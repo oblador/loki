@@ -5,12 +5,12 @@ title: Handling Flaky Tests
 
 ## Skipping Tests
 
-In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by using `add.skip()`:
+In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by passing setting `skip: true` in the `loki` parameter:
 
 ```js
 storiesOf('MyComponent', module)
   .add('enabled story', () => <MyComponent />)
-  .lokiSkip('skipped story', () => <MyComponent />);
+  .add('skipped story', () => <MyComponent />, { loki: { skip: true } });
 ```
 
 ## Asynchronous Stories

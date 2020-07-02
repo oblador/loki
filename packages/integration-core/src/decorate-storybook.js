@@ -8,23 +8,23 @@ let warnedAsyncDeprecation = false;
 
 function decorateStorybook(storybook) {
   const originalStoriesOf = storybook.storiesOf;
-  const skippedStories = {};
 
-  function wrapWithSkipStory(add, kind, isDeprecatedCall) {
-    return function skipStory(story, storyFn, parameters) {
-      if (isDeprecatedCall && !warnedSkipDeprecation) {
+  function wrapWithSkipStory(add) {
+    return function skipStory(story, storyFn, parameters = {}) {
+      if (!warnedSkipDeprecation) {
         warnedSkipDeprecation = true;
         console.warn(
-          '[DEPRECATED] `.add.skip(...)` is deprecated. Please use `.lokiSkip(...)` instead.'
+          '[DEPRECATED] `.add.skip(...)` and `.lokiSkip(...)` are deprecated. Please pass `{ loki: { skip: true } }` in the third parameter instead.'
         );
       }
 
-      if (!skippedStories[kind]) {
-        skippedStories[kind] = [];
-      }
-      skippedStories[kind].push(story);
-
-      return add(story, storyFn, parameters);
+      return add(story, storyFn, {
+        ...parameters,
+        loki: {
+          ...(parameters.loki || {}),
+          skip: true,
+        },
+      });
     };
   }
 
@@ -64,9 +64,9 @@ function decorateStorybook(storybook) {
 
   function storiesOf(kind, module) {
     const stories = originalStoriesOf(kind, module);
-    stories.add.skip = wrapWithSkipStory(stories.add.bind(stories), kind, true);
+    stories.add.skip = wrapWithSkipStory(stories.add.bind(stories), kind);
     stories.add.async = wrapWithAsyncStory(stories.add.bind(stories), true);
-    stories.add.async.skip = wrapWithSkipStory(stories.add.async, kind, true);
+    stories.add.async.skip = wrapWithSkipStory(stories.add.async, kind);
     stories.add.skip.async = wrapWithAsyncStory(stories.add.skip, true);
 
     return stories;
@@ -104,22 +104,12 @@ function decorateStorybook(storybook) {
   });
 
   function getStorybook() {
-    return storybook.getStorybook().map(function(component) {
-      const { kind, stories } = component;
-      const skipped = skippedStories[kind];
-
-      if (skipped) {
-        return {
-          kind: kind,
-          skipped: skipped,
-          stories: stories.filter(function(story) {
-            return skipped.indexOf(story.name) === -1;
-          }),
-        };
-      }
-
-      return component;
-    });
+    return storybook
+      .raw()
+      .filter(
+        ({ parameters }) =>
+          !parameters || !parameters.loki || !parameters.loki.skip
+      );
   }
 
   return getStorybook;

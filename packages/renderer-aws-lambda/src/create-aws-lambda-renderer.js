@@ -10,8 +10,7 @@ const getStorybook = async target => {
 
 const captureScreenshotForStory = async (target, event) => {
   const screenshot = await target.captureScreenshotForStory(
-    event.kind,
-    event.story,
+    event.id,
     event.options || {},
     event.configuration || {}
   );
@@ -29,8 +28,7 @@ const captureScreenshotsForStories = async (target, event) => {
   return mapLimit(event.stories, concurrency, async task => {
     try {
       const screenshot = await captureScreenshotForStory(target, {
-        kind: task.kind,
-        story: task.story,
+        id: task.id,
         configuration: task.configuration,
         options: event.options,
       });

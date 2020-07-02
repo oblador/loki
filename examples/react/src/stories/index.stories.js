@@ -19,9 +19,11 @@ import Hover from '../Hover';
 import FocusedInput from '../FocusedInput';
 import IsLokiRunning, { withDisabledAnimations } from '../IsLokiRunning';
 
-storiesOf('Welcome', module).lokiSkip('to Storybook', () => (
-  <Welcome showApp={linkTo('Button')} />
-));
+storiesOf('Welcome', module)
+  .lokiSkip('to Storybook', () => <Welcome showApp={linkTo('Button')} />)
+  .add('skipped', () => <Welcome showApp={linkTo('Button')} />, {
+    loki: { skip: true },
+  });
 
 storiesOf('Text', module).add('with external font', () => (
   <CursiveText>Hello CursiveText</CursiveText>

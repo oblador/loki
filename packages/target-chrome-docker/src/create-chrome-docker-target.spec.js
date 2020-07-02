@@ -23,13 +23,19 @@ const fetchStorybookFixture = async fixture =>
 
 const storybook = [
   {
+    id: 'welcome--to-storybook',
     kind: 'Welcome',
-    stories: ['to Storybook'],
+    story: 'to Storybook',
   },
   {
+    id: 'button--text',
     kind: 'Button',
-    stories: ['with text', 'with some emoji'],
-    skipped: ['skipped story'],
+    story: 'Text',
+  },
+  {
+    id: 'button--emoji',
+    kind: 'Button',
+    story: 'Emoji',
   },
 ];
 

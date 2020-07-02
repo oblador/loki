@@ -282,10 +282,10 @@ function createChromeTarget(
     return client;
   }
 
-  const getStoryUrl = (kind, story) =>
-    `${resolvedBaseUrl}/iframe.html?selectedKind=${encodeURIComponent(
-      kind
-    )}&selectedStory=${encodeURIComponent(story)}`;
+  const getStoryUrl = storyId =>
+    `${resolvedBaseUrl}/iframe.html?id=${encodeURIComponent(
+      storyId
+    )}&viewMode=story`;
 
   const launchStoriesTab = withTimeout(LOADING_STORIES_TIMEOUT)(
     withRetries(5, RETRY_LOADING_STORIES_TIMEOUT)(async url => {
@@ -320,12 +320,7 @@ function createChromeTarget(
     }
   }
 
-  async function captureScreenshotForStory(
-    kind,
-    story,
-    options,
-    configuration
-  ) {
+  async function captureScreenshotForStory(storyId, options, configuration) {
     let tabOptions = Object.assign(
       {
         media: options.chromeEmulatedMedia,
@@ -340,7 +335,7 @@ function createChromeTarget(
       tabOptions = Object.assign(tabOptions, presets[configuration.preset]);
     }
     const selector = configuration.chromeSelector || options.chromeSelector;
-    const url = getStoryUrl(kind, story);
+    const url = getStoryUrl(storyId);
 
     const tab = await launchNewTab(tabOptions);
     let screenshot;

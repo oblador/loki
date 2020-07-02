@@ -58,24 +58,6 @@ const groupByTarget = configurations =>
     groupBy(([, { target }]) => target, toPairs(configurations))
   );
 
-const filterStorybook = (storybook, excludePattern, includePattern) => {
-  const filterStory = kind => story => {
-    const fullStoryName = `${kind} ${story}`;
-    const exclude =
-      excludePattern && new RegExp(excludePattern, 'i').test(fullStoryName);
-    const include =
-      !includePattern || new RegExp(includePattern, 'i').test(fullStoryName);
-    return !exclude && include;
-  };
-
-  return storybook
-    .map(({ kind, stories }) => ({
-      kind,
-      stories: stories.filter(filterStory(kind)),
-    }))
-    .filter(({ stories }) => stories.length !== 0);
-};
-
 async function runTests(flatConfigurations, options) {
   if (options.updateReference) {
     await fs.ensureDir(options.referenceDir);
@@ -148,32 +130,41 @@ async function runTests(flatConfigurations, options) {
                 Object.keys(configurations).reduce(
                   (tasks, configurationName) => {
                     const configuration = configurations[configurationName];
-                    const kinds = filterStorybook(
-                      storybook,
-                      options.skipStoriesPattern || configuration.skipStories,
-                      options.storiesFilter || configuration.storiesFilter
-                    );
+                    const excludePattern =
+                      options.skipStoriesPattern || configuration.skipStories;
+                    const includePattern =
+                      options.storiesFilter || configuration.storiesFilter;
+
                     return tasks.concat(
-                      kinds
-                        .map(({ kind, stories }) =>
-                          stories.map(story => ({
-                            id: `${targetName}/${TASK_TYPE_TEST}/${configurationName}/${kind}/${story}`,
-                            meta: {
-                              target: targetName,
-                              configuration: configurationName,
-                              kind,
-                              story,
-                              type: TASK_TYPE_TEST,
-                            },
-                            task: {
-                              configuration,
-                              configurationName,
-                              kind,
-                              story,
-                            },
-                          }))
-                        )
-                        .reduce((acc, array) => acc.concat(array), [])
+                      storybook
+                        .filter(({ kind, story }) => {
+                          const fullStoryName = `${kind} ${story}`;
+                          const exclude =
+                            excludePattern &&
+                            new RegExp(excludePattern, 'i').test(fullStoryName);
+                          const include =
+                            !includePattern ||
+                            new RegExp(includePattern, 'i').test(fullStoryName);
+                          return !exclude && include;
+                        })
+                        .map(({ id, kind, story }) => ({
+                          id: `${targetName}/${TASK_TYPE_TEST}/${configurationName}/${kind}/${story}`,
+                          meta: {
+                            target: targetName,
+                            configuration: configurationName,
+                            id,
+                            kind,
+                            story,
+                            type: TASK_TYPE_TEST,
+                          },
+                          task: {
+                            configuration,
+                            configurationName,
+                            id,
+                            kind,
+                            story,
+                          },
+                        }))
                     );
                   },
                   []

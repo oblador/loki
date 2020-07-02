@@ -163,9 +163,9 @@ async function configureStorybook() {
 
   on('getStories', () => {
     const stories = getStorybook().map(component => ({
+      id: component.id,
       kind: component.kind,
-      stories: component.stories.map(story => story.name),
-      skipped: component.skipped,
+      story: component.story,
     }));
     emit('setStories', { stories });
   });
