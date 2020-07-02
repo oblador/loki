@@ -55,10 +55,10 @@
               }
             });
         </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Handling Flaky Tests</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="skipping-tests"></a><a href="#skipping-tests" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Skipping Tests</h2>
-<p>In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by using <code>add.skip()</code>:</p>
+<p>In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by passing setting <code>skip: true</code> in the <code>loki</code> parameter:</p>
 <pre><code class="hljs css language-js">storiesOf(<span class="hljs-string">'MyComponent'</span>, <span class="hljs-built_in">module</span>)
   .add(<span class="hljs-string">'enabled story'</span>, () =&gt; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MyComponent</span> /&gt;</span>)
-  .lokiSkip('skipped story', () =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">MyComponent</span> /&gt;</span>);
+  .add('skipped story', () =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">MyComponent</span> /&gt;</span>, { loki: { skip: true } });
 </span></code></pre>
 <h2><a class="anchor" aria-hidden="true" id="asynchronous-stories"></a><a href="#asynchronous-stories" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Asynchronous Stories</h2>
 <p>Some components will do some computing or loading data over the network and then re-render. This can cause flaky tests and incorrect screenshots. Loki handles most cases of network traffic and loading images, but for other cases you can mark your story as async and tell loki when you're done via the <code>context.done</code> function:</p>
@@ -76,37 +76,39 @@
 <li>Native Lottie animations</li>
 <li>React Native <code>Animated</code> library</li>
 </ul>
-<p>It's up to you to disable these kind of animations. A simple way would be to use context with <a href="https://github.com/acdlite/recompose"><code>recompose</code></a>:</p>
+<p>It's up to you to disable these kind of animations. A simple way would be to use context:</p>
 <pre><code class="hljs css language-js"><span class="hljs-comment">// .storybook/config.js or storybook/storybook.js</span>
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> { addDecorator } <span class="hljs-keyword">from</span> <span class="hljs-string">'@storybook/react'</span>;
-<span class="hljs-keyword">import</span> React, { Children } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
-<span class="hljs-keyword">import</span> PropTypes <span class="hljs-keyword">from</span> <span class="hljs-string">'prop-types'</span>;
-<span class="hljs-keyword">import</span> { withContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'recompose'</span>;
+<span class="hljs-keyword">import</span> isLokiRunning <span class="hljs-keyword">from</span> <span class="hljs-string">'@loki/is-loki-running'</span>;
 
-<span class="hljs-keyword">const</span> DisabledAnimationsProvider = withContext(
-  { <span class="hljs-attr">disableAnimations</span>: PropTypes.bool },
-  () =&gt; ({ <span class="hljs-attr">disableAnimations</span>: <span class="hljs-literal">true</span> })
-)(<span class="hljs-function">(<span class="hljs-params">{ children }</span>) =&gt;</span> Children.only(children));
+<span class="hljs-keyword">const</span> DisableAnimationsContext = React.createContext(<span class="hljs-literal">false</span>);
 
-<span class="hljs-keyword">const</span> withDisabledAnimations = <span class="hljs-function"><span class="hljs-params">getStory</span> =&gt;</span>
-  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">DisabledAnimationsProvider</span>&gt;</span>{getStory()}<span class="hljs-tag">&lt;/<span class="hljs-name">DisabledAnimationsProvider</span>&gt;</span></span>;
+<span class="hljs-keyword">const</span> withDisabledAnimations = <span class="hljs-function"><span class="hljs-params">getStory</span> =&gt;</span> (
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">DisableAnimationsContext.Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{isLokiRunning()}</span>&gt;</span>
+    {getStory()}
+  <span class="hljs-tag">&lt;/<span class="hljs-name">DisableAnimationsContext.Provider</span>&gt;</span></span>
+);
 
 addDecorator(withDisabledAnimations);
 
 <span class="hljs-comment">// MyComponent.js</span>
-<span class="hljs-keyword">import</span> { getContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'recompose'</span>;
+<span class="hljs-keyword">const</span> MyComponent = <span class="hljs-function">(<span class="hljs-params">props</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> disableAnimations = React.useContext(DisableAnimationsContext);
 
-<span class="hljs-keyword">const</span> MyComponent = <span class="hljs-function">(<span class="hljs-params">{ disableAnimations }</span>) =&gt;</span> (
-  disableAnimations
-  ? <span class="hljs-comment">/* Something without animations */</span>
-  : <span class="hljs-comment">/* Something with animations */</span>
-)
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> getContext({
-  <span class="hljs-attr">disableAnimations</span>: PropTypes.bool,
-})(MyComponent);
+  <span class="hljs-keyword">return</span> (
+    disableAnimations
+    ? <span class="hljs-comment">/* Something without animations */</span>
+    : <span class="hljs-comment">/* Something with animations */</span>
+  )
+}
 </code></pre>
-</span></div></article></div><div class="docLastUpdate"><em>Last updated on 10/2/2019</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/serverless.html"><span class="arrow-prev">← </span><span>Serverless renderer</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#skipping-tests">Skipping Tests</a></li><li><a href="#asynchronous-stories">Asynchronous Stories</a></li><li><a href="#transitions-and-animations">Transitions and Animations</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/favicon.svg" alt="Loki" width="52" height="52"/></a><div><h5>Docs</h5><a href="/getting-started.html">Getting Started</a><a href="/configuration.html">API Reference</a><a href="/continuous-integration.html">Guides</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a></div><div><h5>More</h5><a href="https://github.com/oblador/loki">GitHub</a><a class="github-button" href="https://github.com/oblador/loki" data-icon="octicon-star" data-count-href="/oblador/loki/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><div class="social"><a href="https://twitter.com/trastknast" class="twitter-follow-button">Follow @trastknast</a></div></div></section><section class="copyright">Copyright © 2020 Joel Arvidsson</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>window.twttr=(function(d,s, id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return t;js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, 'script', 'twitter-wjs'));</script><script>
+<p>It's also possible to do target loki with CSS:</p>
+<pre><code class="hljs css language-css">*<span class="hljs-selector-attr">[loki-test]</span> <span class="hljs-selector-class">.my-component</span> {
+  <span class="hljs-attribute">visibility</span>: hidden;
+}
+</code></pre>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 2020-7-3</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/serverless.html"><span class="arrow-prev">← </span><span>Serverless renderer</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#skipping-tests">Skipping Tests</a></li><li><a href="#asynchronous-stories">Asynchronous Stories</a></li><li><a href="#transitions-and-animations">Transitions and Animations</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/favicon.svg" alt="Loki" width="52" height="52"/></a><div><h5>Docs</h5><a href="/getting-started.html">Getting Started</a><a href="/configuration.html">API Reference</a><a href="/continuous-integration.html">Guides</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a></div><div><h5>More</h5><a href="https://github.com/oblador/loki">GitHub</a><a class="github-button" href="https://github.com/oblador/loki" data-icon="octicon-star" data-count-href="/oblador/loki/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><div class="social"><a href="https://twitter.com/trastknast" class="twitter-follow-button">Follow @trastknast</a></div></div></section><section class="copyright">Copyright © 2020 Joel Arvidsson</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>window.twttr=(function(d,s, id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return t;js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, 'script', 'twitter-wjs'));</script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;
