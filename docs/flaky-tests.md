@@ -13,6 +13,20 @@ storiesOf('MyComponent', module)
   .add('skipped story', () => <MyComponent />, { loki: { skip: true } });
 ```
 
+If you are using Component Story Format (CSF), passing the parameter would look like the following:
+
+```js
+export const SkippedStory = () => (
+  <MyComponent />
+);
+
+SkippedStory.story = {
+  parameters: {
+    loki: { skip: true },
+  },
+};
+```
+
 ## Asynchronous Stories
 
 Some components will do some computing or loading data over the network and then re-render. This can cause flaky tests and incorrect screenshots. Loki handles most cases of network traffic and loading images, but for other cases you can mark your story as async and tell loki when you're done via the `context.done` function:
