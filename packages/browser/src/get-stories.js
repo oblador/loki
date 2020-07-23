@@ -9,6 +9,7 @@ const getStories = window => {
     id: component.id,
     kind: component.kind,
     story: component.story,
+    parameters: component.parameters.loki || {},
   }));
 };
 

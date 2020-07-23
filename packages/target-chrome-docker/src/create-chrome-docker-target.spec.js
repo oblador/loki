@@ -26,16 +26,19 @@ const storybook = [
     id: 'welcome--to-storybook',
     kind: 'Welcome',
     story: 'to Storybook',
+    parameters: {},
   },
   {
     id: 'button--text',
     kind: 'Button',
     story: 'Text',
+    parameters: {},
   },
   {
     id: 'button--emoji',
     kind: 'Button',
     story: 'Emoji',
+    parameters: {},
   },
 ];
 
