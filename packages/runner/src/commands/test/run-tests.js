@@ -147,7 +147,7 @@ async function runTests(flatConfigurations, options) {
                             new RegExp(includePattern, 'i').test(fullStoryName);
                           return !exclude && include;
                         })
-                        .map(({ id, kind, story }) => ({
+                        .map(({ id, kind, story, parameters }) => ({
                           id: `${targetName}/${TASK_TYPE_TEST}/${configurationName}/${kind}/${story}`,
                           meta: {
                             target: targetName,
@@ -163,6 +163,7 @@ async function runTests(flatConfigurations, options) {
                             id,
                             kind,
                             story,
+                            parameters,
                           },
                         }))
                     );

@@ -321,7 +321,12 @@ function createChromeTarget(
     }
   }
 
-  async function captureScreenshotForStory(storyId, options, configuration) {
+  async function captureScreenshotForStory(
+    storyId,
+    options,
+    configuration,
+    parameters
+  ) {
     let tabOptions = Object.assign(
       {
         media: options.chromeEmulatedMedia,
@@ -335,7 +340,10 @@ function createChromeTarget(
       }
       tabOptions = Object.assign(tabOptions, presets[configuration.preset]);
     }
-    const selector = configuration.chromeSelector || options.chromeSelector;
+    const selector =
+      parameters.chromeSelector ||
+      configuration.chromeSelector ||
+      options.chromeSelector;
     const url = getStoryUrl(storyId);
 
     const tab = await launchNewTab(tabOptions);

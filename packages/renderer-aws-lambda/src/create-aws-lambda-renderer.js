@@ -12,7 +12,8 @@ const captureScreenshotForStory = async (target, event) => {
   const screenshot = await target.captureScreenshotForStory(
     event.id,
     event.options || {},
-    event.configuration || {}
+    event.configuration || {},
+    event.parameters || {}
   );
   if (!screenshot) {
     throw new Error(
@@ -31,6 +32,7 @@ const captureScreenshotsForStories = async (target, event) => {
         id: task.id,
         configuration: task.configuration,
         options: event.options,
+        parameters: task.parameters,
       });
       return screenshot;
     } catch (error) {

@@ -139,10 +139,8 @@ const getSelectorBoxSize = (window, selector) => {
 
   function getRootElement(rootSelector) {
     const roots = Array.from(
-      // Replace all > * from the selector
-      // We want the parent and not all the children
-      window.document.querySelectorAll(
-        rootSelector.replace(/(\s+)?>(\s+)?\*/g, '')
+      Array.from(window.document.querySelectorAll(rootSelector)).map(
+        element => element.parentElement
       )
     );
 

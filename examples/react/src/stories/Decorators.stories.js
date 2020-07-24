@@ -38,3 +38,20 @@ export const OverflowWithSeveralElements = () => (
     <div style={{ backgroundColor: 'yellow', height: 500 }}>Very long div</div>
   </div>
 );
+
+export const CustomChromeSelector = () => (
+  <div
+    style={{
+      border: '10px solid red',
+    }}
+  >
+    <div id="inner" style={{ backgroundColor: 'green' }}>
+      This should not have a red border.
+    </div>
+    This should not be visible.
+  </div>
+);
+
+CustomChromeSelector.story = {
+  parameters: { loki: { chromeSelector: '#inner' } },
+};
