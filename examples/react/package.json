@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@loki/is-loki-running": "^0.23.0",
+    "@loki/create-async-callback": "^0.23.0",
     "@storybook/addon-actions": "^5.3.13",
     "@storybook/addon-links": "^5.3.13",
     "@storybook/addons": "^5.3.13",

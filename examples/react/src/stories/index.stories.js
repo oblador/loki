@@ -2,6 +2,7 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 import { linkTo } from '@storybook/addon-links';
+import createAsyncCallback from '@loki/create-async-callback';
 
 import { Welcome } from '@storybook/react/demo';
 import Logo from '../Logo';
@@ -34,6 +35,9 @@ storiesOf('Asynchronous render', module)
   .add('Logo with 1s delay', () => <Logo delay={1000} />)
   .lokiAsync('lokiAsync() with 1s delay', ({ done }) => (
     <DelayedComponent delay={1000} onDone={done} />
+  ))
+  .add('createAsyncCallback() with 1s delay', () => (
+    <DelayedComponent delay={1000} onDone={createAsyncCallback()} />
   ));
 
 storiesOf('Animation', module)

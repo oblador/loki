@@ -16,9 +16,7 @@ storiesOf('MyComponent', module)
 If you are using Component Story Format (CSF), passing the parameter would look like the following:
 
 ```js
-export const SkippedStory = () => (
-  <MyComponent />
-);
+export const SkippedStory = () => <MyComponent />;
 
 SkippedStory.story = {
   parameters: {
@@ -35,6 +33,13 @@ Some components will do some computing or loading data over the network and then
 storiesOf('MyComponent', module)
   .add('synchronous story', () => <MyComponent />)
   .lokiAsync('asynchronous story', ({ done }) => <MyComponent onDone={done} />);
+```
+
+If you are using Component Story Format (CSF), you may use the `@loki/create-async-callback` package:
+
+```js
+import createAsyncCallback from '@loki/create-async-callback';
+export const AsyncStory = () => <MyComponent onDone={createAsyncCallback()} />;
 ```
 
 ## Transitions and Animations

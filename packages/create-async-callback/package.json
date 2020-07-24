@@ -1,0 +1,26 @@
+{
+  "name": "@loki/create-async-callback",
+  "version": "0.23.0",
+  "description": "Loki async story management helper",
+  "keywords": [
+    "loki"
+  ],
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/create-async-callback",
+  "bugs": {
+    "url": "https://github.com/oblador/loki/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oblador/loki.git",
+    "directory": "packages/create-async-callback"
+  },
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "main": "src/index.web.js",
+  "react-native": "src/index.native.js",
+  "publishConfig": {
+    "access": "public"
+  }
+}
