@@ -9,6 +9,8 @@ module.exports = function createAsyncCallback(win = window) {
         resolveAsyncStory = resolve;
       })
     );
+  } else {
+    console.warn('Loki is not correctly configured');
   }
   return () => {
     if (resolveAsyncStory) {
