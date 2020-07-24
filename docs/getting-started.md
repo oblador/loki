@@ -5,7 +5,7 @@ title: Getting started
 
 ## Prerequsites
 
-- Node 7.6 or higher
+- [Node](https://nodejs.org/)
 
 ### Optional dependencies
 
