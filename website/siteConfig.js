@@ -32,7 +32,7 @@ const users = [
 const siteConfig = {
   algolia: {
     apiKey: '5a53968a2a72331b2f3cbffc75d92819',
-    indexName: 'loki'
+    indexName: 'loki',
   },
   title: 'Loki', // Title for your website.
   tagline: 'Visual Regression Testing for Storybook',
@@ -42,6 +42,7 @@ const siteConfig = {
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
+  cname: 'loki.js.org',
 
   // Used for publishing and more
   projectName: 'loki',

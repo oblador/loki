@@ -19,6 +19,9 @@
       },
       "getting-started": {
         "title": "Getting started"
+      },
+      "serverless": {
+        "title": "Serverless renderer"
       }
     },
     "links": {
