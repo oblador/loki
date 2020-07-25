@@ -63,6 +63,32 @@ Loki will not start any servers for you, so ensure storybook and any simulator/e
 
 - [React example](https://github.com/oblador/loki/tree/master/examples/react)
 - [React Native example](https://github.com/oblador/loki/tree/master/examples/react-native)
+## Maintainers
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/oblador">
+          <img width="150" height="150" src="https://github.com/oblador.png?v=3&s=150">
+          <br />
+          <strong>Joel Arvidsson</strong>
+        </a>
+        <br />
+        Author
+      </td>
+      <td align="center">
+        <a href="https://github.com/techeverri">
+          <img width="150" height="150" src="https://github.com/techeverri.png?v=3&s=150">
+          <br />
+          <strong>Tomas Echeverri Valencia</strong>
+        </a>
+        <br />
+        Maintainer
+      </td>
+    </tr>
+  <tbody>
+</table>
 
 ## License
 
