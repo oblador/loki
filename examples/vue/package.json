@@ -27,6 +27,7 @@
     "babel-preset-vue": "^2.0.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "loki": "^0.24.0",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
@@ -47,5 +48,20 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "loki": {
+    "configurations": {
+      "chrome.laptop": {
+        "target": "chrome.docker",
+        "width": 1366,
+        "height": 768,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      },
+      "chrome.iphone7": {
+        "target": "chrome.docker",
+        "preset": "iPhone 7"
+      }
+    }
+  }
 }
