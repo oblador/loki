@@ -36,6 +36,7 @@
       "test/*",
       "website",
       "examples/react",
+      "examples/vue",
       "examples/renderer-aws-lambda"
     ]
   },
