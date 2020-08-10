@@ -82,3 +82,24 @@ jobs:
         with:
           name: react-example-screenshots
           path: examples/react/.loki
+
+  visual-vue-dom:
+    name: 'Visual tests: Vue DOM'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
+      - name: Run loki
+        run: yarn workspace @loki/example-vue test-ci
+      - name: Archive screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v1
+        with:
+          name: vue-example-screenshots
+          path: examples/vue/.loki

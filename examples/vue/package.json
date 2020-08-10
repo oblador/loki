@@ -7,6 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "storybook": "start-storybook -p 6006",
+    "pretest-ci": "build-storybook",
+    "test-ci": "loki --requireReference --reactUri file:./storybook-static",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
