@@ -80,7 +80,7 @@ describe('createChromeAWSLambdaRenderer', () => {
       'throws if not configured',
       async () => {
         await expect(fetchStorybookFixture('unconfigured')).rejects.toThrow(
-          "Loki addon not registered. Add `import 'loki/configure-react'` to your .storybook/preview.js file."
+          "Unable to get stories. Try adding `import 'loki/configure-react'` to your .storybook/preview.js file."
         );
       },
       DOCKER_TEST_TIMEOUT

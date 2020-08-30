@@ -1,4 +1,6 @@
-const { registerPendingPromise } = require('@loki/integration-core');
+const {
+  registerPendingPromise,
+} = require('@loki/integration-react-native/src/ready-state-manager');
 
 module.exports = function createAsyncCallback() {
   let resolveAsyncStory;

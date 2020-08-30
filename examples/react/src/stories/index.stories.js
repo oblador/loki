@@ -20,11 +20,13 @@ import Hover from '../Hover';
 import FocusedInput from '../FocusedInput';
 import IsLokiRunning, { withDisabledAnimations } from '../IsLokiRunning';
 
-storiesOf('Welcome', module)
-  .lokiSkip('to Storybook', () => <Welcome showApp={linkTo('Button')} />)
-  .add('skipped', () => <Welcome showApp={linkTo('Button')} />, {
+storiesOf('Welcome', module).add(
+  'to Storybook',
+  () => <Welcome showApp={linkTo('Button')} />,
+  {
     loki: { skip: true },
-  });
+  }
+);
 
 storiesOf('Text', module).add('with external font', () => (
   <CursiveText>Hello CursiveText</CursiveText>
@@ -33,9 +35,6 @@ storiesOf('Text', module).add('with external font', () => (
 storiesOf('Asynchronous render', module)
   .add('Logo without delay', () => <Logo />)
   .add('Logo with 1s delay', () => <Logo delay={1000} />)
-  .lokiAsync('lokiAsync() with 1s delay', ({ done }) => (
-    <DelayedComponent delay={1000} onDone={done} />
-  ))
   .add('createAsyncCallback() with 1s delay', () => (
     <DelayedComponent delay={1000} onDone={createAsyncCallback()} />
   ));

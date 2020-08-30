@@ -46,7 +46,6 @@ assert_contains "package.json" "$(cat <<-END
   }
 END
 )"
-assert_contains ".storybook/preview.js" "import 'loki/configure-react'"
 
 # Ensure we can snap stories
 yarn build-storybook

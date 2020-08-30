@@ -1,1 +1,0 @@
-import 'loki/configure-react';

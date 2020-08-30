@@ -20,23 +20,13 @@ function hasReactNativeDependency(pkg) {
   return hasDependency('react-native', pkg);
 }
 
-function hasVueDependency(pkg) {
-  return hasDependency('vue', pkg);
-}
-
 function isReactNativeProject() {
   return hasDependency('react-native');
-}
-
-function isVueProject() {
-  return hasDependency('vue');
 }
 
 module.exports = {
   getProjectPackagePath,
   getProjectPackage,
   hasReactNativeDependency,
-  hasVueDependency,
   isReactNativeProject,
-  isVueProject,
 };

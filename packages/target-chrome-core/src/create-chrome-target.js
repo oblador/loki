@@ -9,7 +9,10 @@ const {
   awaitSelectorPresent,
   setLokiIsRunning,
   setLokiTestAttribute,
+  populateLokiHelpers,
 } = require('@loki/browser');
+const { createReadyStateManager } = require('@loki/integration-core');
+
 const {
   TimeoutError,
   FetchingURLsError,
@@ -168,6 +171,9 @@ function createChromeTarget(
     client.executeFunctionWithWindow = executeFunctionWithWindow;
 
     client.loadUrl = async (url, selectorToBePresent) => {
+      await evaluateOnNewDocument(
+        `(${populateLokiHelpers})(window, (${createReadyStateManager})());`
+      );
       if (!options.chromeEnableAnimations) {
         debug('Disabling animations');
         await evaluateOnNewDocument(`(${disableAnimations})(window);`);
