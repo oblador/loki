@@ -1,9 +1,7 @@
+const createReadyStateManager = require('./create-ready-state-manager');
 const decorateStorybook = require('./decorate-storybook');
-const readyStateManager = require('./ready-state-manager');
 
-module.exports = Object.assign(
-  {
-    decorateStorybook,
-  },
-  readyStateManager
-);
+module.exports = Object.assign({
+  decorateStorybook,
+  createReadyStateManager,
+});

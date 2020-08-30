@@ -27,15 +27,7 @@ SkippedStory.story = {
 
 ## Asynchronous Stories
 
-Some components will do some computing or loading data over the network and then re-render. This can cause flaky tests and incorrect screenshots. Loki handles most cases of network traffic and loading images, but for other cases you can mark your story as async and tell loki when you're done via the `context.done` function:
-
-```js
-storiesOf('MyComponent', module)
-  .add('synchronous story', () => <MyComponent />)
-  .lokiAsync('asynchronous story', ({ done }) => <MyComponent onDone={done} />);
-```
-
-If you are using Component Story Format (CSF), you may use the `@loki/create-async-callback` package:
+Some components will do some computing or loading data over the network and then re-render. This can cause flaky tests and incorrect screenshots. Loki handles most cases of network traffic and loading images, but for other cases you can mark your story as async and tell loki when you're done via the async callback pattern:
 
 ```js
 import createAsyncCallback from '@loki/create-async-callback';

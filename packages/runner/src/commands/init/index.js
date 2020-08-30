@@ -7,7 +7,6 @@ const {
   getProjectPackagePath,
   getProjectPackage,
   hasReactNativeDependency,
-  hasVueDependency,
 } = require('../../config/project-package');
 
 const insertAfter = (
@@ -33,7 +32,6 @@ const insertAfter = (
 function init(args) {
   const pkg = getProjectPackage();
   const isReactNativeProject = hasReactNativeDependency(pkg);
-  const isVueProject = hasVueDependency(pkg);
 
   const relative = to => path.relative('.', to);
 
@@ -86,37 +84,6 @@ function init(args) {
         "import 'loki/configure-react-native';"
       );
       fs.outputFileSync(storybookjsPath, modifiedStorybookjs);
-    }
-  } else {
-    const projectType = isVueProject ? 'vue' : 'react';
-    const configPackage = `loki/configure-${projectType}`;
-    const storybookPackage = `@storybook/${projectType}`;
-
-    const configjsPath = `${storybookPath}/config.js`;
-    const previewjsPath = `${storybookPath}/preview.js`;
-    const destinationPath = fs.existsSync(configjsPath)
-      ? configjsPath
-      : previewjsPath;
-
-    const configContent = fs.existsSync(destinationPath)
-      ? fs.readFileSync(destinationPath, 'utf8')
-      : '';
-
-    if (configContent.indexOf(configPackage) !== -1) {
-      warn(
-        `${relative(
-          destinationPath
-        )} already has loki configuration, skipping...`
-      );
-    } else {
-      info(`Adding loki configuration to ${relative(destinationPath)}`);
-      const modifiedConfigContent = insertAfter(
-        configContent,
-        new RegExp(`(require\\(|from )['"]${storybookPackage}['"]\\)?;?[ \t]*`),
-        `import '${configPackage}';`,
-        'append'
-      );
-      fs.outputFileSync(destinationPath, modifiedConfigContent);
     }
   }
 }

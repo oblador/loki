@@ -11,7 +11,8 @@
     "format": "prettier '{,packages/**/,examples/**/,website/**/,docs/**/,test/**/}*.{md,js,json}' --write",
     "lint": "eslint packages/*/src",
     "test": "jest",
-    "test-ci": "jest --testLocationInResults --ci --outputFile=test_results.json --json"
+    "test-ci": "jest --testLocationInResults --ci --outputFile=test_results.json --json",
+    "publish-docs": "GIT_USER=oblador yarn workspace @loki/website publish-gh-pages"
   },
   "engines": {
     "node": ">=7.6"

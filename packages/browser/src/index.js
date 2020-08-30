@@ -6,6 +6,7 @@ const disableInputCaret = require('./disable-input-caret');
 const disablePointerEvents = require('./disable-pointer-events');
 const getSelectorBoxSize = require('./get-selector-box-size');
 const getStories = require('./get-stories');
+const populateLokiHelpers = require('./populate-loki-helpers');
 const setLokiIsRunning = require('./set-loki-is-running');
 const setLokiTestAttribute = require('./set-loki-test-attribute');
 
@@ -18,6 +19,7 @@ module.exports = {
   disablePointerEvents,
   getSelectorBoxSize,
   getStories,
+  populateLokiHelpers,
   setLokiIsRunning,
   setLokiTestAttribute,
 };

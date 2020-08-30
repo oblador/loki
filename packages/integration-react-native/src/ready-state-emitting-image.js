@@ -6,7 +6,7 @@
 const React = require('react');
 const Image = require('react-native/Libraries/Image/Image');
 const hoistNonReactStatics = require('hoist-non-react-statics');
-const { registerPendingPromise } = require('@loki/integration-core');
+const { registerPendingPromise } = require('./ready-state-manager');
 
 const IMAGE_LOAD_TIMEOUT = 20000;
 
