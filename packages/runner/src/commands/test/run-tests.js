@@ -18,6 +18,7 @@ const {
   createAndroidEmulatorTarget,
 } = require('@loki/target-native-android-emulator');
 const { die } = require('../../console');
+const createBaselineLimitedBatchBuilder = require('./create-baseline-limited-batch-builder');
 const testBatch = require('./test-batch');
 const { TaskRunner } = require('./task-runner');
 const {
@@ -73,7 +74,8 @@ async function runTests(flatConfigurations, options) {
     configurations,
     concurrency = 1,
     tolerance = 0,
-    batchSize = 1
+    batchSize = 1,
+    batchBuilder
   ) => {
     let storybook;
 
@@ -174,6 +176,7 @@ async function runTests(flatConfigurations, options) {
                   concurrency: Math.ceil(concurrency / batchSize),
                   exitOnError: false,
                   batchSize,
+                  batchBuilder,
                   batchExector: batch =>
                     testBatch(
                       target,
@@ -228,7 +231,8 @@ async function runTests(flatConfigurations, options) {
           configurations,
           options.chromeConcurrency,
           options.chromeTolerance,
-          options.chromeAwsLambdaBatchSize
+          options.chromeAwsLambdaBatchSize,
+          createBaselineLimitedBatchBuilder(options)
         );
       }
       case 'chrome.docker': {
