@@ -31,13 +31,17 @@ class TaskRunner extends EventEmitter {
       batchExector: (batch, context) => batch.map(task => task.task(context)),
       exitOnError: true,
     };
-    const { batchExector, batchSize, concurrency, exitOnError } = Object.assign(
-      {},
-      defaultOptions,
-      options
-    );
+    const {
+      batchExector,
+      batchSize,
+      batchBuilder,
+      concurrency,
+      exitOnError,
+    } = Object.assign({}, defaultOptions, options);
+
     this.batchExector = batchExector;
     this.batchSize = batchSize;
+    this.batchBuilder = batchBuilder || getArrayChunks;
     this.concurrency = concurrency;
     this.exitOnError = exitOnError;
     if (!Array.isArray(tasks)) {
@@ -87,10 +91,10 @@ class TaskRunner extends EventEmitter {
   }
 
   createTaskIterator(context) {
-    return async (batch, batchNumber) =>
+    return async batch =>
       Promise.all(
         this.batchExector(batch, context).map(async (work, i) => {
-          const index = this.batchSize * batchNumber + i;
+          const index = this.tasks.indexOf(batch[i]);
           try {
             const hasSubTasks = work instanceof TaskRunner;
             this.mergeTaskState(index, {
@@ -128,7 +132,7 @@ class TaskRunner extends EventEmitter {
     let caughtError;
     try {
       await eachOfLimit(
-        getArrayChunks(this.tasks, this.batchSize),
+        this.batchBuilder(this.tasks, this.batchSize),
         this.concurrency,
         this.createTaskIterator(context)
       );

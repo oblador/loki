@@ -1,16 +1,8 @@
 const fs = require('fs-extra');
 const path = require('path');
-const { slugify } = require('transliteration');
 const { ReferenceImageError } = require('@loki/core');
 const { getImageDiffer } = require('./get-image-differ');
-
-const SLUGIFY_OPTIONS = {
-  lowercase: false,
-  separator: '_',
-};
-
-const defaultFileNameFormatter = ({ configurationName, kind, story }) =>
-  slugify(`${configurationName} ${kind} ${story}`, SLUGIFY_OPTIONS);
+const { getOutputPaths } = require('./get-output-paths');
 
 async function compareScreenshot(
   screenshot,
@@ -20,12 +12,12 @@ async function compareScreenshot(
   kind,
   story
 ) {
-  const getBaseName = options.fileNameFormatter || defaultFileNameFormatter;
-  const basename = getBaseName({ configurationName, kind, story });
-  const filename = `${basename}.png`;
-  const outputPath = `${options.outputDir}/${filename}`;
-  const referencePath = `${options.referenceDir}/${filename}`;
-  const diffPath = `${options.differenceDir}/${filename}`;
+  const { outputPath, referencePath, diffPath } = getOutputPaths(
+    options,
+    configurationName,
+    kind,
+    story
+  );
   const referenceExists = await fs.pathExists(referencePath);
   const shouldUpdateReference =
     options.updateReference || (!options.requireReference && !referenceExists);

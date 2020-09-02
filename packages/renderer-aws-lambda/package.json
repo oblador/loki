@@ -28,7 +28,7 @@
     "docker-lambda": "^0.15.3"
   },
   "peerDependencies": {
-    "chrome-aws-lambda": "^2.0.1"
+    "chrome-aws-lambda": ">=2"
   },
   "publishConfig": {
     "access": "public"
