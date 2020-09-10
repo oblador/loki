@@ -27,6 +27,18 @@ const users = [
     infoLink: 'https://rocket.chat',
     pinned: true,
   },
+  {
+    caption: 'Jimdo',
+    image: '/img/users/jimdo.svg',
+    infoLink: 'https://www.jimdo.com',
+    pinned: true,
+  },
+  {
+    caption: 'saaslify',
+    description: 'Bootstrap your SAAS',
+    infoLink: 'https://www.saaslify.com',
+    pinned: true,
+  },
 ];
 
 const siteConfig = {
