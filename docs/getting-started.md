@@ -3,7 +3,7 @@ id: getting-started
 title: Getting started
 ---
 
-## Prerequsites
+## Prerequisites
 
 - [Node](https://nodejs.org/)
 
