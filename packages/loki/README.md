@@ -20,7 +20,7 @@ Loki aims to have easy setup, no to low maintenance cost, reproducible tests ind
 - iOS simulator
 - Android emulator
 
-## Prerequsites
+## Prerequisites
 
 - [Node](https://nodejs.org/)
 
