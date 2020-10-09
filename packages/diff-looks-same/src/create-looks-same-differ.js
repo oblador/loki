@@ -20,13 +20,13 @@ function createLooksSameDiffer(config) {
         return reject(new Error('Current image is empty'));
       }
 
-      return looksSame(reference, current, instanceConfig, async (err, isSame) => {
+      return looksSame(reference, current, instanceConfig, (err, isSame) => {
         if (err) {
           reject(err);
         } else if (isSame) {
           resolve(isSame);
         } else {
-          await fs.ensureFile(diffPath);
+          fs.ensureFileSync(diffPath);
           looksSame.createDiff(
             {
               ...instanceConfig,
