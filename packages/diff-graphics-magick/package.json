@@ -21,8 +21,7 @@
   "main": "src/index.js",
   "dependencies": {
     "fs-extra": "^8.1.0",
-    "gm": "^1.23.1",
-    "image-size": "^0.9.1"
+    "gm": "^1.23.1"
   },
   "publishConfig": {
     "access": "public"
