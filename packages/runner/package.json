@@ -44,6 +44,6 @@
     "minimist": "^1.2.0",
     "ramda": "^0.26.1",
     "react": "^16.12.0",
-    "transliteration": "^2.1.0"
+    "transliteration": "^2.1.11"
   }
 }
