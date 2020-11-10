@@ -3,6 +3,7 @@ const { slugify } = require('transliteration');
 const SLUGIFY_OPTIONS = {
   lowercase: false,
   separator: '_',
+  allowedChars: 'a-zA-Z0-9',
 };
 
 const defaultFileNameFormatter = ({ configurationName, kind, story }) =>
