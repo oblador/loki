@@ -22,6 +22,9 @@
   "dependencies": {
     "@loki/browser": "^0.25.1"
   },
+  "peerDependencies": {
+    "@storybook/react": "^5"
+  },
   "publishConfig": {
     "access": "public"
   }

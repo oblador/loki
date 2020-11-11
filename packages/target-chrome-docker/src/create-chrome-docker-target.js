@@ -45,12 +45,16 @@ function createChromeDockerTarget({
   chromeDockerImage = 'yukinying/chrome-headless-browser',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
   dockerWithSudo = false,
+  chromeDockerUseCopy = false,
   chromeDockerWithoutSeccomp = false,
 }) {
   let port;
   let dockerId;
   let host;
+  let localPath;
   let dockerUrl = getAbsoluteURL(baseUrl);
+  const isLocalFile = dockerUrl.indexOf('file:') === 0;
+  const staticMountPath = '/var/loki';
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
   const execute = getExecutor(dockerWithSudo);
@@ -67,12 +71,14 @@ function createChromeDockerTarget({
       );
     }
     dockerUrl = dockerUrl.replace('localhost', ip);
-  } else if (dockerUrl.indexOf('file:') === 0) {
-    const staticPath = dockerUrl.substr('file:'.length);
-    const staticMountPath = '/var/loki';
-    runArgs.push('-v');
-    runArgs.push(`${staticPath}:${staticMountPath}`);
+  } else if (isLocalFile) {
+    localPath = dockerUrl.substr('file:'.length);
     dockerUrl = `file://${staticMountPath}`;
+    if (!chromeDockerUseCopy) {
+      // setup volumn mount if we're not using copy
+      runArgs.push('-v');
+      runArgs.push(`${localPath}:${staticMountPath}`);
+    }
   }
 
   async function getIsImageDownloaded(imageName) {
@@ -84,6 +90,19 @@ function createChromeDockerTarget({
 
     if (code !== 0) {
       throw new Error(`Failed querying docker, ${stderr}`);
+    }
+    return stdout.trim().length !== 0;
+  }
+
+  async function copyFiles() {
+    const { code, stdout, stderr } = await execute(dockerPath, [
+      'cp',
+      localPath,
+      `${dockerId}:${staticMountPath}`,
+    ]);
+
+    if (code !== 0) {
+      throw new Error(`Failed to copy files, ${stderr}`);
     }
     return stdout.trim().length !== 0;
   }
@@ -123,6 +142,9 @@ function createChromeDockerTarget({
     const { code, stdout, stderr } = await execute(dockerPath, args);
     if (code === 0) {
       dockerId = stdout;
+      if (chromeDockerUseCopy) {
+        await copyFiles();
+      }
       const logs = execute(dockerPath, ['logs', dockerId, '--follow']);
       const errorLogs = [];
       logs.stderr.on('data', chunk => {

@@ -243,6 +243,7 @@ async function runTests(flatConfigurations, options) {
             chromeDockerImage: options.chromeDockerImage,
             chromeFlags: options.chromeFlags,
             dockerWithSudo: options.dockerWithSudo,
+            chromeDockerUseCopy: options.chromeDockerUseCopy,
             chromeDockerWithoutSeccomp: options.chromeDockerWithoutSeccomp,
           }),
           configurations,

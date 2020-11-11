@@ -22,6 +22,10 @@
   "dependencies": {
     "@loki/integration-core": "^0.25.0"
   },
+  "peerDependencies": {
+    "@storybook/react-native": "^5",
+    "@storybook/addons": "^5"
+  },
   "publishConfig": {
     "access": "public"
   }
