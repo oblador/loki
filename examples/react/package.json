@@ -19,7 +19,7 @@
     "test-ci": "loki --requireReference --reactUri file:./storybook-static",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public --quiet"
   },
   "devDependencies": {
     "@loki/create-async-callback": "^0.25.0",
