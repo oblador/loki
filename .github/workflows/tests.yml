@@ -1,6 +1,12 @@
 name: Tests
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   unit:
@@ -16,14 +22,9 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
       - name: Prepare docker
-        run: docker pull yukinying/chrome-headless-browser
-      - name: Run Jest
-        uses: tangro/actions-test@1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        with:
-          command: test-ci
+        run: docker pull yukinying/chrome-headless-browser:85.0.4181.8
+      - name: Run integration tests
+        run: yarn test-ci
 
   static-analysis:
     name: Static analysis
@@ -43,7 +44,6 @@ jobs:
   integration-cli:
     name: 'Integration tests: CLI'
     runs-on: ubuntu-latest
-    if: 'false' # temporarily disable due to version incompatiblities
 
     steps:
       - uses: actions/checkout@v2

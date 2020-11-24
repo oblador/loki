@@ -1,6 +1,6 @@
 const { createChromeDockerTarget } = require('./');
 
-const DOCKER_TEST_TIMEOUT = 60000;
+const DOCKER_TEST_TIMEOUT = 120000;
 
 const fetchStorybookUrl = async baseUrl => {
   const target = createChromeDockerTarget({ baseUrl });
