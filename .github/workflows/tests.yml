@@ -24,7 +24,7 @@ jobs:
       - name: Prepare docker
         run: docker pull yukinying/chrome-headless-browser:85.0.4181.8
       - name: Run Jest
-        uses: tangro/actions-test@1.1.0
+        uses: tangro/actions-test@1.1.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_CONTEXT: ${{ toJson(github) }}
