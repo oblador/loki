@@ -48,7 +48,7 @@ END
 )"
 
 # Ensure we can snap stories
-yarn build-storybook
+yarn build-storybook --quiet
 mkdir -p .loki/reference
 cp ../../fixtures/chrome_laptop_Welcome_to_Storybook.png ./.loki/reference
 yarn loki test laptop --requireReference --storiesFilter Welcome --reactUri file:./storybook-static
