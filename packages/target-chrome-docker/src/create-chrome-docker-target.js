@@ -75,7 +75,7 @@ function createChromeDockerTarget({
     localPath = dockerUrl.substr('file:'.length);
     dockerUrl = `file://${staticMountPath}`;
     if (!chromeDockerUseCopy) {
-      // setup volumn mount if we're not using copy
+      // setup volume mount if we're not using copy
       runArgs.push('-v');
       runArgs.push(`${localPath}:${staticMountPath}`);
     }
