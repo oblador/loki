@@ -1,6 +1,6 @@
 {
   "name": "@loki/integration-react",
-  "version": "0.25.1",
+  "version": "0.26.0",
   "description": "Loki react integration",
   "keywords": [
     "loki"
@@ -20,7 +20,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/browser": "^0.25.1"
+    "@loki/browser": "^0.26.0"
   },
   "peerDependencies": {
     "@storybook/react": "^5"

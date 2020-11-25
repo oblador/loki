@@ -5,6 +5,7 @@ const {
   disablePointerEvents,
   getSelectorBoxSize,
   getStories,
+  getStorybookError,
   awaitLokiReady,
   awaitSelectorPresent,
   setLokiIsRunning,
@@ -168,6 +169,13 @@ function createChromeTarget(
       return result.value && JSON.parse(result.value);
     };
 
+    const ensureNoErrorPresent = async () => {
+      const errorMessage = await executeFunctionWithWindow(getStorybookError);
+      if (errorMessage) {
+        throw new Error(`Failed to render with error "${errorMessage}"`);
+      }
+    };
+
     client.executeFunctionWithWindow = executeFunctionWithWindow;
 
     client.loadUrl = async (url, selectorToBePresent) => {
@@ -189,11 +197,20 @@ function createChromeTarget(
 
       if (selectorToBePresent) {
         debug(`Awaiting selector "${selectorToBePresent}"`);
-        await executeFunctionWithWindow(
-          awaitSelectorPresent,
-          selectorToBePresent
-        );
+        try {
+          await executeFunctionWithWindow(
+            awaitSelectorPresent,
+            selectorToBePresent
+          );
+        } catch (error) {
+          if (error.message.startsWith('Timeout')) {
+            await ensureNoErrorPresent();
+          }
+          throw error;
+        }
       }
+
+      await ensureNoErrorPresent();
 
       await awaitRequestsFinished();
 

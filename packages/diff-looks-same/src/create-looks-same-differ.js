@@ -26,6 +26,7 @@ function createLooksSameDiffer(config) {
         } else if (isSame) {
           resolve(isSame);
         } else {
+          fs.ensureFileSync(diffPath);
           looksSame.createDiff(
             {
               ...instanceConfig,

@@ -1,6 +1,6 @@
 {
   "name": "loki",
-  "version": "0.25.1",
+  "version": "0.26.0",
   "description": "Visual Regression Testing for react-storybook",
   "bin": {
     "loki": "bin/loki"
@@ -32,14 +32,14 @@
     "*.js"
   ],
   "dependencies": {
-    "@loki/integration-react": "^0.25.1",
-    "@loki/integration-react-native": "^0.25.0",
-    "@loki/integration-vue": "^0.25.1",
-    "@loki/runner": "^0.25.1",
-    "@loki/target-chrome-app": "^0.25.1",
-    "@loki/target-chrome-docker": "^0.25.1",
-    "@loki/target-native-android-emulator": "^0.25.0",
-    "@loki/target-native-ios-simulator": "^0.25.0"
+    "@loki/integration-react": "^0.26.0",
+    "@loki/integration-react-native": "^0.26.0",
+    "@loki/integration-vue": "^0.26.0",
+    "@loki/runner": "^0.26.0",
+    "@loki/target-chrome-app": "^0.26.0",
+    "@loki/target-chrome-docker": "^0.26.0",
+    "@loki/target-native-android-emulator": "^0.26.0",
+    "@loki/target-native-ios-simulator": "^0.26.0"
   },
   "publishConfig": {
     "access": "public"
