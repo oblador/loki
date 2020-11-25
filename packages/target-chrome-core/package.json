@@ -23,7 +23,7 @@
     "@loki/browser": "^0.25.1",
     "@loki/core": "^0.25.0",
     "@loki/integration-core": "^0.25.0",
-    "debug": "^4.2.0"
+    "debug": "^4.1.1"
   },
   "publishConfig": {
     "access": "public"
