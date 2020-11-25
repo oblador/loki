@@ -35,6 +35,7 @@
       "packages/*",
       "test/*",
       "website",
+      "examples/vue",
       "examples/react",
       "examples/renderer-aws-lambda"
     ]
