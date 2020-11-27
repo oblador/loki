@@ -2852,11 +2852,6 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@loki/integration-core@^0.25.0":
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/@loki/integration-core/-/integration-core-0.25.0.tgz#5b38c18703e0fafa7063f5b191ab4772e5550803"
-  integrity sha512-hwGJpocCshFsRAf6PotC3VVZGXILlO1RulTnmUNj7f4G4oc/nkTJlg20+QDSOeOLtO3gQjouIA0PFq6mbqyaSw==
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

@@ -26,6 +26,14 @@
     "@storybook/react-native": "^5",
     "@storybook/addons": "^5"
   },
+  "peerDependenciesMeta": {
+    "@storybook/react-native": {
+      "optional": true
+    },
+    "@storybook/addons": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   }
