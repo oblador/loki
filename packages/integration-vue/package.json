@@ -22,6 +22,14 @@
   "dependencies": {
     "@loki/browser": "^0.26.0"
   },
+  "peerDependencies": {
+    "@storybook/vue": "^5"
+  },
+  "peerDependenciesMeta": {
+    "@storybook/vue": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   }
