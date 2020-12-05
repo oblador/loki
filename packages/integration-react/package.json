@@ -25,6 +25,11 @@
   "peerDependencies": {
     "@storybook/react": "^5"
   },
+  "peerDependenciesMeta": {
+    "@storybook/react": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   }

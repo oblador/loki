@@ -25,6 +25,11 @@
   "peerDependencies": {
     "@storybook/vue": "^5"
   },
+  "peerDependenciesMeta": {
+    "@storybook/vue": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   }
