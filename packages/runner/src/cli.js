@@ -35,7 +35,9 @@ async function run() {
   const command = argv._[0] || 'test';
   const executor = getExecutorForCommand(command);
 
-  bold(`loki ${command} v${version}`);
+  if (!argv.silent) {
+    bold(`loki ${command} v${version}`);
+  }
 
   try {
     await executor(args);

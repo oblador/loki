@@ -10,15 +10,24 @@ const { renderTask } = require('./render-task');
 
 const renderNonInteractive = taskRunner => {
   const handleChange = task => {
-    if (
-      (task.status === STATUS_FAILED || task.status === STATUS_SUCCEEDED) &&
-      task.meta.type !== TASK_TYPE_TESTS &&
-      task.meta.type !== TASK_TYPE_TARGET
-    ) {
-      console.error(renderTask(task));
-      if (task.error && task.error.instructions) {
-        console.info(task.error.instructions);
-      }
+    const message = renderTask(task);
+    // eslint-disable-next-line default-case
+    switch (task.status) {
+      case STATUS_FAILED:
+        console.error(message);
+        if (task.error && task.error.instructions) {
+          console.info(task.error.instructions);
+        }
+        break;
+
+      case STATUS_SUCCEEDED:
+        if (
+          task.meta.type !== TASK_TYPE_TESTS &&
+          task.meta.type !== TASK_TYPE_TARGET
+        ) {
+          console.log(message);
+        }
+        break;
     }
   };
   taskRunner.on(EVENT_CHANGE, handleChange);
