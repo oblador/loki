@@ -1,6 +1,6 @@
 {
   "name": "@loki/target-native-android-emulator",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "description": "Loki Android simulator target",
   "keywords": [
     "loki"
@@ -20,8 +20,8 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/core": "^0.26.0",
-    "@loki/target-native-core": "^0.26.0",
+    "@loki/core": "^0.27.0",
+    "@loki/target-native-core": "^0.27.0",
     "fs-extra": "^8.1.0",
     "osnap": "^1.1.0",
     "tempy": "^0.3.0"

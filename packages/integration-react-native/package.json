@@ -1,6 +1,6 @@
 {
   "name": "@loki/integration-react-native",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "description": "Loki react-native integration",
   "keywords": [
     "loki"
@@ -20,11 +20,11 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/integration-core": "^0.26.0"
+    "@loki/integration-core": "^0.27.0"
   },
   "peerDependencies": {
-    "@storybook/react-native": "^5",
-    "@storybook/addons": "^5"
+    "@storybook/addons": "^5",
+    "@storybook/react-native": "^5"
   },
   "peerDependenciesMeta": {
     "@storybook/react-native": {
