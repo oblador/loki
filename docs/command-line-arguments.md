@@ -45,6 +45,7 @@ yarn loki test -- --port 9009
 | **`--targetFilter`**                    | Regular expression for targets that should be tested.                                                                                           | _None_                                          |
 | **`--requireReference`**                | Fail stories without reference image, useful for CI.                                                                                            | _False, true for CI_                            |
 | **`--verboseRenderer`**                 | Plain text renderer, useful for CI.                                                                                                             | _False, true for CI_                            |
+| **`--silent`**                          | Plain text renderer that will only output errors.                                                                                               | `false`                                         |
 | **`--dockerWithSudo`**                  | Run docker commands with sudo.                                                                                                                  | `false`                                         |
 
 ## `loki update`

@@ -25,6 +25,7 @@ const {
   renderInteractive,
   renderVerbose,
   renderNonInteractive,
+  renderSilent,
 } = require('./renderers');
 const {
   TASK_TYPE_TARGET,
@@ -36,7 +37,18 @@ const {
   TASK_TYPE_STOP,
 } = require('./constants');
 
-const defaultRenderer = ciInfo.isCI ? renderNonInteractive : renderInteractive;
+const getRendererForOptions = options => {
+  if (options.silent) {
+    return renderSilent;
+  }
+  if (options.verboseRenderer) {
+    return renderVerbose;
+  }
+  if (ciInfo.isCI) {
+    return renderNonInteractive;
+  }
+  return renderInteractive;
+};
 
 async function placeGitignore(pathsToIgnore) {
   const parentDir = path.dirname(pathsToIgnore[0]);
@@ -276,7 +288,7 @@ async function runTests(flatConfigurations, options) {
   );
 
   const context = { activeTargets: [] };
-  const render = options.verboseRenderer ? renderVerbose : defaultRenderer;
+  const render = getRendererForOptions(options);
   const stopRendering = render(tasks);
 
   try {

@@ -49,6 +49,7 @@ function parseOptions(args, config) {
     'looks-same': $('looks-same'),
     gm: $('gm'),
     verboseRenderer: $('verboseRenderer'),
+    silent: $('silent'),
     requireReference: $('requireReference') || ciInfo.isCI,
     updateReference: argv._[0] === 'update',
     targetFilter: argv.targetFilter,
