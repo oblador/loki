@@ -22,6 +22,12 @@
   ],
   "storybook": {
     "displayName": "Loki",
+    "supportedFrameworks": [
+      "React",
+      "Angular",
+      "Vue",
+      "react-native"
+    ],
     "icon": "https://loki.js.org/img/favicon.svg"
   },
   "homepage": "https://loki.js.org",
