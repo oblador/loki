@@ -1,14 +1,16 @@
 {
   "name": "loki",
   "version": "0.27.0",
-  "description": "Visual Regression Testing for react-storybook",
+  "description": "Visual Regression Testing for Storybook",
   "bin": {
     "loki": "bin/loki"
   },
   "keywords": [
+    "storybook-addons",
     "storybook",
     "react-storybook",
     "testing",
+    "test",
     "visual testing",
     "visual testing",
     "react-native",
@@ -18,6 +20,10 @@
     "android",
     "web"
   ],
+  "storybook": {
+    "displayName": "Loki",
+    "icon": "https://loki.js.org/img/favicon.svg"
+  },
   "homepage": "https://loki.js.org",
   "bugs": {
     "url": "https://github.com/oblador/loki/issues"
