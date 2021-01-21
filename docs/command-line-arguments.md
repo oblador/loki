@@ -47,6 +47,8 @@ yarn loki test -- --port 9009
 | **`--verboseRenderer`**                 | Plain text renderer, useful for CI.                                                                                                             | _False, true for CI_                            |
 | **`--silent`**                          | Plain text renderer that will only output errors.                                                                                               | `false`                                         |
 | **`--dockerWithSudo`**                  | Run docker commands with sudo.                                                                                                                  | `false`                                         |
+| **`--dockerArgs`**                  | Additional arguments to pass to docker.  | _None_ |
+
 
 ## `loki update`
 
