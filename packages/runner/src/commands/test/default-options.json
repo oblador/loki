@@ -1,4 +1,5 @@
 {
+  "dockerArgs": "",
   "chromeAwsLambdaFunctionName": "loki",
   "chromeAwsLambdaRetries": "0",
   "chromeAwsLambdaBatchSize": "1",
