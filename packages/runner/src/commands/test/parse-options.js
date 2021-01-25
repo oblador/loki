@@ -25,7 +25,7 @@ function parseOptions(args, config) {
     reactUri:
       $('reactUri') || `http://${$('host')}:${argv.port || $('reactPort')}`,
     reactNativeUri: `ws://${$('host')}:${argv.port || $('reactNativePort')}`,
-    dockerArgs: $('dockerArgs').split(' '),
+    dockerNet: $('dockerNet'),
     chromeAwsLambdaFunctionName: $('chromeAwsLambdaFunctionName'),
     chromeAwsLambdaRetries: parseInt($('chromeAwsLambdaRetries'), 10),
     chromeAwsLambdaBatchSize: parseInt($('chromeAwsLambdaBatchSize'), 10),

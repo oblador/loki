@@ -202,7 +202,9 @@ function createChromeTarget(
             awaitSelectorPresent,
             selectorToBePresent
           );
+          debug(`Selector "${selectorToBePresent}" found!`);
         } catch (error) {
+          debug(`Error waiting for selector "${error.message}"!`);
           if (error.message.startsWith('Timeout')) {
             await ensureNoErrorPresent();
           }
@@ -210,14 +212,16 @@ function createChromeTarget(
         }
       }
 
+      debug(`Waiting for ensureNoErrorPresent...`);
       await ensureNoErrorPresent();
 
+      debug(`Waiting for awaitRequestsFinished...`);
       await awaitRequestsFinished();
 
       debug('Awaiting runtime setup');
-
       await executeFunctionWithWindow(setLokiTestAttribute);
 
+      debug(`Waiting for executeFunctionWithWindow...`);
       await executeFunctionWithWindow(awaitLokiReady);
     };
 
