@@ -212,16 +212,16 @@ function createChromeTarget(
         }
       }
 
-      debug(`Waiting for ensureNoErrorPresent...`);
+      debug('Waiting for ensureNoErrorPresent...');
       await ensureNoErrorPresent();
 
-      debug(`Waiting for awaitRequestsFinished...`);
+      debug('Waiting for awaitRequestsFinished...');
       await awaitRequestsFinished();
 
       debug('Awaiting runtime setup');
       await executeFunctionWithWindow(setLokiTestAttribute);
 
-      debug(`Waiting for executeFunctionWithWindow...`);
+      debug('Waiting for executeFunctionWithWindow...');
       await executeFunctionWithWindow(awaitLokiReady);
     };
 
