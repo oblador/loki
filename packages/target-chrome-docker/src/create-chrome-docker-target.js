@@ -44,6 +44,7 @@ function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
   chromeDockerImage = 'yukinying/chrome-headless-browser',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+  dockerNet = null,
   dockerWithSudo = false,
   chromeDockerUseCopy = false,
   chromeDockerWithoutSeccomp = false,
@@ -120,12 +121,19 @@ function createChromeDockerTarget({
     port = await getRandomPort();
 
     ensureDependencyAvailable('docker');
-    const args = runArgs
+    const dockerArgs = runArgs.concat([
+      '--shm-size=1g',
+      '-p',
+      `${port}:${port}`,
+    ]);
+
+    if (dockerNet) {
+      dockerArgs.push(`--net=${dockerNet}`);
+    }
+    dockerArgs.push(chromeDockerImage);
+
+    const args = dockerArgs
       .concat([
-        '--shm-size=1g',
-        '-p',
-        `${port}:${port}`,
-        chromeDockerImage,
         '--disable-datasaver-prompt',
         '--no-first-run',
         '--disable-extensions',
