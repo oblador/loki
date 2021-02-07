@@ -254,6 +254,7 @@ async function runTests(flatConfigurations, options) {
             baseUrl: options.reactUri,
             chromeDockerImage: options.chromeDockerImage,
             chromeFlags: options.chromeFlags,
+            dockerNet: options.dockerNet,
             dockerWithSudo: options.dockerWithSudo,
             chromeDockerUseCopy: options.chromeDockerUseCopy,
             chromeDockerWithoutSeccomp: options.chromeDockerWithoutSeccomp,
