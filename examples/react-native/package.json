@@ -11,22 +11,27 @@
     "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save && rm $LOKI_FILE"
   },
   "dependencies": {
-    "react": "16.9.0",
-    "react-native": "0.61.5"
+    "react": "16.13.1",
+    "react-native": "0.63.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@babel/runtime": "^7.7.4",
-    "@storybook/addon-actions": "^5.3.13",
-    "@storybook/addon-links": "^5.3.13",
-    "@storybook/react-native": "^5.3.13",
-    "@storybook/react-native-server": "^5.3.13",
-    "babel-jest": "^24.9.0",
-    "babel-loader": "^8.0.6",
-    "jest": "^24.9.0",
+    "@babel/core": "^7.12.10",
+    "@babel/runtime": "^7.12.5",
+    "@loki/create-async-callback": "*",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@storybook/addon-actions": "^6.1",
+    "@storybook/addon-knobs": "^6.1",
+    "@storybook/addon-links": "^6.1",
+    "@storybook/react-native": "^5.3.23",
+    "@storybook/react-native-server": "^5.3.23",
+    "babel-jest": "^26.6.3",
+    "babel-loader": "^8.2.2",
+    "eslint": "^7.17.0",
+    "jest": "^26.6.3",
     "loki": "*",
-    "metro-react-native-babel-preset": "^0.57.0",
-    "react-test-renderer": "16.9.0"
+    "metro-react-native-babel-preset": "^0.64.0",
+    "react-dom": "16.13.1",
+    "react-test-renderer": "16.13.1"
   },
   "jest": {
     "preset": "react-native"
