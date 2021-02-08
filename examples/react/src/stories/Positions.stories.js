@@ -124,7 +124,7 @@ export const OverflowHiddenRelative = () => (
           height: 100,
           backgroundColor: 'green',
         }}
-      ></div>
+      />
       <div
         style={{
           position: 'relative',
@@ -134,7 +134,7 @@ export const OverflowHiddenRelative = () => (
           height: '50px',
           backgroundColor: 'yellow',
         }}
-      ></div>
+      />
     </div>
   </div>
 );
@@ -172,7 +172,7 @@ export const OverflowHiddenFixed = () => (
             height: 50,
             backgroundColor: 'yellow',
           }}
-        ></div>
+        />
       </div>
 
       <div
@@ -194,7 +194,7 @@ export const OverflowHiddenFixed = () => (
             height: 50,
             backgroundColor: 'orange',
           }}
-        ></div>
+        />
       </div>
     </div>
   </div>
