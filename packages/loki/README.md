@@ -63,6 +63,22 @@ Loki will not start any servers for you, so ensure storybook and any simulator/e
 
 - [React example](https://github.com/oblador/loki/tree/master/examples/react)
 - [React Native example](https://github.com/oblador/loki/tree/master/examples/react-native)
+
+## Development
+
+```bash
+# Install dependencies
+yarn
+# Start example storybook
+yarn workspace @loki/example-react run storybook
+# Run example visual tests
+yarn workspace @loki/example-react run test
+# Run unit tests
+yarn test
+# Run cli integration tests
+cd test/cli && yarn test
+```
+
 ## Maintainers
 
 <table>
