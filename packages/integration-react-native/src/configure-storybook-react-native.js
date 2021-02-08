@@ -92,7 +92,7 @@ async function configureStorybook() {
   const platform = ReactNative.Platform.OS;
 
   const on = (eventName, callback) =>
-    channel.on(`${MESSAGE_PREFIX}${eventName}`, params => {
+    channel.on(`${MESSAGE_PREFIX}${eventName}`, (params) => {
       if (params && params.platform === platform) {
         callback(params);
       }
@@ -160,7 +160,7 @@ async function configureStorybook() {
   });
 
   on('getStories', () => {
-    const stories = getStorybook().map(component => ({
+    const stories = getStorybook().map((component) => ({
       id: component.id,
       kind: component.kind,
       story: component.story,

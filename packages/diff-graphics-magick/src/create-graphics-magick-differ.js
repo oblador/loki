@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const gm = require('gm');
 
-const getSize = filePath =>
+const getSize = (filePath) =>
   new Promise((resolve, reject) => {
     gm(filePath).size((err, value) => {
       if (err) {

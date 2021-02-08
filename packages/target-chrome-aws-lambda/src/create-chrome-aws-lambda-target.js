@@ -7,7 +7,10 @@ function createChromeAWSLambdaTarget({
   chromeAwsLambdaFunctionName,
   chromeAwsLambdaRetries = 0,
 }) {
-  const invoke = withRetries(chromeAwsLambdaRetries, 1000)(async payload => {
+  const invoke = withRetries(
+    chromeAwsLambdaRetries,
+    1000
+  )(async (payload) => {
     const lambda = new AWS.Lambda();
 
     const params = {
@@ -60,7 +63,7 @@ function createChromeAWSLambdaTarget({
       stories,
       options,
     });
-    return screenshots.map(screenshot => {
+    return screenshots.map((screenshot) => {
       if (screenshot.errorMessage) {
         return parseError(screenshot.errorMessage);
       }

@@ -8,7 +8,7 @@ const PROJECT_ROOT = path.dirname(path.dirname(path.dirname(__dirname)));
 
 const DEBUG = false;
 
-const executeLambda = event =>
+const executeLambda = (event) =>
   dockerLambda({
     event,
     dockerArgs: ['-m', '1024M'].concat(DEBUG ? ['-e', 'DEBUG=*'] : []),
@@ -18,13 +18,13 @@ const executeLambda = event =>
     returnSpawnResult: DEBUG,
   });
 
-const fetchStorybookUrl = async baseUrl =>
+const fetchStorybookUrl = async (baseUrl) =>
   executeLambda({
     command: 'getStorybook',
     baseUrl,
   });
 
-const getStorybookFixtureUrl = fixture =>
+const getStorybookFixtureUrl = (fixture) =>
   `file:./fixtures/storybook-${fixture}`;
 
 const fetchStorybookScreenshot = async (fixture, id) =>
@@ -42,7 +42,7 @@ const fetchStorybookScreenshot = async (fixture, id) =>
     },
   });
 
-const fetchStorybookFixture = async fixture =>
+const fetchStorybookFixture = async (fixture) =>
   fetchStorybookUrl(getStorybookFixtureUrl(fixture));
 
 const storybook = [

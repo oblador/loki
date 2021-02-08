@@ -140,7 +140,7 @@ const getSelectorBoxSize = (window, selector) => {
   function getRootElement(rootSelector) {
     const roots = Array.from(
       Array.from(window.document.querySelectorAll(rootSelector)).map(
-        element => element.parentElement
+        (element) => element.parentElement
       )
     );
 
@@ -174,7 +174,7 @@ const getSelectorBoxSize = (window, selector) => {
     throw new Error('No visible elements found');
   }
 
-  const getBoundingClientRect = element => element.getBoundingClientRect();
+  const getBoundingClientRect = (element) => element.getBoundingClientRect();
 
   const boxSizeUnion = (domRect, { x, y, width, height }) => {
     if (!domRect) {

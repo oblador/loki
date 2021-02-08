@@ -1,4 +1,4 @@
-const mockSize = jest.fn(callback => callback(null, { with: 1, height: 1 }));
+const mockSize = jest.fn((callback) => callback(null, { with: 1, height: 1 }));
 
 const gm = require('gm');
 const createGraphicsMagickDiffer = require('./create-graphics-magick-differ');
@@ -21,10 +21,10 @@ describe('createGraphicsMagickDiffer', () => {
   const tolerance = 1;
 
   it('should return false for unequal sizes', async () => {
-    mockSize.mockImplementationOnce(callback =>
+    mockSize.mockImplementationOnce((callback) =>
       callback(null, { with: 100, height: 100 })
     );
-    mockSize.mockImplementationOnce(callback =>
+    mockSize.mockImplementationOnce((callback) =>
       callback(null, { with: 100, height: 200 })
     );
     const config = { asdf: '1234' };

@@ -37,7 +37,7 @@ const {
   TASK_TYPE_STOP,
 } = require('./constants');
 
-const getRendererForOptions = options => {
+const getRendererForOptions = (options) => {
   if (options.silent) {
     return renderSilent;
   }
@@ -54,8 +54,8 @@ async function placeGitignore(pathsToIgnore) {
   const parentDir = path.dirname(pathsToIgnore[0]);
   const gitignorePath = `${parentDir}/.gitignore`;
   if (!(await fs.pathExists(gitignorePath))) {
-    const relativeToParent = p => path.relative(parentDir, p);
-    const isDecendant = p => p.indexOf('..') !== 0;
+    const relativeToParent = (p) => path.relative(parentDir, p);
+    const isDecendant = (p) => p.indexOf('..') !== 0;
     const gitignore = pathsToIgnore
       .map(relativeToParent)
       .filter(isDecendant)
@@ -65,7 +65,7 @@ async function placeGitignore(pathsToIgnore) {
   }
 }
 
-const groupByTarget = configurations =>
+const groupByTarget = (configurations) =>
   mapObjIndexed(
     fromPairs,
     groupBy(([, { target }]) => target, toPairs(configurations))
@@ -189,7 +189,7 @@ async function runTests(flatConfigurations, options) {
                   exitOnError: false,
                   batchSize,
                   batchBuilder,
-                  batchExector: batch =>
+                  batchExector: (batch) =>
                     testBatch(
                       target,
                       batch.map(({ task }) => task),
@@ -217,7 +217,7 @@ async function runTests(flatConfigurations, options) {
     };
   };
 
-  const createTargetTask = configurations => {
+  const createTargetTask = (configurations) => {
     const { target } = configurations[Object.keys(configurations)[0]];
     switch (target) {
       case 'chrome.app': {
@@ -297,7 +297,7 @@ async function runTests(flatConfigurations, options) {
     stopRendering();
   } catch (err) {
     stopRendering();
-    await Promise.all(context.activeTargets.map(target => target.stop()));
+    await Promise.all(context.activeTargets.map((target) => target.stop()));
     throw err;
   }
 }

@@ -31,7 +31,7 @@ const Status = ({ status }) => {
   const colorProps = {
     [`bg${color.substring(0, 1).toUpperCase()}${color.substring(1)}`]: true,
   };
-
+  // eslint-disable-next-line react/jsx-props-no-spreading
   return <Color {...colorProps} bold whiteBright>{` ${title} `}</Color>;
 };
 

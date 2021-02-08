@@ -6,7 +6,7 @@ const { die } = require('../../console');
 const parseOptions = require('./parse-options');
 const getConfig = require('../../config');
 
-const isPNG = file => file.substr(-4) === '.png';
+const isPNG = (file) => file.substr(-4) === '.png';
 
 function approve(args) {
   const config = getConfig();
@@ -21,7 +21,7 @@ function approve(args) {
   }
   fs.emptyDirSync(referenceDir);
   fs.ensureDirSync(referenceDir);
-  files.forEach(file =>
+  files.forEach((file) =>
     fs.moveSync(path.join(outputDir, file), path.join(referenceDir, file))
   );
 }

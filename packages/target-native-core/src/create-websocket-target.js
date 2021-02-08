@@ -17,7 +17,7 @@ function createWebsocketTarget(socketUri, platform, captureScreenshot) {
 
   const waitForLokiMessage = async (type, timeout = 2000) => {
     const prefixedType = `${MESSAGE_PREFIX}${type}`;
-    const matchesPlatform = data => data && data.platform === platform;
+    const matchesPlatform = (data) => data && data.platform === platform;
     try {
       const message = await withTimeout(timeout)(
         messageQueue.waitFor(prefixedType, matchesPlatform)
@@ -32,7 +32,7 @@ function createWebsocketTarget(socketUri, platform, captureScreenshot) {
   const sendLokiCommand = (type, params = {}) =>
     send(`${MESSAGE_PREFIX}${type}`, Object.assign({ platform }, params));
 
-  const connect = uri =>
+  const connect = (uri) =>
     new Promise((resolve, reject) => {
       debug(`Connecting to ${uri}`);
       const ws = new WebSocket(uri, {
@@ -45,7 +45,7 @@ function createWebsocketTarget(socketUri, platform, captureScreenshot) {
         messageQueue.rejectAll(err);
       }, 10000);
 
-      const onMessage = data => {
+      const onMessage = (data) => {
         const { type, args } = JSON.parse(data);
         debug(
           `Received message ${type} with args ${JSON.stringify(args, null, 2)}`
@@ -53,7 +53,7 @@ function createWebsocketTarget(socketUri, platform, captureScreenshot) {
         messageQueue.receiveMessage(type, args);
       };
 
-      const onError = err => {
+      const onError = (err) => {
         debug('Connection failed', err);
         clearTimeout(timeout);
         reject(err);

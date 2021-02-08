@@ -13,7 +13,7 @@ const STATUS_NAMES = {
   [STATUS_FAILED]: 'FAIL',
 };
 
-const getDescription = task => {
+const getDescription = (task) => {
   switch (task.meta.type) {
     case TASK_TYPE_TEST:
       return `${task.meta.target}/${task.meta.configuration}/${task.meta.kind}/${task.meta.story}`;
@@ -22,7 +22,7 @@ const getDescription = task => {
   }
 };
 
-const renderTask = task => {
+const renderTask = (task) => {
   const status = STATUS_NAMES[task.status];
   const description = getDescription(task);
   const error = task.error ? `: ${task.error.message}` : '';

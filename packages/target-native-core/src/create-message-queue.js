@@ -1,6 +1,6 @@
 const { NativeError } = require('@loki/core');
 
-const createMessageQueue = nativeErrorType => {
+const createMessageQueue = (nativeErrorType) => {
   const queue = [];
 
   const waitFor = (type, condition) =>
@@ -28,8 +28,8 @@ const createMessageQueue = nativeErrorType => {
     }
   };
 
-  const rejectAll = err => {
-    queue.forEach(item => item.reject(err));
+  const rejectAll = (err) => {
+    queue.forEach((item) => item.reject(err));
     queue.splice(0, queue.length);
   };
 

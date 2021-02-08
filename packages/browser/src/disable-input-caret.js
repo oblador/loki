@@ -1,4 +1,4 @@
-const disableInputCaret = window => {
+const disableInputCaret = (window) => {
   const DISABLE_INPUT_CARET_STYLE = `
   * {
     caret-color: transparent !important;

@@ -13,7 +13,7 @@ const { createChromeTarget } = require('@loki/target-chrome-core');
 const { getLocalIPAddress } = require('./get-local-ip-address');
 const { getNetworkHost } = require('./get-network-host');
 
-const getExecutor = dockerWithSudo => (dockerPath, args) => {
+const getExecutor = (dockerWithSudo) => (dockerPath, args) => {
   if (dockerWithSudo) {
     return execa('sudo', [dockerPath, ...args]);
   }
@@ -30,7 +30,7 @@ const waitOnCDPAvailable = (host, port) =>
         interval: 100,
         timeout: 5000,
       },
-      err => {
+      (err) => {
         if (err) {
           reject(err);
         } else {
@@ -155,7 +155,7 @@ function createChromeDockerTarget({
       }
       const logs = execute(dockerPath, ['logs', dockerId, '--follow']);
       const errorLogs = [];
-      logs.stderr.on('data', chunk => {
+      logs.stderr.on('data', (chunk) => {
         errorLogs.push(chunk);
       });
 
@@ -168,7 +168,7 @@ function createChromeDockerTarget({
             `Chrome failed to start with ${
               errorLogs.length === 1 ? 'error' : 'errors'
             } ${errorLogs
-              .map(e => `"${e.toString('utf8').trim()}"`)
+              .map((e) => `"${e.toString('utf8').trim()}"`)
               .join(', ')}`
           );
         }

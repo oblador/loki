@@ -6,7 +6,7 @@
 
 const getSelectorBoxSize = require('./get-selector-box-size');
 
-const addElementsToWrapper = (rects, customMarkup = w => w) => {
+const addElementsToWrapper = (rects, customMarkup = (w) => w) => {
   let wrapper = document.querySelector('#root');
 
   if (!wrapper) {
@@ -149,7 +149,7 @@ describe('getSelectorBoxSize', () => {
       { x: 40, y: 40, width: 60, height: 60 },
       { x: 30, y: 120, width: 20, height: 20 },
     ];
-    addElementsToWrapper(mockElementRects, root => {
+    addElementsToWrapper(mockElementRects, (root) => {
       const wrapper = document.createElement('div');
       wrapper.setAttribute('class', 'wrapper');
       wrapper.getBoundingClientRect = jest.fn(() => ({

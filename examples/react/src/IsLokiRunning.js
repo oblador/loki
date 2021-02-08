@@ -4,7 +4,7 @@ import './isLokiRunning.css';
 
 const DisableAnimationsContext = React.createContext(false);
 
-export const withDisabledAnimations = getStory => (
+export const withDisabledAnimations = (getStory) => (
   <DisableAnimationsContext.Provider value={isLokiRunning()}>
     {getStory()}
   </DisableAnimationsContext.Provider>

@@ -6,7 +6,7 @@
     "test": "bash ./test-cra-init.sh"
   },
   "devDependencies": {
-    "execa": "^1.0.0",
+    "execa": "^5.0.0",
     "loki": "^0.27.0"
   }
 }

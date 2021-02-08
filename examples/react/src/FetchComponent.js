@@ -5,7 +5,7 @@ export const FetchFail = () => {
   useEffect(() => {
     setFetchState('LOADING');
     fetch('http://localhost:1234/get')
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           setFetchState('COMPLETED');
         } else {

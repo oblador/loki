@@ -4,17 +4,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class DelayedComponent extends Component {
-  static propTypes = {
-    delay: PropTypes.number,
-    onDone: PropTypes.func,
-  };
-
-  static defaultProps = {
-    delay: 1000,
-    onDone: null,
-  };
-
-  state = { done: false };
+  constructor(props, context) {
+    super(props, context);
+    this.state = { done: false };
+  }
 
   componentDidMount() {
     this.timer = setTimeout(() => {
@@ -33,3 +26,13 @@ export default class DelayedComponent extends Component {
     return <div>{this.state.done ? 'Done!' : 'Loading…'}</div>;
   }
 }
+
+DelayedComponent.propTypes = {
+  delay: PropTypes.number,
+  onDone: PropTypes.func,
+};
+
+DelayedComponent.defaultProps = {
+  delay: 1000,
+  onDone: null,
+};

@@ -20,7 +20,7 @@ const getArrayChunks = (array, chunkSize) =>
   Array(Math.ceil(array.length / chunkSize))
     .fill()
     .map((_, index) => index * chunkSize)
-    .map(begin => array.slice(begin, begin + chunkSize));
+    .map((begin) => array.slice(begin, begin + chunkSize));
 
 class TaskRunner extends EventEmitter {
   constructor(tasks, options = {}) {
@@ -28,7 +28,7 @@ class TaskRunner extends EventEmitter {
     const defaultOptions = {
       concurrency: 1,
       batchSize: 1,
-      batchExector: (batch, context) => batch.map(task => task.task(context)),
+      batchExector: (batch, context) => batch.map((task) => task.task(context)),
       exitOnError: true,
     };
     const {
@@ -50,7 +50,9 @@ class TaskRunner extends EventEmitter {
       );
     }
     this.tasks = tasks
-      .filter(task => task && task.enabled !== false && task.meta && task.task)
+      .filter(
+        (task) => task && task.enabled !== false && task.meta && task.task
+      )
       .map(({ id, meta, task }, index) => ({
         id: id || index,
         meta,
@@ -91,7 +93,7 @@ class TaskRunner extends EventEmitter {
   }
 
   createTaskIterator(context) {
-    return async batch =>
+    return async (batch) =>
       Promise.all(
         this.batchExector(batch, context).map(async (work, i) => {
           const index = this.tasks.indexOf(batch[i]);
@@ -103,7 +105,7 @@ class TaskRunner extends EventEmitter {
               subTaskRunner: hasSubTasks ? work : null,
             });
             if (hasSubTasks) {
-              work.on(EVENT_CHANGE, changedTask =>
+              work.on(EVENT_CHANGE, (changedTask) =>
                 this.emitChange(changedTask)
               );
               await Promise.resolve(work.run(context));
@@ -144,8 +146,8 @@ class TaskRunner extends EventEmitter {
     }
     this.emit(EVENT_END);
     const errors = this.tasks
-      .filter(task => task.status === STATUS_FAILED)
-      .map(task => task.error)
+      .filter((task) => task.status === STATUS_FAILED)
+      .map((task) => task.error)
       .reduce((acc, error) => acc.concat(error.errors || error), []);
     if (errors.length !== 0) {
       throw new TaskRunnerError('Some tasks failed to run', errors);

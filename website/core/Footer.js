@@ -5,12 +5,12 @@ function Footer(props) {
   const { config, language } = props;
   const { baseUrl, docsUrl } = config;
 
-  const docUrl = doc => {
+  const docUrl = (doc) => {
     const docsPart = `${docsUrl ? `${docsUrl}/` : ''}`;
     return `${baseUrl}${docsPart}${doc}`;
   };
 
-  const pageUrl = doc => baseUrl + (language ? `${language}/` : '') + doc;
+  const pageUrl = (doc) => baseUrl + (language ? `${language}/` : '') + doc;
 
   return (
     <footer className="nav-footer" id="footer">

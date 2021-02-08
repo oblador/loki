@@ -6,8 +6,8 @@ const {
 } = require('../task-runner');
 const { renderTask } = require('./render-task');
 
-const renderVerbose = taskRunner => {
-  const handleChange = task => {
+const renderVerbose = (taskRunner) => {
+  const handleChange = (task) => {
     const message = renderTask(task);
     switch (task.status) {
       case STATUS_FAILED:

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-const getStories = window => {
+const getStories = (window) => {
   const getStorybook =
     (window.__STORYBOOK_CLIENT_API__ && window.__STORYBOOK_CLIENT_API__.raw) ||
     (window.loki && window.loki.getStorybook);
@@ -10,7 +10,7 @@ const getStories = window => {
     );
   }
   return getStorybook()
-    .map(component => ({
+    .map((component) => ({
       id: component.id,
       kind: component.kind,
       story: component.story,

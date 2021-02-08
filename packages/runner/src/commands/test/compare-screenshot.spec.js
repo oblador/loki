@@ -16,7 +16,7 @@ describe('compareScreenshot', () => {
   const story = 'Story';
   const filename = `${configurationName}_${kind}_${story}.png`;
 
-  const executeWithOptions = options =>
+  const executeWithOptions = (options) =>
     compareScreenshot(
       MOCK_SCREENSHOT,
       options,

@@ -11,11 +11,11 @@ const parseOptions = require('./parse-options');
 const runTests = require('./run-tests');
 const buildCommand = require('../../build-command');
 
-const escapeRegExp = str => str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
+const escapeRegExp = (str) => str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
 
 const getUpdateCommand = (errors, args) => {
   const argv = minimist(args);
-  const stories = uniq(errors.map(e => `${e.kind} ${e.story}`));
+  const stories = uniq(errors.map((e) => `${e.kind} ${e.story}`));
   const storiesFilter = `^${stories.map(escapeRegExp).join('|')}$`;
   const tooManyToFilter = stories.length > 10;
 
@@ -69,7 +69,7 @@ async function test(args) {
   } catch (err) {
     if (err.name === 'TaskRunnerError') {
       const imageErrors = err.errors.filter(
-        e => e instanceof ReferenceImageError
+        (e) => e instanceof ReferenceImageError
       );
       if (imageErrors.length !== 0) {
         error('Visual tests failed');

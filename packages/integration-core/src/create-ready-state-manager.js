@@ -13,7 +13,7 @@ function createReadyStateManager() {
   }
 
   function awaitReady() {
-    return Promise.all(pendingPromises.splice(0)).then(function() {
+    return Promise.all(pendingPromises.splice(0)).then(function () {
       if (pendingPromises.length) {
         return awaitReady();
       }

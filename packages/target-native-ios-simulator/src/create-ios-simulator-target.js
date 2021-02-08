@@ -16,7 +16,7 @@ const captureScreenshot = withRetries(3)(async () => {
   return screenshot;
 });
 
-const createIOSSimulatorTarget = socketUri =>
+const createIOSSimulatorTarget = (socketUri) =>
   createWebsocketTarget(socketUri, 'ios', captureScreenshot);
 
 module.exports = createIOSSimulatorTarget;
