@@ -16,6 +16,7 @@
   "reference": "./.loki/reference",
   "reactPort": "6006",
   "reactNativePort": "7007",
+  "pixelmatch": {},
   "looksSame": {},
   "gm": {}
 }

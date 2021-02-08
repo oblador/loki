@@ -1,7 +1,6 @@
 const path = require('path');
 const minimist = require('minimist');
 const ciInfo = require('ci-info');
-const { dependencyAvailable } = require('@loki/core');
 const defaults = require('./default-options');
 
 function parseOptions(args, config) {
@@ -44,11 +43,11 @@ function parseOptions(args, config) {
     chromeEmulatedMedia: $('chromeEmulatedMedia'),
     skipStoriesPattern: $('skipStories'),
     storiesFilter: $('storiesFilter'),
-    diffingEngine:
-      $('diffingEngine') || (dependencyAvailable('gm') ? 'gm' : 'looks-same'),
+    diffingEngine: $('diffingEngine') || 'pixelmatch',
     fetchFailIgnore: $('fetchFailIgnore'),
     'looks-same': $('looks-same'),
     gm: $('gm'),
+    pixelmatch: $('pixelmatch'),
     verboseRenderer: $('verboseRenderer'),
     silent: $('silent'),
     requireReference: $('requireReference') || ciInfo.isCI,

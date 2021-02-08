@@ -46,7 +46,7 @@ This setting is a CSS selector to the part of the page you want screenshots of. 
 
 ## `diffingEngine`
 
-There are two currently available options to choose from when comparing images in loki. These are both configurable by passing in a JSON block to them with their name in the configuration. This block will be passed through to the library and you can use their specific reference documentation. Example `package.json`:
+There are three currently available options to choose from when comparing images in loki. These are configurable by passing in a JSON block to them with their name in the configuration. This block will be passed through to the library and you can use their specific reference documentation. Example `package.json`:
 
 ```json
 {
@@ -58,9 +58,13 @@ There are two currently available options to choose from when comparing images i
 }
 ```
 
+### [`pixelmatch`](https://github.com/mapbox/pixelmatch)
+
+The default engine and is JavaScript only. It's more sensitive to changes on large images and is less susceptible to anti alias flakiness.
+
 ### [`gm`](https://github.com/aheckmann/gm)
 
-Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. This is default if available. `chromeTolerance` percentage is based on overall image, meaning you'd likely want a low threshold.
+Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. `chromeTolerance` percentage is based on overall image, meaning you'd likely want a low threshold.
 
 The configuration is parsed to the `options` argument in `gm.compare`
 
@@ -68,11 +72,11 @@ The configuration is parsed to the `options` argument in `gm.compare`
 
 A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. `chromeTolerance` percentage is based on neighboring pixels which makes it ideal when you have different pixel densities.
 
-|                | `gm`                                            | `looks-same`                  |
-| -------------- | ----------------------------------------------- | ----------------------------- |
-| **Dependency** | [GraphicsMagick](http://www.graphicsmagick.org) | None                          |
-| **Speed**      | 🏃Fast                                          | 🚶Slower                      |
-| **Output**     | ![](/img/gm-diff.png)                           | ![](/img/looks-same-diff.png) |
+|                | `pixelmatch`                  | `gm`                                            | `looks-same`                  |
+| -------------- | ----------------------------- | ----------------------------------------------- | ----------------------------- |
+| **Dependency** | None                          | [GraphicsMagick](http://www.graphicsmagick.org) | None                          |
+| **Speed**      | 🏃Fast                        | 🏃Faster                                        | 🚶Slower                      |
+| **Output**     | ![](/img/pixelmatch-diff.png) | ![](/img/gm-diff.png)                           | ![](/img/looks-same-diff.png) |
 
 ## `verboseRenderer`
 
