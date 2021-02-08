@@ -83,26 +83,26 @@ function createChromeDockerTarget({
   }
 
   async function getIsImageDownloaded(imageName) {
-    const { code, stdout, stderr } = await execute(dockerPath, [
+    const { exitCode, stdout, stderr } = await execute(dockerPath, [
       'images',
       '-q',
       imageName,
     ]);
 
-    if (code !== 0) {
+    if (exitCode !== 0) {
       throw new Error(`Failed querying docker, ${stderr}`);
     }
     return stdout.trim().length !== 0;
   }
 
   async function copyFiles() {
-    const { code, stdout, stderr } = await execute(dockerPath, [
+    const { exitCode, stdout, stderr } = await execute(dockerPath, [
       'cp',
       localPath,
       `${dockerId}:${staticMountPath}`,
     ]);
 
-    if (code !== 0) {
+    if (exitCode !== 0) {
       throw new Error(`Failed to copy files, ${stderr}`);
     }
     return stdout.trim().length !== 0;
@@ -147,8 +147,8 @@ function createChromeDockerTarget({
         ' '
       )}"`
     );
-    const { code, stdout, stderr } = await execute(dockerPath, args);
-    if (code === 0) {
+    const { exitCode, stdout, stderr } = await execute(dockerPath, args);
+    if (exitCode === 0) {
       dockerId = stdout;
       if (chromeDockerUseCopy) {
         await copyFiles();
@@ -174,7 +174,7 @@ function createChromeDockerTarget({
         }
         throw error;
       } finally {
-        if (logs.code === null && !logs.killed) {
+        if (logs.exitCode === null && !logs.killed) {
           logs.kill();
         }
       }

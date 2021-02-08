@@ -22,12 +22,12 @@
   "dependencies": {
     "@loki/core": "^0.27.0",
     "@loki/target-chrome-core": "^0.27.0",
-    "chrome-remote-interface": "^0.28.0",
+    "chrome-remote-interface": "^0.29.0",
     "debug": "^4.1.1",
-    "execa": "^1.0.0",
-    "fs-extra": "^8.1.0",
-    "get-port": "^5.0.0",
-    "wait-on": "^3.3.0"
+    "execa": "^5.0.0",
+    "fs-extra": "^9.1.0",
+    "get-port": "^5.1.1",
+    "wait-on": "^5.2.1"
   },
   "publishConfig": {
     "access": "public"
