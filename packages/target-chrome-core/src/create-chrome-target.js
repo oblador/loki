@@ -273,6 +273,18 @@ function createChromeTarget(
             clip.y = 0;
           }
 
+          // Clap width/height to fit in viewport
+          if (clip.x + clip.width > deviceMetrics.width) {
+            clip.width = deviceMetrics.width - clip.x;
+          }
+
+          if (
+            options.disableAutomaticViewportHeight &&
+            clip.y + clip.height > deviceMetrics.height
+          ) {
+            clip.height = deviceMetrics.height - clip.y;
+          }
+
           const contentEndY = clip.y + clip.height;
           const shouldResizeWindowToFit =
             !options.disableAutomaticViewportHeight &&
