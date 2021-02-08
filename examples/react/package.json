@@ -3,13 +3,14 @@
   "version": "0.27.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-motion": "^0.5.2",
-    "react-scripts": "3.4.0"
+    "react-scripts": "4.0.2",
+    "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -18,21 +19,13 @@
     "pretest-ci": "build-storybook",
     "test-ci": "loki --requireReference --reactUri file:./storybook-static",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9009 -s public",
+    "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public --quiet"
   },
-  "devDependencies": {
-    "@loki/create-async-callback": "^0.27.0",
-    "@loki/is-loki-running": "^0.27.0",
-    "@storybook/addon-actions": "^5.3.13",
-    "@storybook/addon-links": "^5.3.13",
-    "@storybook/addons": "^5.3.13",
-    "@storybook/preset-create-react-app": "^1.5.2",
-    "@storybook/react": "^5.3.13",
-    "loki": "^0.27.0"
-  },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "../../.eslintrc"
+    ]
   },
   "browserslist": {
     "production": [
@@ -45,5 +38,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@loki/create-async-callback": "^0.27.0",
+    "@loki/is-loki-running": "^0.27.0",
+    "@storybook/addon-actions": "^6.1.17",
+    "@storybook/addon-essentials": "^6.1.17",
+    "@storybook/addon-links": "^6.1.17",
+    "@storybook/node-logger": "^6.1.17",
+    "@storybook/preset-create-react-app": "^3.1.5",
+    "@storybook/react": "^6.1.17",
+    "loki": "^0.27.0"
   }
 }

@@ -7,7 +7,7 @@ const CursiveText = ({ children }) => (
 );
 
 CursiveText.propTypes = {
-  children: PropTypes.string,
+  children: PropTypes.string.isRequired,
 };
 
 export default CursiveText;
