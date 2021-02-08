@@ -1,8 +1,8 @@
 const fs = require('fs-extra');
 const path = require('path');
-const createLooksSameDiffer = require('./create-looks-same-differ');
+const createPixelmatchDiffer = require('./create-pixelmatch-differ');
 
-const workingDirectory = `./looks-same-${Math.round(Math.random() * 1000)}`;
+const workingDirectory = `./pixelmatch-${Math.round(Math.random() * 1000)}`;
 const darkGrayPath = path.join(workingDirectory, 'dark-dray.png');
 const lightGrayPath = path.join(workingDirectory, 'light-dray.png');
 
@@ -13,7 +13,7 @@ function writeBase64Image({ outputPath, base64String }) {
   fs.writeFileSync(outputPath, imageData, { encoding: 'base64' });
 }
 
-describe('createLooksSameDiffer', () => {
+describe('createPixelmatchDiffer', () => {
   beforeEach(() => {
     const darkGrayBase64String =
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2NISUn5DwAEiAIshLJN6AAAAABJRU5ErkJggg==';
@@ -35,7 +35,7 @@ describe('createLooksSameDiffer', () => {
 
   it('creates diff files in deeply nested directories', async () => {
     const config = {};
-    const looksSameDiffer = createLooksSameDiffer(config);
+    const pixelmatchDiffer = createPixelmatchDiffer(config);
 
     const diffPath = path.join(
       workingDirectory,
@@ -44,7 +44,7 @@ describe('createLooksSameDiffer', () => {
       'diff.png'
     );
     const tolerance = 0;
-    await looksSameDiffer(darkGrayPath, lightGrayPath, diffPath, tolerance);
+    await pixelmatchDiffer(darkGrayPath, lightGrayPath, diffPath, tolerance);
 
     expect(fs.existsSync(diffPath)).toEqual(true);
   });
