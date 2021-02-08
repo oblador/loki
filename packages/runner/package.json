@@ -29,6 +29,7 @@
     "@loki/core": "^0.27.0",
     "@loki/diff-graphics-magick": "^0.27.0",
     "@loki/diff-looks-same": "^0.27.0",
+    "@loki/diff-pixelmatch": "^0.27.0",
     "@loki/target-chrome-app": "^0.27.0",
     "@loki/target-chrome-aws-lambda": "^0.27.0",
     "@loki/target-chrome-docker": "^0.27.0",

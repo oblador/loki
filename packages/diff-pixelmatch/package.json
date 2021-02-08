@@ -1,18 +1,18 @@
 {
-  "name": "@loki/diff-looks-same",
+  "name": "@loki/diff-pixelmatch",
   "version": "0.27.0",
-  "description": "Loki looks-same image differ",
+  "description": "Loki pixelmatch image differ",
   "keywords": [
     "loki"
   ],
-  "homepage": "https://github.com/oblador/loki/tree/master/packages/diff-looks-same",
+  "homepage": "https://github.com/oblador/loki/tree/master/packages/diff-pixelmatch",
   "bugs": {
     "url": "https://github.com/oblador/loki/issues"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/oblador/loki.git",
-    "directory": "packages/diff-looks-same"
+    "directory": "packages/diff-pixelmatch"
   },
   "license": "MIT",
   "files": [
@@ -21,7 +21,8 @@
   "main": "src/index.js",
   "dependencies": {
     "fs-extra": "^8.1.0",
-    "looks-same": "^4.0.0"
+    "pixelmatch": "^5.2.0",
+    "pngjs": "^4.0.1"
   },
   "publishConfig": {
     "access": "public"
