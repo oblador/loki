@@ -1,8 +1,8 @@
-const { createChromeDockerTarget } = require('./');
+const { createChromeDockerTarget } = require('.');
 
 const DOCKER_TEST_TIMEOUT = 120000;
 
-const fetchStorybookUrl = async baseUrl => {
+const fetchStorybookUrl = async (baseUrl) => {
   const target = createChromeDockerTarget({ baseUrl });
   await target.start();
   let result;
@@ -18,7 +18,7 @@ const fetchStorybookUrl = async baseUrl => {
   return result;
 };
 
-const fetchStorybookFixture = async fixture =>
+const fetchStorybookFixture = async (fixture) =>
   fetchStorybookUrl(`file:${__dirname}/../../../fixtures/storybook-${fixture}`);
 
 const storybook = [

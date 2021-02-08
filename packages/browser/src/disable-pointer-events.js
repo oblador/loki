@@ -1,4 +1,4 @@
-const disablePointerEvents = window => {
+const disablePointerEvents = (window) => {
   const DISABLE_POINTER_EVENTS_STYLE = `
   * {
     pointer-events: none !important;

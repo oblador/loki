@@ -79,7 +79,7 @@ class ChromeError extends LokiError {
   }
 }
 
-const serializeError = error =>
+const serializeError = (error) =>
   JSON.stringify({
     isSerializedError: true,
     type: error instanceof LokiError ? error.name : 'Error',
@@ -96,7 +96,7 @@ const errorTypes = {
   ChromeError,
 };
 
-const parseError = jsonString => {
+const parseError = (jsonString) => {
   if (typeof jsonString !== 'string') {
     return jsonString;
   }

@@ -11,7 +11,7 @@ const withAlternatingState = (WrappedComponent, interval = 1000) =>
 
     componentDidMount() {
       const toggle = () =>
-        this.setState(state => ({
+        this.setState((state) => ({
           on: !state.on,
         }));
       setTimeout(toggle, 1);
@@ -51,7 +51,7 @@ export const CSSAnimation = () => (
 
 export const ReactMotion = withAlternatingState(({ on }) => (
   <Motion defaultStyle={{ rotate: 45 }} style={{ rotate: spring(on ? 0 : 45) }}>
-    {value => (
+    {(value) => (
       <div
         className="AnimatedComponent"
         style={{ transform: `rotate(${value.rotate}deg)` }}

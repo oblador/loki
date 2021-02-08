@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-const setLokiIsRunning = window => {
+const setLokiIsRunning = (window) => {
   if (!window.loki) {
     window.loki = {};
   }

@@ -5,7 +5,7 @@ const {
 module.exports = function createAsyncCallback() {
   let resolveAsyncStory;
   registerPendingPromise(
-    new Promise(function(resolve) {
+    new Promise((resolve) => {
       resolveAsyncStory = resolve;
     })
   );

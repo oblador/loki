@@ -11,7 +11,7 @@ function testBatch(target, batch, options, tolerance) {
     );
     target
       .captureScreenshotsForStories(batch, options)
-      .then(screenshots =>
+      .then((screenshots) =>
         screenshots.forEach((screenshot, i) => {
           const [resolve, reject] = resolvers[i];
           if (screenshot instanceof Error) {
@@ -31,7 +31,7 @@ function testBatch(target, batch, options, tolerance) {
           }
         })
       )
-      .catch(error => resolvers.forEach(([, reject]) => reject(error)));
+      .catch((error) => resolvers.forEach(([, reject]) => reject(error)));
     return promises;
   }
   return batch.map(

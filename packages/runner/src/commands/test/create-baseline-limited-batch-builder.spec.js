@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 const fs = require('fs');
 const createBaselineLimitedBatchBuilder = require('./create-baseline-limited-batch-builder');
 const { getOutputPaths } = require('./get-output-paths');
@@ -6,7 +7,7 @@ jest.mock('fs');
 
 const mockOptions = { referenceDir: '/references' };
 
-const mockFsWithTasks = mockTasks => {
+const mockFsWithTasks = (mockTasks) => {
   const files = mockTasks.reduce((acc, task) => {
     const { referencePath } = getOutputPaths(
       mockOptions,
@@ -17,7 +18,7 @@ const mockFsWithTasks = mockTasks => {
     acc[referencePath] = task.size;
     return acc;
   }, {});
-  fs.statSync.mockImplementation(file => {
+  fs.statSync.mockImplementation((file) => {
     if (file in files) {
       return {
         size: files[file],
@@ -27,7 +28,7 @@ const mockFsWithTasks = mockTasks => {
   });
 };
 
-const generateTasks = sizes =>
+const generateTasks = (sizes) =>
   sizes.map((size, i) => ({
     size,
     task: {
@@ -37,13 +38,12 @@ const generateTasks = sizes =>
     },
   }));
 
-const expectBatchLengths = ({ options, limit, tasks, batchSize }) => {
-  return expect(
+const expectBatchLengths = ({ options, limit, tasks, batchSize }) =>
+  expect(
     createBaselineLimitedBatchBuilder(options, limit)(tasks, batchSize).map(
-      batch => batch.length
+      (batch) => batch.length
     )
   );
-};
 
 describe('createBaselineLimitedBatchBuilder', () => {
   const options = mockOptions;

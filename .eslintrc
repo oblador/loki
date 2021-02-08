@@ -17,12 +17,16 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/prop-types": [0],
     "react/destructuring-assignment": [0],
+    "react/jsx-fragments": [0],
     "import/extensions": [2, { "js": "never", "json": "always" }],
     "import/no-extraneous-dependencies": [0],
     "import/no-unresolved": [2, { ignore: ['^react(-native)?$'] }],
     "no-plusplus": [0],
     "no-await-in-loop": [0],
     "func-names": [0],
+    "prefer-object-spread": [0],
+    "max-classes-per-file": [0],
+    "no-async-promise-executor": [0],
     "prettier/prettier": "error"
   }
 }

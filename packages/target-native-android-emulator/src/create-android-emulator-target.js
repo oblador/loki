@@ -11,7 +11,7 @@ const captureScreenshot = async () => {
   return screenshot;
 };
 
-const createAndroidEmulatorTarget = socketUri =>
+const createAndroidEmulatorTarget = (socketUri) =>
   createWebsocketTarget(socketUri, 'android', captureScreenshot);
 
 module.exports = createAndroidEmulatorTarget;

@@ -1,4 +1,4 @@
-const getStorybookError = window => {
+const getStorybookError = (window) => {
   const errorElement = window.document.querySelector(
     '.sb-show-errordisplay #error-message'
   );

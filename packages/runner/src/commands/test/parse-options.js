@@ -14,7 +14,7 @@ function parseOptions(args, config) {
     ],
   });
 
-  const $ = key => argv[key] || config[key] || defaults[key];
+  const $ = (key) => argv[key] || config[key] || defaults[key];
 
   return {
     outputDir: path.resolve($('output')),

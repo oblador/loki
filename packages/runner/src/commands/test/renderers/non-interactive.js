@@ -8,8 +8,8 @@ const {
 const { TASK_TYPE_TESTS, TASK_TYPE_TARGET } = require('../constants');
 const { renderTask } = require('./render-task');
 
-const renderNonInteractive = taskRunner => {
-  const handleChange = task => {
+const renderNonInteractive = (taskRunner) => {
+  const handleChange = (task) => {
     const message = renderTask(task);
     // eslint-disable-next-line default-case
     switch (task.status) {

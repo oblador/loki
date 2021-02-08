@@ -5,11 +5,12 @@ module.exports = function createAsyncCallback(win = window) {
   let resolveAsyncStory;
   if (registerPendingPromise) {
     registerPendingPromise(
-      new Promise(function(resolve) {
+      new Promise((resolve) => {
         resolveAsyncStory = resolve;
       })
     );
   }
+
   return () => {
     if (resolveAsyncStory) {
       resolveAsyncStory();

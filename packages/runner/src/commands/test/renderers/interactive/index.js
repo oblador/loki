@@ -4,7 +4,7 @@ const { render } = require('ink');
 
 const App = importJsx('./App');
 
-const renderInteractive = taskRunner => {
+const renderInteractive = (taskRunner) => {
   const { unmount } = render(<App taskRunner={taskRunner} />);
   return unmount;
 };

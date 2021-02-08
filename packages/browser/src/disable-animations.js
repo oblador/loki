@@ -1,6 +1,6 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
-const disableAnimations = window => {
+const disableAnimations = (window) => {
   const DISABLE_CSS_ANIMATIONS_STYLE = `
   *, :before, :after {
     -webkit-transition: none !important;
@@ -27,7 +27,7 @@ const disableAnimations = window => {
   const scheduleFrame = () => {
     setTimeout(() => {
       currentFrame++;
-      callbacks.splice(0).forEach(c => c(now()));
+      callbacks.splice(0).forEach((c) => c(now()));
 
       // Assume no new invocations for 50ms means we've ended
       resolveRAFTimer = setTimeout(() => {
@@ -40,7 +40,7 @@ const disableAnimations = window => {
     // Defer screenshotting until animations has ended/stabilized
     if (!resolveRAF) {
       window.loki.registerPendingPromise(
-        new Promise(resolve => {
+        new Promise((resolve) => {
           resolveRAF = resolve;
         })
       );
@@ -56,7 +56,7 @@ const disableAnimations = window => {
   // based animations run until the end within a few milliseconds.
   // In case they run infinitely or more than 1000 frames/16 "seconds",
   // we just force them to a pause.
-  window.requestAnimationFrame = callback => {
+  window.requestAnimationFrame = (callback) => {
     // Avoid infinite loop by only allowing 1000 frames
     if (currentFrame < maxFrames) {
       callbacks.push(callback);

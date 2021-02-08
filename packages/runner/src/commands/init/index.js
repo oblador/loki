@@ -33,7 +33,7 @@ function init(args) {
   const pkg = getProjectPackage();
   const isReactNativeProject = hasReactNativeDependency(pkg);
 
-  const relative = to => path.relative('.', to);
+  const relative = (to) => path.relative('.', to);
 
   const argv = minimist(args, {
     boolean: ['f', 'force'],

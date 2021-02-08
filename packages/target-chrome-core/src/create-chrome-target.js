@@ -32,7 +32,8 @@ const CAPTURING_SCREENSHOT_RETRY_BACKOFF = 500;
 const REQUEST_STABILIZATION_TIMEOUT = 100;
 const RESIZE_DELAY = 500;
 
-const delay = duration => new Promise(resolve => setTimeout(resolve, duration));
+const delay = (duration) =>
+  new Promise((resolve) => setTimeout(resolve, duration));
 
 function createChromeTarget(
   start,
@@ -105,12 +106,12 @@ function createChromeTarget(
     };
 
     const startObservingRequests = () => {
-      const requestEnded = requestId => {
+      const requestEnded = (requestId) => {
         delete pendingRequestURLMap[requestId];
         maybeFulfillPromise();
       };
 
-      const requestFailed = requestId => {
+      const requestFailed = (requestId) => {
         const failedURL = pendingRequestURLMap[requestId];
         if (!fetchFailIgnore || !fetchFailIgnore.test(failedURL)) {
           failedURLs.push(failedURL);
@@ -144,7 +145,7 @@ function createChromeTarget(
         maybeFulfillPromise();
       });
 
-    const evaluateOnNewDocument = scriptSource => {
+    const evaluateOnNewDocument = (scriptSource) => {
       if (Page.addScriptToEvaluateOnLoad) {
         // For backwards support
         return Page.addScriptToEvaluateOnLoad({ scriptSource });
@@ -225,7 +226,7 @@ function createChromeTarget(
       await executeFunctionWithWindow(awaitLokiReady);
     };
 
-    const getPositionInViewport = async selector => {
+    const getPositionInViewport = async (selector) => {
       try {
         return await executeFunctionWithWindow(getSelectorBoxSize, selector);
       } catch (error) {
@@ -242,92 +243,96 @@ function createChromeTarget(
       options.chromeRetries,
       CAPTURING_SCREENSHOT_RETRY_BACKOFF
     )(
-      withTimeout(CAPTURING_SCREENSHOT_TIMEOUT, 'captureScreenshot')(
-        async (selector = 'body') => {
-          debug(`Getting viewport position of "${selector}"`);
-          const position = await getPositionInViewport(selector);
+      withTimeout(
+        CAPTURING_SCREENSHOT_TIMEOUT,
+        'captureScreenshot'
+      )(async (selector = 'body') => {
+        debug(`Getting viewport position of "${selector}"`);
+        const position = await getPositionInViewport(selector);
 
-          if (position.width === 0 || position.height === 0) {
-            throw new Error(
-              `Selector "${selector} has zero width or height. Can't capture screenshot.`
-            );
-          }
-
-          const clip = {
-            scale: 1,
-            x: Math.floor(position.x),
-            y: Math.floor(position.y),
-            width: Math.ceil(position.width),
-            height: Math.ceil(position.height),
-          };
-
-          // Clamp x/y positions to viewport otherwise chrome
-          // ignores scale
-          if (clip.x < 0) {
-            clip.width += clip.x;
-            clip.x = 0;
-          }
-
-          if (clip.y < 0) {
-            clip.height += clip.y;
-            clip.y = 0;
-          }
-
-          // Clap width/height to fit in viewport
-          if (clip.x + clip.width > deviceMetrics.width) {
-            clip.width = deviceMetrics.width - clip.x;
-          }
-
-          if (
-            options.disableAutomaticViewportHeight &&
-            clip.y + clip.height > deviceMetrics.height
-          ) {
-            clip.height = deviceMetrics.height - clip.y;
-          }
-
-          const contentEndY = clip.y + clip.height;
-          const shouldResizeWindowToFit =
-            !options.disableAutomaticViewportHeight &&
-            contentEndY > deviceMetrics.height;
-
-          if (shouldResizeWindowToFit) {
-            const override = Object.assign({}, deviceMetrics, {
-              height: contentEndY,
-            });
-            debug('Resizing window to fit tall content');
-            await Emulation.setDeviceMetricsOverride(override);
-            // This number is arbitrary and probably excessive,
-            // but there are no other events or values to observe
-            // that I could find indicating when chrome is done resizing
-            await delay(RESIZE_DELAY);
-          }
-
-          debug('Capturing screenshot');
-          const screenshot = await Page.captureScreenshot({
-            format: 'png',
-            clip,
-          });
-          const buffer = Buffer.from(screenshot.data, 'base64');
-
-          if (shouldResizeWindowToFit) {
-            await Emulation.setDeviceMetricsOverride(deviceMetrics);
-          }
-
-          return buffer;
+        if (position.width === 0 || position.height === 0) {
+          throw new Error(
+            `Selector "${selector} has zero width or height. Can't capture screenshot.`
+          );
         }
-      )
+
+        const clip = {
+          scale: 1,
+          x: Math.floor(position.x),
+          y: Math.floor(position.y),
+          width: Math.ceil(position.width),
+          height: Math.ceil(position.height),
+        };
+
+        // Clamp x/y positions to viewport otherwise chrome
+        // ignores scale
+        if (clip.x < 0) {
+          clip.width += clip.x;
+          clip.x = 0;
+        }
+
+        if (clip.y < 0) {
+          clip.height += clip.y;
+          clip.y = 0;
+        }
+
+        // Clap width/height to fit in viewport
+        if (clip.x + clip.width > deviceMetrics.width) {
+          clip.width = deviceMetrics.width - clip.x;
+        }
+
+        if (
+          options.disableAutomaticViewportHeight &&
+          clip.y + clip.height > deviceMetrics.height
+        ) {
+          clip.height = deviceMetrics.height - clip.y;
+        }
+
+        const contentEndY = clip.y + clip.height;
+        const shouldResizeWindowToFit =
+          !options.disableAutomaticViewportHeight &&
+          contentEndY > deviceMetrics.height;
+
+        if (shouldResizeWindowToFit) {
+          const override = Object.assign({}, deviceMetrics, {
+            height: contentEndY,
+          });
+          debug('Resizing window to fit tall content');
+          await Emulation.setDeviceMetricsOverride(override);
+          // This number is arbitrary and probably excessive,
+          // but there are no other events or values to observe
+          // that I could find indicating when chrome is done resizing
+          await delay(RESIZE_DELAY);
+        }
+
+        debug('Capturing screenshot');
+        const screenshot = await Page.captureScreenshot({
+          format: 'png',
+          clip,
+        });
+        const buffer = Buffer.from(screenshot.data, 'base64');
+
+        if (shouldResizeWindowToFit) {
+          await Emulation.setDeviceMetricsOverride(deviceMetrics);
+        }
+
+        return buffer;
+      })
     );
 
     return client;
   }
 
-  const getStoryUrl = storyId =>
+  const getStoryUrl = (storyId) =>
     `${resolvedBaseUrl}/iframe.html?id=${encodeURIComponent(
       storyId
     )}&viewMode=story`;
 
   const launchStoriesTab = withTimeout(LOADING_STORIES_TIMEOUT)(
-    withRetries(5, RETRY_LOADING_STORIES_TIMEOUT)(async url => {
+    withRetries(
+      5,
+      RETRY_LOADING_STORIES_TIMEOUT
+    )(async (url) => {
       const tab = await launchNewTab({
         width: 100,
         height: 100,

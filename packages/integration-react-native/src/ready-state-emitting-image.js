@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
 /**
  * This replaces the React Native Image component to register when it's finished
  * loading to avoid race conditions in visual tests.
@@ -11,15 +11,13 @@ const { registerPendingPromise } = require('./ready-state-manager');
 const IMAGE_LOAD_TIMEOUT = 20000;
 
 class ReadyStateEmittingImage extends React.Component {
-  static propTypes = Image.propTypes;
-
   constructor(props) {
     super(props);
 
     if (props.source) {
       registerPendingPromise(
         new Promise((resolve, reject) => {
-          this.resolve = value => {
+          this.resolve = (value) => {
             resolve(value);
             clearTimeout(this.timer);
           };
@@ -41,11 +39,11 @@ class ReadyStateEmittingImage extends React.Component {
     this.ref.setNativeProps(...args);
   };
 
-  handleRef = ref => {
+  handleRef = (ref) => {
     this.ref = ref;
   };
 
-  handleLoadEnd = e => {
+  handleLoadEnd = (e) => {
     if (this.resolve) {
       this.resolve();
       this.resolve = null;
@@ -67,6 +65,8 @@ class ReadyStateEmittingImage extends React.Component {
     );
   }
 }
+
+ReadyStateEmittingImage.propTypes = Image.propTypes;
 
 hoistNonReactStatics(ReadyStateEmittingImage, Image);
 

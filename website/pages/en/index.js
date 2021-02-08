@@ -105,8 +105,8 @@ function Index(props) {
     }
 
     const showcase = siteConfig.users
-      .filter(user => user.pinned)
-      .map(user => (
+      .filter((user) => user.pinned)
+      .map((user) => (
         <a
           href={user.infoLink}
           key={user.infoLink}

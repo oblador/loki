@@ -5,10 +5,9 @@ function createLooksSameDiffer(config) {
   return function getImageDiff(path1, path2, diffPath, tolerance) {
     const instanceConfig = { tolerance, ...config };
     return new Promise(async (resolve, reject) => {
-      const [reference, current] = (await Promise.all([
-        fs.readFile(path1),
-        fs.readFile(path2),
-      ])).map(Buffer.from);
+      const [reference, current] = (
+        await Promise.all([fs.readFile(path1), fs.readFile(path2)])
+      ).map(Buffer.from);
 
       if (current.equals(reference)) {
         return resolve(true);
@@ -35,7 +34,7 @@ function createLooksSameDiffer(config) {
               diff: diffPath,
               highlightColor: '#ff00ff',
             },
-            diffErr => {
+            (diffErr) => {
               if (diffErr) {
                 reject(diffErr);
               }

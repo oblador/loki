@@ -37,7 +37,7 @@ describe('withRetries', () => {
     for (let i = 0; i < retries; i++) {
       expect(callback).toHaveBeenCalledTimes(0);
       jest.runAllTimers();
-      await new Promise(resolve => setImmediate(resolve));
+      await new Promise((resolve) => setImmediate(resolve));
     }
     await expect(output).rejects.toThrow('Failed with "output"');
     expect(mockFn).toHaveBeenCalledTimes(4);

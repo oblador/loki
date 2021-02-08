@@ -1,11 +1,11 @@
 const { dependencyAvailable } = require('@loki/core');
 
-const escapeShell = str => `"${str.replace(/(["\t\n\r$`\\])/g, '\\$1')}"`;
+const escapeShell = (str) => `"${str.replace(/(["\t\n\r$`\\])/g, '\\$1')}"`;
 
-const isTruthy = args => arg =>
+const isTruthy = (args) => (arg) =>
   args[arg] !== false && typeof args[arg] !== 'undefined';
 
-const stringifyArg = args => arg => {
+const stringifyArg = (args) => (arg) => {
   const flag = arg.length === 1 ? `-${arg}` : `--${arg}`;
   if (typeof args[arg] === 'boolean') {
     return flag;
@@ -13,11 +13,8 @@ const stringifyArg = args => arg => {
   return `${flag}=${escapeShell(String(args[arg]))}`;
 };
 
-const argObjectToString = args =>
-  Object.keys(args)
-    .filter(isTruthy(args))
-    .map(stringifyArg(args))
-    .join(' ');
+const argObjectToString = (args) =>
+  Object.keys(args).filter(isTruthy(args)).map(stringifyArg(args)).join(' ');
 
 function buildCommand(command, argObject) {
   const args = argObjectToString(argObject);

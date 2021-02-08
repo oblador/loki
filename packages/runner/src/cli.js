@@ -11,7 +11,7 @@ const {
 const { die, bold } = require('./console');
 const { version } = require('../package.json');
 
-const getExecutorForCommand = command => {
+const getExecutorForCommand = (command) => {
   switch (command) {
     case 'init': {
       return require('./commands/init');

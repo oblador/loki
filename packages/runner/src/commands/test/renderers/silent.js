@@ -4,8 +4,8 @@ const { EVENT_CHANGE, STATUS_FAILED } = require('../task-runner');
 const { TASK_TYPE_TESTS, TASK_TYPE_TARGET } = require('../constants');
 const { renderTask } = require('./render-task');
 
-const renderSilent = taskRunner => {
-  const handleChange = task => {
+const renderSilent = (taskRunner) => {
+  const handleChange = (task) => {
     if (
       task.status === STATUS_FAILED &&
       task.meta.type !== TASK_TYPE_TESTS &&

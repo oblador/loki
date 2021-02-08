@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-const setLokiTestAttribute = window => {
+const setLokiTestAttribute = (window) => {
   window.document.querySelector(':root').setAttribute('loki-test', true);
 };
 

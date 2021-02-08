@@ -3,7 +3,7 @@ const map = require('ramda/src/map');
 const { dependencyAvailable } = require('@loki/core');
 const { isReactNativeProject } = require('./project-package');
 
-const mapChromeAppToDocker = map(config =>
+const mapChromeAppToDocker = map((config) =>
   Object.assign({}, config, {
     target: config.target.replace('chrome.app', 'chrome.docker'),
   })

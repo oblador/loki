@@ -41,12 +41,12 @@ function decorateStorybook(storybook, readyStateManager) {
           var resolveAsyncStory = null;
           readyStateManager.resetPendingPromises();
           readyStateManager.registerPendingPromise(
-            new Promise(function(resolve) {
+            new Promise(function (resolve) {
               resolveAsyncStory = resolve;
             })
           );
 
-          const done = function() {
+          const done = function () {
             if (resolveAsyncStory) {
               resolveAsyncStory();
             }
@@ -80,20 +80,20 @@ function decorateStorybook(storybook, readyStateManager) {
     Object.defineProperty(storybook, 'storiesOf', {
       configurable: true,
       enumerable: true,
-      get: function() {
+      get: function () {
         return storiesOf;
       },
     });
   }
 
   storybook.setAddon({
-    lokiSkip: function(...args) {
+    lokiSkip: function (...args) {
       return wrapWithSkipStory(this.add.bind(this), this.kind)(...args);
     },
-    lokiAsync: function(...args) {
+    lokiAsync: function (...args) {
       return wrapWithAsyncStory(this.add.bind(this))(...args);
     },
-    lokiAsyncSkip: function(...args) {
+    lokiAsyncSkip: function (...args) {
       return wrapWithSkipStory(
         wrapWithAsyncStory(this.add.bind(this)),
         this.kind

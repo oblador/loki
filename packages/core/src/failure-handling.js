@@ -1,7 +1,7 @@
 const { TimeoutError } = require('./errors');
 
-const withTimeout = (timeout, operationName) => fnOrPromise => {
-  const awaitPromise = promise =>
+const withTimeout = (timeout, operationName) => (fnOrPromise) => {
+  const awaitPromise = (promise) =>
     new Promise(async (resolve, reject) => {
       let cancelled = false;
       const timer = setTimeout(() => {
@@ -28,9 +28,12 @@ const withTimeout = (timeout, operationName) => fnOrPromise => {
   return awaitPromise(fnOrPromise);
 };
 
-const sleep = duration => new Promise(resolve => setTimeout(resolve, duration));
+const sleep = (duration) =>
+  new Promise((resolve) => setTimeout(resolve, duration));
 
-const withRetries = (maxRetries = 3, backoff = 0) => fn => async (...args) => {
+const withRetries = (maxRetries = 3, backoff = 0) => (fn) => async (
+  ...args
+) => {
   let tries = 0;
   let lastError;
   while (tries <= maxRetries) {
