@@ -1,6 +1,6 @@
 {
   "name": "@loki/example-react",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -40,14 +40,14 @@
     ]
   },
   "devDependencies": {
-    "@loki/create-async-callback": "^0.27.0",
-    "@loki/is-loki-running": "^0.27.0",
+    "@loki/create-async-callback": "^0.28.0",
+    "@loki/is-loki-running": "^0.28.0",
     "@storybook/addon-actions": "^6.1.17",
     "@storybook/addon-essentials": "^6.1.17",
     "@storybook/addon-links": "^6.1.17",
     "@storybook/node-logger": "^6.1.17",
     "@storybook/preset-create-react-app": "^3.1.5",
     "@storybook/react": "^6.1.17",
-    "loki": "^0.27.0"
+    "loki": "^0.28.0"
   }
 }
