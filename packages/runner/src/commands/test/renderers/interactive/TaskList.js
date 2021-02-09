@@ -107,18 +107,19 @@ const renderFailedTasks = (tasks) =>
       <FailedTest key={task.id} title={task.meta.story} error={task.error} />
     ));
 
-const renderKinds = (kinds) =>
-  kinds.map(({ key, status, target, configuration, kind, tasks }) => (
-    <React.Fragment key={key}>
-      <KindTask
-        status={status}
-        target={target}
-        configuration={configuration}
-        kind={kind}
-      />
-      {renderFailedTasks(tasks)}
-    </React.Fragment>
-  ));
+const renderKind = ({ key, status, target, configuration, kind, tasks }) => (
+  <React.Fragment key={key}>
+    <KindTask
+      status={status}
+      target={target}
+      configuration={configuration}
+      kind={kind}
+    />
+    {renderFailedTasks(tasks)}
+  </React.Fragment>
+);
+
+const renderKinds = (kinds) => kinds.map(renderKind);
 
 const TaskList = ({ tasks }) => {
   const runningGrouped = groupByKind(collectRecursively(isRunningTest, tasks));
@@ -150,7 +151,7 @@ const TaskList = ({ tasks }) => {
 
   return (
     <Box flexDirection="column">
-      <Static>{renderKinds(completed)}</Static>
+      <Static items={completed}>{renderKind}</Static>
       {renderKinds(running)}
       {tasks.map((task) => (
         <TargetTask

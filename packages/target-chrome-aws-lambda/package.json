@@ -21,7 +21,7 @@
   "main": "src/index.js",
   "dependencies": {
     "@loki/core": "^0.27.0",
-    "aws-sdk": "^2.588.0",
+    "aws-sdk": "^2.840.0",
     "debug": "^4.1.1"
   },
   "publishConfig": {

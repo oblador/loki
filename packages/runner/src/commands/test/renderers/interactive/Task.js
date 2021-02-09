@@ -1,5 +1,5 @@
 const React = require('react');
-const { Box, Color } = require('ink');
+const { Box, Text } = require('ink');
 const {
   STATUS_NOT_STARTED,
   STATUS_RUNNING,
@@ -28,19 +28,15 @@ const STATUS_CONFIGURATION_MAP = {
 
 const Status = ({ status }) => {
   const { color, title } = STATUS_CONFIGURATION_MAP[status];
-  const colorProps = {
-    [`bg${color.substring(0, 1).toUpperCase()}${color.substring(1)}`]: true,
-  };
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Color {...colorProps} bold whiteBright>{` ${title} `}</Color>;
+  return <Text backgroundColor={color} bold color="#fff">{` ${title} `}</Text>;
 };
 
 const Task = ({ status, prefix, title }) => (
   <Box>
     <Status status={status} />
     <Box marginLeft={1}>
-      <Color dim>{prefix}</Color>
-      <Color bold>{title}</Color>
+      <Text dimColor>{prefix}</Text>
+      <Text bold>{title}</Text>
     </Box>
   </Box>
 );

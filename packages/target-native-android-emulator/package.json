@@ -22,9 +22,9 @@
   "dependencies": {
     "@loki/core": "^0.27.0",
     "@loki/target-native-core": "^0.27.0",
-    "fs-extra": "^8.1.0",
+    "fs-extra": "^9.1.0",
     "osnap": "^1.1.0",
-    "tempy": "^0.3.0"
+    "tempy": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"

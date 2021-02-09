@@ -22,7 +22,7 @@
   "dependencies": {
     "@loki/core": "^0.27.0",
     "@loki/target-chrome-app": "^0.27.0",
-    "async": "^3.0.1"
+    "async": "^3.2.0"
   },
   "devDependencies": {
     "docker-lambda": "^0.15.3"
