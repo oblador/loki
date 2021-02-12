@@ -11,14 +11,14 @@ const getNetworkHost = async (execute, dockerId) => {
   // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
   // bridge, which means we can talk directly to it via its IP address.
   if (runningInsideDocker) {
-    const { code, stdout } = await execute('docker', [
+    const { exitCode, stdout } = await execute('docker', [
       'inspect',
       '-f',
       '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}',
       dockerId,
     ]);
 
-    if (code !== 0) {
+    if (exitCode !== 0) {
       throw new Error('Unable to determine IP of docker container');
     }
 
