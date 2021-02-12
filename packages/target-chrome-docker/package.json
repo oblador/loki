@@ -1,6 +1,6 @@
 {
   "name": "@loki/target-chrome-docker",
-  "version": "0.28.0",
+  "version": "0.28.1",
   "description": "Loki Chrome docker target",
   "keywords": [
     "loki"
