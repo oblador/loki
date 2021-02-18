@@ -27,6 +27,12 @@ const users = [
     infoLink: 'https://rocket.chat',
     pinned: true,
   },
+  {
+    caption: 'Warren',
+    image: '/img/users/warren.svg',
+    infoLink: 'https://warren.com.br',
+    pinned: true,
+  },
 ];
 
 const siteConfig = {
