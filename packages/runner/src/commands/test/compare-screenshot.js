@@ -37,7 +37,8 @@ async function compareScreenshot(
 
   const isEqual = await getImageDiffer(
     options.diffingEngine,
-    options[options.diffingEngine]
+    options[options.diffingEngine],
+    options.includeReferenceOnDiff
   )(referencePath, outputPath, diffPath, tolerance);
 
   if (!isEqual) {
