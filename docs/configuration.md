@@ -58,6 +58,10 @@ There are three currently available options to choose from when comparing images
 }
 ```
 
+### `includeReferenceOnDiff`
+
+This property enables combining the diff with the reference images, side by side. This allows for a better visualization of the previous state and the new one, along with the diff engine result.
+
 ### [`pixelmatch`](https://github.com/mapbox/pixelmatch)
 
 The default engine and is JavaScript only. It's more sensitive to changes on large images and is less susceptible to anti alias flakiness.
