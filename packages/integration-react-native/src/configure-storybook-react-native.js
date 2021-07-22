@@ -4,7 +4,6 @@ const storybook = require('@storybook/react-native');
 const addons = require('@storybook/addons').default;
 const ReactNative = require('react-native');
 const ExceptionsManager = require('react-native/Libraries/Core/ExceptionsManager');
-const { decorateStorybook } = require('@loki/integration-core');
 const readyStateManager = require('./ready-state-manager');
 
 const { awaitReady, resetPendingPromises } = readyStateManager;
@@ -77,9 +76,6 @@ function getAddonsChannel() {
 
 async function configureStorybook() {
   injectLokiGlobalErrorHandler();
-
-  // Decorate the storiesOf function to be able to skip stories
-  const getStorybook = decorateStorybook(storybook, readyStateManager);
 
   // Monkey patch `Image`
   Object.defineProperty(ReactNative, 'Image', {
@@ -160,7 +156,7 @@ async function configureStorybook() {
   });
 
   on('getStories', () => {
-    const stories = getStorybook().map((component) => ({
+    const stories = storybook.map((component) => ({
       id: component.id,
       kind: component.kind,
       story: component.story,
