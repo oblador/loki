@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - name: Setup node from node version file
+        uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
+          node-version-file: '.nvmrc'
       - name: Install dependencies
         run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
       - name: Prepare docker
@@ -32,10 +32,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - name: Setup node from node version file
+        uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
+          node-version-file: '.nvmrc'
       - name: Install dependencies
         run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
       - name: Run ESLint
@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '14.x'
       - name: Install dependencies
@@ -68,10 +68,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - name: Setup node from node version file
+        uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
+          node-version-file: '.nvmrc'
       - name: Install dependencies
         run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
       - name: Run loki
