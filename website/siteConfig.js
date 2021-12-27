@@ -33,6 +33,12 @@ const users = [
     infoLink: 'https://warren.com.br',
     pinned: true,
   },
+  {
+    caption: 'Me Salva!',
+    image: '/img/users/mesalva.svg',
+    infoLink: 'https://mesalva.com',
+    pinned: true,
+  },
 ];
 
 const siteConfig = {
