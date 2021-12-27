@@ -15,7 +15,7 @@
     "publish-docs": "GIT_USER=oblador yarn workspace @loki/website publish-gh-pages"
   },
   "engines": {
-    "node": ">=7.6"
+    "node": ">=v16.13.1"
   },
   "author": {
     "name": "Joel Arvidsson",
