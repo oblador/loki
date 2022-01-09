@@ -1,11 +1,8 @@
 name: Website
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'website/**'
+  release:
+    types: [created]
 
 jobs:
   publish:
