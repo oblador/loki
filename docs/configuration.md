@@ -113,7 +113,7 @@ module.exports = {
 ## `configurations`
 
 | Name                                 | Type      | Description                                                                                                                                               | Targets      |
-| ------------------------------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| ------------------------------------ |-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------| ------------ |
 | **`target`**                         | _string_  | Target platform, possible values are `chrome.app`, `chrome.docker`, `chrome.aws-lambda`, `ios.simulator`, `android.emulator`.                             | All          |
 | **`skipStories`**                    | _string_  | **DEPRECATED** Same as `loki.skipStories`, but applied to only this configuration.                                                                        | All          |
 | **`storiesFilter`**                  | _string_  | Same as `loki.storiesFilter`, but applied to only this configuration.                                                                                     | All          |
@@ -126,3 +126,4 @@ module.exports = {
 | **`deviceScaleFactor`**              | _integer_ | Browser pixel density multiple, use `2` for retina, not supported in docker.                                                                              | `chrome.app` |
 | **`mobile`**                         | _boolean_ | Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.                                          | `chrome.*`   |
 | **`media`**                          | _string_  | Emulates the given media for CSS media queries.                                                                                                           | _None_       |
+| **`storyQueryParams`**               | _object_  | Adds query params to story fetch URL. Example: `{theme: "dark"}`                                                                                          | _None_       |

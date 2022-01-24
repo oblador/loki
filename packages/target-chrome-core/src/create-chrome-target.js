@@ -323,10 +323,15 @@ function createChromeTarget(
     return client;
   }
 
-  const getStoryUrl = (storyId) =>
-    `${resolvedBaseUrl}/iframe.html?id=${encodeURIComponent(
-      storyId
-    )}&viewMode=story`;
+  const getStoryUrl = (storyId, storyQueryParams = {}) => {
+    const params = new URLSearchParams({
+      id: storyId,
+      getStoryUrl: 'story',
+      ...storyQueryParams,
+    });
+
+    return `${resolvedBaseUrl}/iframe.html?${params.toString()}`;
+  };
 
   const launchStoriesTab = withTimeout(LOADING_STORIES_TIMEOUT)(
     withRetries(
@@ -388,7 +393,7 @@ function createChromeTarget(
       parameters.chromeSelector ||
       configuration.chromeSelector ||
       options.chromeSelector;
-    const url = getStoryUrl(storyId);
+    const url = getStoryUrl(storyId, configuration.storyQueryParams);
 
     const tab = await launchNewTab(tabOptions);
     let screenshot;
