@@ -26,7 +26,7 @@ describe('withRetries', () => {
 
   it('pauses between each attempt when passing backoff argument', async () => {
     const retries = 3;
-    jest.useFakeTimers();
+    jest.useFakeTimers('legacy');
     const callback = jest.fn();
     const mockFn = jest.fn(() => {
       throw new Error('output');

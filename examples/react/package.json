@@ -3,14 +3,14 @@
   "version": "0.28.1",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-motion": "^0.5.2",
-    "react-scripts": "4.0.2",
-    "web-vitals": "^1.0.1"
+    "react-scripts": "5.0.0",
+    "web-vitals": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -42,12 +42,17 @@
   "devDependencies": {
     "@loki/create-async-callback": "^0.28.0",
     "@loki/is-loki-running": "^0.28.0",
-    "@storybook/addon-actions": "^6.1.17",
-    "@storybook/addon-essentials": "^6.1.17",
-    "@storybook/addon-links": "^6.1.17",
-    "@storybook/node-logger": "^6.1.17",
-    "@storybook/preset-create-react-app": "^3.1.5",
-    "@storybook/react": "^6.1.17",
-    "loki": "^0.28.1"
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-interactions": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/builder-webpack5": "^6.4.19",
+    "@storybook/manager-webpack5": "^6.4.19",
+    "@storybook/node-logger": "^6.4.19",
+    "@storybook/preset-create-react-app": "^4.1.0",
+    "@storybook/react": "^6.4.19",
+    "@storybook/testing-library": "^0.0.9",
+    "loki": "^0.28.1",
+    "webpack": "^5.70.0"
   }
 }
