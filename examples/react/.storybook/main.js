@@ -1,14 +1,14 @@
 module.exports = {
-  webpackFinal: config => {
+  webpackFinal: (config) => {
     return {
       ...config,
-      plugins: config.plugins.filter(plugin => {
+      plugins: config.plugins.filter((plugin) => {
         if (plugin.constructor.name === 'ESLintWebpackPlugin') {
-          return false
+          return false;
         }
-        return true
+        return true;
       }),
-    }
+    };
   },
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [

@@ -8,7 +8,7 @@
     "loki": "bin/loki"
   },
   "scripts": {
-    "format": "prettier '{,packages/**/,examples/**/,website/**/,docs/**/,test/**/}*.{md,js,jsx,json}' --write",
+    "format": "prettier '{,packages/**/,examples/**/,website/**/,docs/**/,test/**/,.github/**/}*.{md,js,jsx,json,yml}' --write",
     "lint": "eslint packages/*/src",
     "test": "jest",
     "test-ci": "jest --testLocationInResults --ci --outputFile=test_results.json --json",
@@ -53,7 +53,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "^27.5.1",
     "lerna": "^3.22.1",
-    "prettier": "^2.2.1"
+    "prettier": "^2.6.1"
   },
   "jest": {
     "testEnvironment": "node",

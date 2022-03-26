@@ -54,11 +54,7 @@ describe('createBaselineLimitedBatchBuilder', () => {
     const tasks = generateTasks(new Array(10).fill(limit / 2));
     mockFsWithTasks(tasks);
     expectBatchLengths({ options, limit, tasks, batchSize }).toEqual([
-      2,
-      2,
-      2,
-      2,
-      2,
+      2, 2, 2, 2, 2,
     ]);
   });
 
@@ -81,12 +77,7 @@ describe('createBaselineLimitedBatchBuilder', () => {
     const tasks = generateTasks([1, 2, 3, 4, 5, 5, 4, 7, 8, 11]);
     mockFsWithTasks(tasks);
     expectBatchLengths({ options, limit, tasks, batchSize }).toEqual([
-      4,
-      2,
-      1,
-      1,
-      1,
-      1,
+      4, 2, 1, 1, 1, 1,
     ]);
   });
 });

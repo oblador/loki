@@ -31,13 +31,8 @@ class TaskRunner extends EventEmitter {
       batchExector: (batch, context) => batch.map((task) => task.task(context)),
       exitOnError: true,
     };
-    const {
-      batchExector,
-      batchSize,
-      batchBuilder,
-      concurrency,
-      exitOnError,
-    } = Object.assign({}, defaultOptions, options);
+    const { batchExector, batchSize, batchBuilder, concurrency, exitOnError } =
+      Object.assign({}, defaultOptions, options);
 
     this.batchExector = batchExector;
     this.batchSize = batchSize;
