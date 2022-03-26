@@ -23,7 +23,7 @@ jobs:
         run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
       - name: Prepare docker
         run: docker pull yukinying/chrome-headless-browser:90.0.4408.0
-      - name: Run integration tests
+      - name: Run unit tests
         run: yarn test-ci
 
   static-analysis:
