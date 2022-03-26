@@ -1,0 +1,27 @@
+name: Website
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish:
+    if: ${{ github.ref == 'refs/heads/master' }}
+    name: Publish to GitHub Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node from node version file
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
+      - name: Build website
+        run: yarn workspace @loki/website build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./website/build/loki
