@@ -6,7 +6,6 @@ on:
 
 jobs:
   publish:
-    if: ${{ github.ref == 'refs/heads/master' }}
     name: Publish to GitHub Pages
     runs-on: ubuntu-latest
 
