@@ -21,7 +21,7 @@
   "main": "src/index.js",
   "dependencies": {
     "@loki/target-chrome-core": "^0.29.0",
-    "chrome-launcher": "^0.13.4",
+    "chrome-launcher": "^0.14.1",
     "chrome-remote-interface": "^0.29.0",
     "debug": "^4.1.1"
   },
