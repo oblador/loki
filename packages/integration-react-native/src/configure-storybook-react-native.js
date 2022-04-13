@@ -156,7 +156,8 @@ async function configureStorybook() {
   });
 
   on('getStories', () => {
-    const stories = storybook.map((component) => ({
+    const storybookRaw = storybook.raw();
+    const stories = storybookRaw.map((component) => ({
       id: component.id,
       kind: component.kind,
       story: component.story,
