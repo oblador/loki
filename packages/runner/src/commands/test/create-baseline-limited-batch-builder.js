@@ -20,7 +20,8 @@ const createBaselineLimitedBatchBuilder =
         options,
         task.task.configurationName,
         task.task.kind,
-        task.task.story
+        task.task.story,
+        task.task.parameters
       );
       let size;
       try {

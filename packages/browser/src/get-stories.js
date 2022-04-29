@@ -9,14 +9,28 @@ const getStories = (window) => {
       "Unable to get stories. Try adding `import 'loki/configure-react'` to your .storybook/preview.js file."
     );
   }
+  const blockedParams = [
+    'actions',
+    'argTypes',
+    'backgrounds',
+    'controls',
+    'docs',
+    'framework',
+    'storySource',
+  ];
+
   return getStorybook()
     .map((component) => ({
       id: component.id,
       kind: component.kind,
       story: component.story,
-      parameters: component.parameters.loki || {},
+      parameters: Object.fromEntries(
+        Object.entries(component.parameters || {}).filter(
+          ([key]) => !key.startsWith('__') && !blockedParams.includes(key)
+        )
+      ),
     }))
-    .filter(({ parameters }) => !parameters.skip);
+    .filter(({ parameters }) => !parameters.loki || !parameters.loki.skip);
 };
 
 module.exports = getStories;

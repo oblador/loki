@@ -385,7 +385,7 @@ function createChromeTarget(
       tabOptions = Object.assign(tabOptions, presets[configuration.preset]);
     }
     const selector =
-      parameters.chromeSelector ||
+      (parameters.loki && parameters.loki.chromeSelector) ||
       configuration.chromeSelector ||
       options.chromeSelector;
     const url = getStoryUrl(storyId);

@@ -12,7 +12,7 @@ const executeLambda = (event) =>
   dockerLambda({
     event,
     dockerArgs: ['-m', '1024M'].concat(DEBUG ? ['-e', 'DEBUG=*'] : []),
-    dockerImage: 'lambci/lambda:nodejs8.10',
+    dockerImage: 'lambci/lambda:nodejs12.x',
     taskDir: PROJECT_ROOT,
     handler: 'examples/renderer-aws-lambda/index.handler',
     returnSpawnResult: DEBUG,
@@ -47,22 +47,67 @@ const fetchStorybookFixture = async (fixture) =>
 
 const storybook = [
   {
-    id: 'welcome--to-storybook',
-    kind: 'Welcome',
-    story: 'to Storybook',
-    parameters: {},
+    id: 'example-button--large',
+    kind: 'Example/Button',
+    story: 'Large',
+    parameters: {
+      args: {
+        label: 'Button',
+        size: 'large',
+      },
+      fileName: './src/stories/Button.stories.jsx',
+      globals: {
+        measureEnabled: false,
+        outline: false,
+      },
+    },
   },
   {
-    id: 'button--text',
-    kind: 'Button',
-    story: 'Text',
-    parameters: {},
+    id: 'example-button--primary',
+    kind: 'Example/Button',
+    story: 'Primary',
+    parameters: {
+      args: {
+        label: 'Button',
+        primary: true,
+      },
+      fileName: './src/stories/Button.stories.jsx',
+      globals: {
+        measureEnabled: false,
+        outline: false,
+      },
+    },
   },
   {
-    id: 'button--emoji',
-    kind: 'Button',
-    story: 'Emoji',
-    parameters: {},
+    id: 'example-button--secondary',
+    kind: 'Example/Button',
+    story: 'Secondary',
+    parameters: {
+      args: {
+        label: 'Button',
+      },
+      fileName: './src/stories/Button.stories.jsx',
+      globals: {
+        measureEnabled: false,
+        outline: false,
+      },
+    },
+  },
+  {
+    id: 'example-button--small',
+    kind: 'Example/Button',
+    story: 'Small',
+    parameters: {
+      args: {
+        label: 'Button',
+        size: 'small',
+      },
+      fileName: './src/stories/Button.stories.jsx',
+      globals: {
+        measureEnabled: false,
+        outline: false,
+      },
+    },
   },
 ];
 
@@ -103,12 +148,13 @@ describe('createChromeAWSLambdaRenderer', () => {
       async () => {
         const screenshot = await fetchStorybookScreenshot(
           'static',
-          'welcome--to-storybook'
+          'example-button--large'
         );
         const referencePath = path.resolve(
           __dirname,
-          '../__snapshots__/welcome-to-storybook.png'
+          '../__snapshots__/example-button-large.png'
         );
+        fs.writeFileSync(referencePath, Buffer.from(screenshot, 'base64'));
         const reference = fs.readFileSync(referencePath);
         expect(screenshot).toEqual(reference.toString('base64'));
       },
@@ -125,9 +171,9 @@ describe('createChromeAWSLambdaRenderer', () => {
           baseUrl: getStorybookFixtureUrl('static'),
           stories: [
             {
-              id: 'welcome--to-storybook',
-              kind: 'Welcome',
-              story: 'to Storybook',
+              id: 'example-button--large',
+              kind: 'Example/Button',
+              story: 'Large',
               configuration: {
                 preset: 'iPhone 7',
                 chromeRetries: 0,
@@ -142,7 +188,7 @@ describe('createChromeAWSLambdaRenderer', () => {
 
         const referencePath = path.resolve(
           __dirname,
-          '../__snapshots__/welcome-to-storybook.png'
+          '../__snapshots__/example-button-large.png'
         );
         const reference = fs.readFileSync(referencePath);
         expect(screenshot).toEqual(reference.toString('base64'));
