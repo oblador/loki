@@ -23,22 +23,67 @@ const fetchStorybookFixture = async (fixture) =>
 
 const storybook = [
   {
-    id: 'welcome--to-storybook',
-    kind: 'Welcome',
-    story: 'to Storybook',
-    parameters: {},
+    id: 'example-button--large',
+    kind: 'Example/Button',
+    story: 'Large',
+    parameters: {
+      args: {
+        label: 'Button',
+        size: 'large',
+      },
+      fileName: './src/stories/Button.stories.jsx',
+      globals: {
+        measureEnabled: false,
+        outline: false,
+      },
+    },
   },
   {
-    id: 'button--text',
-    kind: 'Button',
-    story: 'Text',
-    parameters: {},
+    id: 'example-button--primary',
+    kind: 'Example/Button',
+    story: 'Primary',
+    parameters: {
+      args: {
+        label: 'Button',
+        primary: true,
+      },
+      fileName: './src/stories/Button.stories.jsx',
+      globals: {
+        measureEnabled: false,
+        outline: false,
+      },
+    },
   },
   {
-    id: 'button--emoji',
-    kind: 'Button',
-    story: 'Emoji',
-    parameters: {},
+    id: 'example-button--secondary',
+    kind: 'Example/Button',
+    story: 'Secondary',
+    parameters: {
+      args: {
+        label: 'Button',
+      },
+      fileName: './src/stories/Button.stories.jsx',
+      globals: {
+        measureEnabled: false,
+        outline: false,
+      },
+    },
+  },
+  {
+    id: 'example-button--small',
+    kind: 'Example/Button',
+    story: 'Small',
+    parameters: {
+      args: {
+        label: 'Button',
+        size: 'small',
+      },
+      fileName: './src/stories/Button.stories.jsx',
+      globals: {
+        measureEnabled: false,
+        outline: false,
+      },
+    },
   },
 ];
 

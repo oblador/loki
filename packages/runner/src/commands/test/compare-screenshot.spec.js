@@ -15,6 +15,7 @@ describe('compareScreenshot', () => {
   const kind = 'Kind';
   const story = 'Story';
   const filename = `${configurationName}_${kind}_${story}.png`;
+  const parameters = {};
 
   const executeWithOptions = (options) =>
     compareScreenshot(
@@ -23,7 +24,8 @@ describe('compareScreenshot', () => {
       tolerance,
       configurationName,
       kind,
-      story
+      story,
+      parameters
     );
 
   describe('reference image is missing', () => {

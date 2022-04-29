@@ -156,12 +156,18 @@ async function configureStorybook() {
   });
 
   on('getStories', () => {
-    const stories = storybook.map((component) => ({
-      id: component.id,
-      kind: component.kind,
-      story: component.story,
-      parameters: component.parameters.loki || {},
-    }));
+    const stories = storybook
+      .map((component) => ({
+        id: component.id,
+        kind: component.kind,
+        story: component.story,
+        parameters: Object.fromEntries(
+          Object.entries(component.parameters || {}).filter(
+            ([key]) => !key.startsWith('__')
+          )
+        ),
+      }))
+      .filter(({ parameters }) => !parameters.loki || !parameters.loki.skip);
     emit('setStories', { stories });
   });
 

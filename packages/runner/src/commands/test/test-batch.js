@@ -55,7 +55,8 @@ function testBatch(target, batch, options, tolerance) {
         tolerance,
         configurationName,
         kind,
-        story
+        story,
+        parameters
       );
     }
   );

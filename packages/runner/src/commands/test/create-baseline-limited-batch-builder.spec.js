@@ -13,7 +13,8 @@ const mockFsWithTasks = (mockTasks) => {
       mockOptions,
       task.task.configurationName,
       task.task.kind,
-      task.task.story
+      task.task.story,
+      task.task.parameters
     );
     acc[referencePath] = task.size;
     return acc;
@@ -35,6 +36,7 @@ const generateTasks = (sizes) =>
       configurationName: 'configuration',
       kind: 'kind',
       story: `story ${i + 1}`,
+      parameters: {},
     },
   }));
 

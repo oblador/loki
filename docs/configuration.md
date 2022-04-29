@@ -105,7 +105,7 @@ Since JSON doesn't support functions, you need to be using the `loki.config.js` 
 ```js
 module.exports = {
   // ...other config goes here
-  fileNameFormatter: ({ configurationName, kind, story }) =>
+  fileNameFormatter: ({ configurationName, kind, story, parameters }) =>
     `${configurationName}/${kind} ${story}`.toLowerCase(),
 };
 ```

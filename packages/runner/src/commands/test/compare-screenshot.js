@@ -10,13 +10,15 @@ async function compareScreenshot(
   tolerance,
   configurationName,
   kind,
-  story
+  story,
+  parameters
 ) {
   const { outputPath, referencePath, diffPath } = getOutputPaths(
     options,
     configurationName,
     kind,
-    story
+    story,
+    parameters
   );
   const referenceExists = await fs.pathExists(referencePath);
   const shouldUpdateReference =
