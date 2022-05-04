@@ -10,6 +10,7 @@ import * as AnimatedComponent from '../AnimatedComponent';
 import DelayedComponent from '../DelayedComponent';
 import CursiveText from '../CursiveText';
 import MediaAwareComponent from '../MediaAwareComponent';
+import FeaturesAwareComponent from '../FeaturesAwareComponent';
 import StackedElements from '../StackedElements';
 import StackedInvisibleElements from '../StackedInvisibleElements';
 import LongElement from '../LongElement';
@@ -51,9 +52,9 @@ storiesOf('Animation', module)
   ))
   .add('with react-motion', () => <AnimatedComponent.ReactMotion />);
 
-storiesOf('Media', module).add('with media queries', () => (
-  <MediaAwareComponent />
-));
+storiesOf('Media', module)
+  .add('with media queries', () => <MediaAwareComponent />)
+  .add('with color scheme features', () => <FeaturesAwareComponent />);
 
 storiesOf('Multiple elements', module)
   .add('Stacked elements', () => <StackedElements />)
