@@ -10,19 +10,10 @@ export default {
 };
 
 export const Error404 = () => <Box color="blue" />;
-
-Error404.story = {
-  name: '404 Error',
-};
+Error404.storyName = '404 Error';
 
 export const TODO = () => <Box color="green" />;
-
-TODO.story = {
-  name: '@TODO',
-};
+TODO.storyName = '@TODO';
 
 export const Skipped = () => <Box color="red" />;
-
-Skipped.story = {
-  parameters: { loki: { skip: true } },
-};
+Skipped.parameters = { loki: { skip: true } };
