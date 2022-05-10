@@ -387,7 +387,8 @@ function createChromeTarget(
         media: options.chromeEmulatedMedia,
         fetchFailIgnore: options.fetchFailIgnore,
       },
-      configuration
+      configuration,
+      parameters.loki || {}
     );
     if (configuration.preset) {
       if (!presets[configuration.preset]) {
