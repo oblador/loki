@@ -74,8 +74,19 @@ function createChromeTarget(
       await Network.clearBrowserCookies();
     }
     await Emulation.setDeviceMetricsOverride(deviceMetrics);
-    if (options.media) {
-      await Emulation.setEmulatedMedia({ media: options.media });
+
+    if (options.media || options.features) {
+      const emulated = {};
+
+      if (options.media) {
+        emulated.media = options.media;
+      }
+
+      if (options.features) {
+        emulated.features = options.features;
+      }
+
+      await Emulation.setEmulatedMedia(emulated);
     }
 
     const pendingRequestURLMap = {};
@@ -376,7 +387,8 @@ function createChromeTarget(
         media: options.chromeEmulatedMedia,
         fetchFailIgnore: options.fetchFailIgnore,
       },
-      configuration
+      configuration,
+      parameters.loki || {}
     );
     if (configuration.preset) {
       if (!presets[configuration.preset]) {

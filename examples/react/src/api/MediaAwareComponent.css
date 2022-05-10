@@ -9,3 +9,15 @@
     content: 'Media: print';
   }
 }
+
+@media (prefers-color-scheme: light) {
+  .FeaturesAwareComponent:before {
+    content: 'Features: prefers-color-scheme:light';
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .FeaturesAwareComponent:before {
+    content: 'Features: prefers-color-scheme:dark';
+  }
+}
