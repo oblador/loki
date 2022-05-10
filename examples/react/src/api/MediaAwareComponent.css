@@ -1,3 +1,15 @@
+@media screen {
+  .MediaAwareComponent:before {
+    content: 'Media: screen';
+  }
+}
+
+@media print {
+  .MediaAwareComponent:before {
+    content: 'Media: print';
+  }
+}
+
 @media (prefers-color-scheme: light) {
   .FeaturesAwareComponent:before {
     content: 'Features: prefers-color-scheme:light';

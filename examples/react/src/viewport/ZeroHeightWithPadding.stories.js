@@ -1,6 +1,10 @@
 import React from 'react';
 
-const ZeroHeightWithPadding = () => (
+export default {
+  title: 'Zero height',
+};
+
+export const ZeroHeightWithPadding = () => (
   <div
     style={{
       overflow: 'hidden',
@@ -12,5 +16,4 @@ const ZeroHeightWithPadding = () => (
     }}
   />
 );
-
-export default ZeroHeightWithPadding;
+ZeroHeightWithPadding.storyName = 'with padding';
