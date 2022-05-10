@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
+export default {
+  title: 'Fetch Components',
+};
+
 export const FetchFail = () => {
   const [fetchState, setFetchState] = useState(undefined);
   useEffect(() => {
@@ -25,5 +29,4 @@ export const FetchFail = () => {
     </div>
   );
 };
-
-export default FetchFail;
+FetchFail.storyName = 'fetch fail';

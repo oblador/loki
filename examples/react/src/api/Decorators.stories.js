@@ -52,6 +52,7 @@ export const CustomChromeSelector = () => (
   </div>
 );
 
-CustomChromeSelector.story = {
-  parameters: { loki: { chromeSelector: '#inner' }, nonLokiParam: 'test123' },
+CustomChromeSelector.parameters = {
+  loki: { chromeSelector: '#inner' },
+  nonLokiParam: 'test123',
 };
