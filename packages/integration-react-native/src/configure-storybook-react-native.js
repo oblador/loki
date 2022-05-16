@@ -111,7 +111,6 @@ async function configureStorybook() {
 
   const originalState = {
     statusBarHidden: false, // TODO: get actual value
-    disableYellowBox: console.disableYellowBox, // eslint-disable-line no-console
   };
 
   const restore = () => {
@@ -121,8 +120,7 @@ async function configureStorybook() {
 
     customErrorHandler = null;
     ReactNative.StatusBar.setHidden(originalState.statusBarHidden);
-    // eslint-disable-next-line no-console
-    console.disableYellowBox = originalState.disableYellowBox;
+    ReactNative.LogBox.ignoreAllLogs(false);
   };
 
   const prepare = () => {
@@ -150,8 +148,7 @@ async function configureStorybook() {
       DevSettings.setHotLoadingEnabled(false);
     }
     ReactNative.StatusBar.setHidden(true, 'none');
-    // eslint-disable-next-line no-console
-    console.disableYellowBox = true;
+    ReactNative.LogBox.ignoreAllLogs(true);
   };
 
   on('prepare', () => {
@@ -166,6 +163,7 @@ async function configureStorybook() {
 
   on('getStories', () => {
     const stories = storybook
+      .raw()
       .map((component) => ({
         id: component.id,
         kind: component.kind,
