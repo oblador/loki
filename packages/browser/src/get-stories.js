@@ -19,6 +19,15 @@ const getStories = (window) => {
     'storySource',
   ];
 
+  const isSerializable = (value) => {
+    try {
+      JSON.stringify(value);
+      return true;
+    } catch (_e) {
+      return false;
+    }
+  };
+
   return getStorybook()
     .map((component) => ({
       id: component.id,
@@ -26,7 +35,10 @@ const getStories = (window) => {
       story: component.story,
       parameters: Object.fromEntries(
         Object.entries(component.parameters || {}).filter(
-          ([key]) => !key.startsWith('__') && !blockedParams.includes(key)
+          ([key, value]) =>
+            !key.startsWith('__') &&
+            !blockedParams.includes(key) &&
+            isSerializable(value)
         )
       ),
     }))
