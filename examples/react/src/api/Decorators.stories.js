@@ -52,7 +52,11 @@ export const CustomChromeSelector = () => (
   </div>
 );
 
+const circular = { next: null };
+circular.next = circular;
+
 CustomChromeSelector.parameters = {
   loki: { chromeSelector: '#inner' },
   nonLokiParam: 'test123',
+  circular,
 };

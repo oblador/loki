@@ -74,6 +74,15 @@ function getAddonsChannel() {
   });
 }
 
+function isSerializable(value) {
+  try {
+    JSON.stringify(value);
+    return true;
+  } catch (_e) {
+    return false;
+  }
+}
+
 async function configureStorybook() {
   injectLokiGlobalErrorHandler();
 
@@ -163,7 +172,7 @@ async function configureStorybook() {
         story: component.story,
         parameters: Object.fromEntries(
           Object.entries(component.parameters || {}).filter(
-            ([key]) => !key.startsWith('__')
+            ([key, value]) => !key.startsWith('__') && isSerializable(value)
           )
         ),
       }))
