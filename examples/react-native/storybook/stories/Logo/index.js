@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'react-native';
 
-const DELAY_URL_PREFIX = 'http://www.deelay.me';
+const DELAY_URL_PREFIX = 'https://www.deelay.me';
 
 const Logo = ({ delay, logoUrl }) => (
   <Image
