@@ -5,7 +5,6 @@ import { Text } from 'react-native';
 
 import { storiesOf } from '@storybook/react-native';
 import { action } from '@storybook/addon-actions';
-import { text } from '@storybook/addon-knobs';
 import { linkTo } from '@storybook/addon-links';
 import createAsyncCallback from '@loki/create-async-callback';
 
@@ -24,7 +23,7 @@ storiesOf('Button', module)
   .addDecorator((getStory) => <CenterView>{getStory()}</CenterView>)
   .add('with text', () => (
     <Button onPress={action('clicked-text')}>
-      <Text>{text('Button text', 'Hello Button')}</Text>
+      <Text>Hello Button</Text>
     </Button>
   ))
   .add('with some emoji', () => (
@@ -40,26 +39,13 @@ storiesOf('Button', module)
       </Button>
     ),
     { loki: { skip: true } }
-  )
-  .lokiSkip('lokiSkip story', () => (
-    <Button onPress={action('clicked-emoji')}>
-      <Text>I am skipped</Text>
-    </Button>
-  ))
-  .add.skip('add.skip story', () => (
-    <Button onPress={action('clicked-emoji')}>
-      <Text>I am skipped</Text>
-    </Button>
-  ));
+  );
 
 storiesOf('Asynchronous Render', module)
   .add('Logo without delay', () => <Logo />)
   .add('Logo with 1s delay', () => <Logo delay={1000} />)
   .add('createAsyncCallback with 1s delay', () => (
     <DelayedComponent delay={1000} onDone={createAsyncCallback()} />
-  ))
-  .add.async('add.async() with 1s delay', ({ done }) => (
-    <DelayedComponent delay={1000} onDone={done} />
   ));
 
 storiesOf('Error Handling', module)
