@@ -25,7 +25,8 @@ function testBatch(target, batch, options, tolerance) {
                 tolerance,
                 task.configurationName,
                 task.kind,
-                task.story
+                task.story,
+                task.parameters
               )
             );
           }
