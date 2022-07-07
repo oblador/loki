@@ -18,7 +18,7 @@ function approve(args) {
   let files = fs.readdirSync(outputDir).filter(isPNG);
 
   if (diffOnly) {
-    // If diff only is active, just copy over the files that were changed
+    // If diff only is active, only copy over the files that were changed
     const changedFiles = fs.readdirSync(differenceDir).filter(isPNG);
     files = files.filter((file) => changedFiles.includes(file));
   }
@@ -30,17 +30,26 @@ function approve(args) {
     );
   }
 
-  if (!diffOnly) {
-    // If diff only is active, the reference directory should not be emptied.
-    // Instead only the files that changed will be overwritten.
-    fs.emptyDirSync(referenceDir);
-    fs.ensureDirSync(referenceDir);
+  if (diffOnly) {
+    /**
+     * If diff only is active, the reference directory should not be emptied.
+     * Instead only the files that changed will be copied over, overwriting the existing ones.
+     * The files are copied and not moved, so running loki approve without --diffOnly after running it with --diffOnly
+     * would not delete them as they would no longer be present in the current images.
+     */
+    files.forEach((file) =>
+      fs.copySync(path.join(outputDir, file), path.join(referenceDir, file), {
+        overwrite: true,
+      })
+    );
+    return;
   }
 
+  fs.emptyDirSync(referenceDir);
+  fs.ensureDirSync(referenceDir);
+
   files.forEach((file) =>
-    fs.moveSync(path.join(outputDir, file), path.join(referenceDir, file), {
-      overwrite: true,
-    })
+    fs.moveSync(path.join(outputDir, file), path.join(referenceDir, file))
   );
 }
 
