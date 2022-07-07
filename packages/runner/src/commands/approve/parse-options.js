@@ -9,7 +9,9 @@ function parseOptions(args, config) {
 
   return {
     outputDir: path.resolve($('output')),
+    differenceDir: path.resolve($('difference')),
     referenceDir: path.resolve($('reference')),
+    diffOnly: $('diffOnly'),
   };
 }
 

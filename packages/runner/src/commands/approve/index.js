@@ -10,19 +10,37 @@ const isPNG = (file) => file.substr(-4) === '.png';
 
 function approve(args) {
   const config = getConfig();
-  const { outputDir, referenceDir } = parseOptions(args, config);
+  const { outputDir, differenceDir, referenceDir, diffOnly } = parseOptions(
+    args,
+    config
+  );
 
-  const files = fs.readdirSync(outputDir).filter(isPNG);
+  let files = fs.readdirSync(outputDir).filter(isPNG);
+
+  if (diffOnly) {
+    // If diff only is active, just copy over the files that were changed
+    const changedFiles = fs.readdirSync(differenceDir).filter(isPNG);
+    files = files.filter((file) => changedFiles.includes(file));
+  }
+
   if (!files.length) {
     die(
       'No images found to approve',
       'Run update command to generate reference files instead'
     );
   }
-  fs.emptyDirSync(referenceDir);
-  fs.ensureDirSync(referenceDir);
+
+  if (!diffOnly) {
+    // If diff only is active, the reference directory should not be emptied.
+    // Instead only the files that changed will be overwritten.
+    fs.emptyDirSync(referenceDir);
+    fs.ensureDirSync(referenceDir);
+  }
+
   files.forEach((file) =>
-    fs.moveSync(path.join(outputDir, file), path.join(referenceDir, file))
+    fs.moveSync(path.join(outputDir, file), path.join(referenceDir, file), {
+      overwrite: true,
+    })
   );
 }
 
