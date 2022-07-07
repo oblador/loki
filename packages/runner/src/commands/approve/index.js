@@ -15,13 +15,9 @@ function approve(args) {
     config
   );
 
-  let files = fs.readdirSync(outputDir).filter(isPNG);
-
-  if (diffOnly) {
-    // If diff only is active, only copy over the files that were changed
-    const changedFiles = fs.readdirSync(differenceDir).filter(isPNG);
-    files = files.filter((file) => changedFiles.includes(file));
-  }
+  // If diff only is active, only copy over the files that were changed
+  const inputDir = diffOnly ? differenceDir : outputDir;
+  const files = fs.readdirSync(inputDir).filter(isPNG);
 
   if (!files.length) {
     die(
