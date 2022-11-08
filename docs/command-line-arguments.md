@@ -46,6 +46,7 @@ yarn loki test -- --port 9009
 | **`--requireReference`**                | Fail stories without reference image, useful for CI.                                                                                            | _False, true for CI_                                      |
 | **`--verboseRenderer`**                 | Plain text renderer, useful for CI.                                                                                                             | _False, true for CI_                                      |
 | **`--silent`**                          | Plain text renderer that will only output errors.                                                                                               | `false`                                                   |
+| **`--passWithNoTests`**                 | Don't fail if there are no tests to run.                                                                                                        | `false`                                                   |
 | **`--dockerWithSudo`**                  | Run docker commands with sudo.                                                                                                                  | `false`                                                   |
 | **`--dockerNet`**                       | Argument to pass to docker --net, e.g. `host` or `bridge`.                                                                                      | _None_                                                    |
 
