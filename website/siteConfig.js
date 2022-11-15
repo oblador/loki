@@ -39,6 +39,12 @@ const users = [
     infoLink: 'https://mesalva.com',
     pinned: true,
   },
+  {
+    caption: 'HousingAnywhere',
+    image: '/img/users/housinganywhere.svg',
+    infoLink: 'https://housinganywhere.com',
+    pinned: true,
+  },
 ];
 
 const siteConfig = {
