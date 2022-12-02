@@ -11,6 +11,7 @@ function parseOptions(args, config) {
       'verboseRenderer',
       'dockerWithSudo',
       'chromeDockerWithoutSeccomp',
+      'passWithNoStories',
     ],
   });
 
@@ -57,6 +58,7 @@ function parseOptions(args, config) {
     dockerWithSudo: $('dockerWithSudo'),
     chromeDockerUseCopy: $('chromeDockerUseCopy'),
     chromeDockerWithoutSeccomp: $('chromeDockerWithoutSeccomp'),
+    passWithNoStories: $('passWithNoStories'),
   };
 }
 

@@ -128,7 +128,7 @@ async function runTests(flatConfigurations, options) {
             },
             task: async () => {
               storybook = await target.getStorybook();
-              if (storybook.length === 0) {
+              if (storybook.length === 0 && !options.passWithNoStories) {
                 throw new Error('Error: No stories were found.');
               }
             },
