@@ -1,7 +1,7 @@
 const path = require('path');
 const minimist = require('minimist');
 const ciInfo = require('ci-info');
-const defaults = require('./default-options');
+const defaults = require('./default-options.json');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {
@@ -11,6 +11,7 @@ function parseOptions(args, config) {
       'verboseRenderer',
       'dockerWithSudo',
       'chromeDockerWithoutSeccomp',
+      'passWithNoStories',
     ],
   });
 
@@ -57,6 +58,8 @@ function parseOptions(args, config) {
     dockerWithSudo: $('dockerWithSudo'),
     chromeDockerUseCopy: $('chromeDockerUseCopy'),
     chromeDockerWithoutSeccomp: $('chromeDockerWithoutSeccomp'),
+    passWithNoStories: $('passWithNoStories'),
+    device: $('device'),
   };
 }
 

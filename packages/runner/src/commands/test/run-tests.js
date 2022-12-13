@@ -128,7 +128,7 @@ async function runTests(flatConfigurations, options) {
             },
             task: async () => {
               storybook = await target.getStorybook();
-              if (storybook.length === 0) {
+              if (storybook.length === 0 && !options.passWithNoStories) {
                 throw new Error('Error: No stories were found.');
               }
             },
@@ -267,14 +267,20 @@ async function runTests(flatConfigurations, options) {
       case 'ios.simulator': {
         return getTargetTasks(
           target,
-          createIOSSimulatorTarget(options.reactNativeUri),
+          createIOSSimulatorTarget({
+            socketUri: options.reactNativeUri,
+            device: options.device,
+          }),
           configurations
         );
       }
       case 'android.emulator': {
         return getTargetTasks(
           target,
-          createAndroidEmulatorTarget(options.reactNativeUri),
+          createAndroidEmulatorTarget({
+            socketUri: options.reactNativeUri,
+            device: options.device,
+          }),
           configurations
         );
       }
