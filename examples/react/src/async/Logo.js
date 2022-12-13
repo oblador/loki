@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const DELAY_URL_PREFIX = 'http://www.deelay.me';
+const getDelayUrl = (url, delay) =>
+  `http://${
+    window.navigator.webdriver ? 'host.docker.internal' : 'localhost'
+  }:4567/${delay}/${url}`;
 
 const Logo = ({ delay, logoUrl }) => (
   <img
     style={{ width: 75, height: 75 }}
     alt=""
-    src={delay ? `${DELAY_URL_PREFIX}/${delay}/${logoUrl}` : logoUrl}
+    src={delay ? getDelayUrl(logoUrl, delay) : logoUrl}
   />
 );
 

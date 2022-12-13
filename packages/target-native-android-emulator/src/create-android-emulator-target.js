@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const tempy = require('tempy');
-const osnap = require('@ferocia-oss/src/android');
+const osnap = require('@ferocia-oss/osnap/src/android');
 const { createWebsocketTarget } = require('@loki/target-native-core');
 
 const captureScreenshot = async (device) => {

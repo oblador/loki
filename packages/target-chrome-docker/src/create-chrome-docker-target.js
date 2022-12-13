@@ -63,6 +63,7 @@ function createChromeDockerTarget({
   if (!chromeDockerWithoutSeccomp) {
     runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
   }
+  runArgs.push('--add-host=host.docker.internal:host-gateway');
 
   if (dockerUrl.indexOf('http://localhost') === 0) {
     const ip = getLocalIPAddress();

@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "storybook": "(adb reverse tcp:7007 tcp:7007 > /dev/null || true) && echo 'y' | start-storybook -p 7007 | react-native start --projectRoot storybook --watchFolders $PWD",
+    "storybook": "(adb reverse tcp:7007 tcp:7007 > /dev/null || true) && echo 'y' | start-storybook -p 7007 | react-native start --projectRoot storybook --watchFolders $PWD | deelay",
     "update-loki": "LOKI_FILE=`cd ../.. && echo \\`pwd\\`/\\`npm pack\\`` && npm install $LOKI_FILE --no-save && rm $LOKI_FILE"
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "@storybook/react-native": "^5.3.23",
     "@storybook/react-native-server": "^5.3.23",
     "babel-jest": "^26.6.3",
+    "deelay": "^2.0.0",
     "jest": "^26.6.3",
     "loki": "*",
     "metro-react-native-babel-preset": "^0.67.0",
