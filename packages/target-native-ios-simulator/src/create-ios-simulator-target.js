@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const tempy = require('tempy');
-const osnap = require('osnap/src/ios');
+const osnap = require('@ferocia-oss/osnap/src/ios');
 const { withRetries } = require('@loki/core');
 const { createWebsocketTarget } = require('@loki/target-native-core');
 

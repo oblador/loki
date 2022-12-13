@@ -2255,6 +2255,17 @@
     unique-filename "^1.1.1"
     which "^1.3.1"
 
+"@ferocia-oss/osnap@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmjs.org/@ferocia-oss/osnap/-/osnap-1.3.0.tgz#b284a61c948f7c539334cadd1102ea0a1f7ee393"
+  integrity sha512-pGKCDjRyerTiWur0ccXG6j+kU+oJwqUxE5Wgd3/oyUT4sQjsY4z/4JwcQNm3N1foVT5Ed1M0c6wa87kHbPgBcg==
+  dependencies:
+    execa "^0.6.3"
+    minimist "^1.2.0"
+    pify "^3.0.0"
+    tempfile "^2.0.0"
+    which "^1.2.14"
+
 "@hapi/hoek@^9.0.0":
   version "9.1.1"
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.1.1.tgz#9daf5745156fd84b8e9889a2dc721f0c58e894aa"
@@ -15667,17 +15678,6 @@ osenv@^0.1.4, osenv@^0.1.5:
   dependencies:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
-
-osnap@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/osnap/-/osnap-1.1.0.tgz#624a58bf72440a97475ed973552c848919f59234"
-  integrity sha512-kiasAEm/iryr348DkOmlBCzcm65MWCLOjrnnKAfK8aS2zID6Rnyyf4os1bHqIwr9KE27LbXo0oK53toNNmQRHA==
-  dependencies:
-    execa "^0.6.3"
-    minimist "^1.2.0"
-    pify "^3.0.0"
-    tempfile "^2.0.0"
-    which "^1.2.14"
 
 overlayscrollbars@^1.13.1:
   version "1.13.1"
