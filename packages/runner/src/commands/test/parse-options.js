@@ -59,6 +59,7 @@ function parseOptions(args, config) {
     chromeDockerUseCopy: $('chromeDockerUseCopy'),
     chromeDockerWithoutSeccomp: $('chromeDockerWithoutSeccomp'),
     passWithNoStories: $('passWithNoStories'),
+    device: $('device'),
   };
 }
 

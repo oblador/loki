@@ -34,7 +34,7 @@ yarn loki test -- --port 9009
 | **`--chromeDockerUseCopy`**             | Use docker copy instead of volume mount for local stories                                                                                       | `false`                                                   |
 | **`--chromeEnableAnimations`**          | Enable CSS transitions and animations.                                                                                                          | `false`                                                   |
 | **`--chromeFlags`**                     | Custom chrome flags.                                                                                                                            | `--headless --disable-gpu --hide-scrollbars`              |
-| **`--chromeLoadTimeout`**               | How many miliseconds loki will wait for the page to load before taking as screnshot.                                                            | `60000`                                                   |
+| **`--chromeLoadTimeout`**               | How many milliseconds loki will wait for the page to load before taking as screenshot.                                                          | `60000`                                                   |
 | **`--chromeRetries`**                   | The number of retries for taking the screenshot, in case of failure.                                                                            | `0`                                                       |
 | **`--chromeSelector`**                  | CSS selector to the part of the DOM to screenshot. Useful you have decorators that should be excluded.                                          | `#root > *`                                               |
 | **`--chromeTolerance`**                 | How many percent tolerated difference compared to reference image. Behaviour of tolerance depends on `diffingEngine`.                           | `0`                                                       |
@@ -49,6 +49,7 @@ yarn loki test -- --port 9009
 | **`--silent`**                          | Plain text renderer that will only output errors.                                                                                               | `false`                                                   |
 | **`--dockerWithSudo`**                  | Run docker commands with sudo.                                                                                                                  | `false`                                                   |
 | **`--dockerNet`**                       | Argument to pass to docker --net, e.g. `host` or `bridge`.                                                                                      | _None_                                                    |
+| **`--device`**                          | Device/emulator ID to target for screenshots. Useful when running multiple devices on a single machine.                                         | _None_                                                    |
 
 ## `loki update`
 
