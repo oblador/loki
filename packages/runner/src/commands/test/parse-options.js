@@ -1,7 +1,7 @@
 const path = require('path');
 const minimist = require('minimist');
 const ciInfo = require('ci-info');
-const defaults = require('./default-options');
+const defaults = require('./default-options.json');
 
 function parseOptions(args, config) {
   const argv = minimist(args, {

@@ -1,6 +1,6 @@
 const path = require('path');
 const minimist = require('minimist');
-const defaults = require('../test/default-options');
+const defaults = require('../test/default-options.json');
 
 function parseOptions(args, config) {
   const argv = minimist(args);

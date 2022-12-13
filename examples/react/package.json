@@ -17,9 +17,9 @@
     "build": "react-scripts build",
     "test": "loki",
     "pretest-ci": "build-storybook",
-    "test-ci": "loki --requireReference --reactUri file:./storybook-static",
+    "test-ci": "concurrently --kill-others --raw --success first 'loki --requireReference --reactUri file:./storybook-static' 'deelay'",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
+    "storybook": "concurrently --kill-others --raw --success first 'start-storybook -p 6006 -s public' 'deelay'",
     "build-storybook": "build-storybook -s public --quiet"
   },
   "eslintConfig": {
@@ -52,6 +52,8 @@
     "@storybook/preset-create-react-app": "^4.1.0",
     "@storybook/react": "^6.4.19",
     "@storybook/testing-library": "^0.0.9",
+    "concurrently": "^7.6.0",
+    "deelay": "^2.0.0",
     "loki": "^0.30.3",
     "webpack": "^5.70.0"
   }
