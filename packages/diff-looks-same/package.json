@@ -1,6 +1,6 @@
 {
   "name": "@loki/diff-looks-same",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "description": "Loki looks-same image differ",
   "keywords": [
     "loki"

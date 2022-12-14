@@ -1,6 +1,6 @@
 {
   "name": "@loki/core",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "description": "Loki Chrome target core lib",
   "keywords": [
     "loki"
