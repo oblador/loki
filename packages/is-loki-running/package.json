@@ -22,5 +22,6 @@
   "react-native": "src/index.native.js",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "types": "./index.d.ts"
 }
