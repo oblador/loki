@@ -22,7 +22,7 @@ Loki aims to have easy setup, no to low maintenance cost, reproducible tests ind
 
 ## Prerequisites
 
-- [Node](https://nodejs.org/)
+- [Node 16+](https://nodejs.org/)
 
 ### Optional dependencies
 
