@@ -51,7 +51,13 @@ END
 yarn build-storybook --quiet
 mkdir -p .loki/reference
 cp ../../fixtures/chrome_laptop_Welcome_to_Storybook.png ./.loki/reference
-yarn loki test laptop --requireReference --storiesFilter Welcome --reactUri file:./storybook-static
+
+yarn storybook --no-open 2> error.log > output.log &
+STORYBOOK_PID=$!
+
+yarn loki test laptop --requireReference --storiesFilter Welcome --reactUri http://localhost:6006
+
+kill $STORYBOOK_PID
 
 # Peace out
 popd > /dev/null
