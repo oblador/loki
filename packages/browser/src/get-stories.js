@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-const getStories = (window) => {
+const getStories = async (window) => {
   const getStorybook =
     (window.__STORYBOOK_CLIENT_API__ && window.__STORYBOOK_CLIENT_API__.raw) ||
     (window.loki && window.loki.getStorybook);
@@ -18,6 +18,13 @@ const getStories = (window) => {
     'framework',
     'storySource',
   ];
+
+  if (
+    window.__STORYBOOK_CLIENT_API__.storyStore &&
+    window.__STORYBOOK_CLIENT_API__.storyStore.cacheAllCSFFiles
+  ) {
+    await window.__STORYBOOK_CLIENT_API__.storyStore.cacheAllCSFFiles();
+  }
 
   const isSerializable = (value) => {
     try {
