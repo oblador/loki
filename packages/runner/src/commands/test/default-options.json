@@ -8,7 +8,7 @@
   "chromeFlags": "--headless --disable-gpu --hide-scrollbars",
   "chromeLoadTimeout": "60000",
   "chromeRetries": "0",
-  "chromeSelector": "#root > *",
+  "chromeSelector": "#root > *, #storybook-root > *",
   "chromeTolerance": "0",
   "host": "localhost",
   "output": "./.loki/current",
