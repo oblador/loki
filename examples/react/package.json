@@ -1,6 +1,6 @@
 {
   "name": "@loki/example-react",
-  "version": "0.31.1",
+  "version": "0.31.2",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
@@ -54,7 +54,7 @@
     "@storybook/testing-library": "^0.0.9",
     "concurrently": "^7.6.0",
     "deelay": "^2.0.0",
-    "loki": "^0.31.1",
+    "loki": "^0.31.2",
     "webpack": "^5.70.0"
   }
 }
