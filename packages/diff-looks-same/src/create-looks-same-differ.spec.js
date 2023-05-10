@@ -30,7 +30,7 @@ describe('createLooksSameDiffer', () => {
   });
 
   afterEach(() => {
-    fs.rmdirSync(workingDirectory, { recursive: true });
+    fs.rmSync(workingDirectory, { recursive: true });
   });
 
   it('creates diff files in deeply nested directories', async () => {

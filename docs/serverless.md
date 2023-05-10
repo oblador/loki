@@ -63,7 +63,7 @@ aws iam create-role \
 ```sh
 aws lambda create-function \
  --function-name loki \
- --runtime nodejs12.x \
+ --runtime nodejs16.x \
  --role arn:aws:iam::<your role> \
  --handler index.handler \
  --memory-size 2048 \

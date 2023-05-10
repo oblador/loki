@@ -12,6 +12,7 @@ jobs:
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v2
@@ -29,6 +30,7 @@ jobs:
   static-analysis:
     name: Static analysis
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v2
@@ -44,13 +46,14 @@ jobs:
   integration-cli:
     name: 'Integration tests: CLI'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version-file: '.nvmrc'
       - name: Install dependencies
         run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
       - name: Run integration tests
@@ -65,6 +68,7 @@ jobs:
   visual-react-dom:
     name: 'Visual tests: React DOM'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v2

@@ -5,7 +5,7 @@ title: Getting started
 
 ## Prerequisites
 
-- [Node](https://nodejs.org/)
+- [Node 16+](https://nodejs.org/)
 
 ### Optional dependencies
 
