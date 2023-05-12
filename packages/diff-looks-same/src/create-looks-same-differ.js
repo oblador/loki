@@ -19,30 +19,24 @@ function createLooksSameDiffer(config) {
         return reject(new Error('Current image is empty'));
       }
 
-      return looksSame(reference, current, instanceConfig, (err, isSame) => {
-        if (err) {
-          reject(err);
-        } else if (isSame) {
-          resolve(isSame);
+      try {
+        const { equal } = await looksSame(reference, current, instanceConfig);
+        if (equal) {
+          resolve(equal);
         } else {
           fs.ensureFileSync(diffPath);
-          looksSame.createDiff(
-            {
-              ...instanceConfig,
-              reference,
-              current,
-              diff: diffPath,
-              highlightColor: '#ff00ff',
-            },
-            (diffErr) => {
-              if (diffErr) {
-                reject(diffErr);
-              }
-              resolve(false);
-            }
-          );
+          const diff = await looksSame.createDiff({
+            ...instanceConfig,
+            reference,
+            current,
+            diff: diffPath,
+            highlightColor: '#ff00ff',
+          });
+          resolve(diff);
         }
-      });
+      } catch (err) {
+        reject(err);
+      }
     });
   };
 }
