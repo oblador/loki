@@ -26,7 +26,8 @@
     "debug": "^4.1.1",
     "execa": "^5.0.0",
     "fs-extra": "^9.1.0",
-    "get-port": "^5.1.1",
+    "find-free-port-sync": "^1.0.0",
+    "mime-types": "^2.1.35",
     "wait-on": "^5.2.1"
   },
   "publishConfig": {
