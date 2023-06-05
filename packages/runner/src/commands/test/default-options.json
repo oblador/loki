@@ -14,6 +14,7 @@
   "output": "./.loki/current",
   "difference": "./.loki/difference",
   "reference": "./.loki/reference",
+  "diffOnly": false,
   "reactPort": "6006",
   "reactNativePort": "7007",
   "pixelmatch": {},

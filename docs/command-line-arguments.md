@@ -61,10 +61,11 @@ Takes same arguments as `loki test`.
 
 Prunes old and updates reference files with the images generated in the last run.
 
-| Flag              | Description                         | Default             |
-| ----------------- | ----------------------------------- | ------------------- |
-| **`--reference`** | Path to screenshot reference folder | `./.loki/reference` |
-| **`--output`**    | Path to screenshot output folder    | `./.loki/current`   |
+| Flag              | Description                                       | Default             |
+| ----------------- | ------------------------------------------------- | ------------------- |
+| **`--reference`** | Path to screenshot reference folder               | `./.loki/reference` |
+| **`--output`**    | Path to screenshot output folder                  | `./.loki/current`   |
+| **`--diffOnly`**  | Only approve files that failed `loki test` before | false               |
 
 ## `loki init`
 
