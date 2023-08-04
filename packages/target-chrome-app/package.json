@@ -23,7 +23,8 @@
     "@loki/target-chrome-core": "^0.32.0",
     "chrome-launcher": "^0.14.1",
     "chrome-remote-interface": "^0.32.1",
-    "debug": "^4.1.1"
+    "debug": "^4.1.1",
+    "find-free-port-sync": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"

@@ -23,6 +23,7 @@
     "access": "public"
   },
   "dependencies": {
+    "mime-types": "^2.1.35",
     "shelljs": "^0.8.3"
   }
 }
