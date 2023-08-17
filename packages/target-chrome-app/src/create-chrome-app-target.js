@@ -9,12 +9,7 @@ const {
 } = require('@loki/core');
 const { createChromeTarget } = require('@loki/target-chrome-core');
 
-function createChromeAppTarget({
-  baseUrl = 'http://localhost:6006',
-  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
-}) {
-  let instance;
-  let staticServer;
+function getStaticServerConfig(baseUrl) {
   let staticServerPath;
   let staticServerPort;
 
@@ -39,8 +34,27 @@ function createChromeAppTarget({
     }
   }
 
+  return {
+    chromeUrl,
+    isLocalFile,
+    staticServerPath,
+    staticServerPort,
+  };
+}
+
+function createChromeAppTarget({
+  baseUrl = 'http://localhost:6006',
+  useStaticServer = true,
+  chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+}) {
+  let instance;
+  let staticServer;
+
+  const { chromeUrl, isLocalFile, staticServerPath, staticServerPort } =
+    getStaticServerConfig(baseUrl);
+
   async function start(options = {}) {
-    if (isLocalFile) {
+    if (useStaticServer && isLocalFile) {
       staticServer = createStaticServer(staticServerPath);
       staticServer.listen(staticServerPort);
       debug(`Starting static file server at ${chromeUrl}`);
@@ -66,7 +80,7 @@ function createChromeAppTarget({
       debug('No chrome instance to kill');
     }
 
-    if (staticServer) {
+    if (useStaticServer && staticServer) {
       staticServer.close();
     }
   }
@@ -86,7 +100,12 @@ function createChromeAppTarget({
     return client;
   }
 
-  return createChromeTarget(start, stop, createNewDebuggerInstance, chromeUrl);
+  return createChromeTarget(
+    start,
+    stop,
+    createNewDebuggerInstance,
+    useStaticServer ? chromeUrl : baseUrl
+  );
 }
 
 module.exports = createChromeAppTarget;
