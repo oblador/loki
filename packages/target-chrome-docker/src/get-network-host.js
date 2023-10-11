@@ -3,10 +3,10 @@ const fs = require('fs-extra');
 const getNetworkHost = async (execute, dockerId) => {
   let host = '127.0.0.1';
 
-  // https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
+  // https://stackoverflow.com/questions/68816329/how-to-get-docker-container-id-from-within-the-container-with-cgroup-v2
   const runningInsideDocker =
-    fs.existsSync('/proc/1/cgroup') &&
-    /docker/.test(fs.readFileSync('/proc/1/cgroup', 'utf8'));
+    fs.existsSync('/proc/self/mountinfo') &&
+    /\/docker\/containers\//.test(fs.readFileSync('/proc/self/mountinfo', 'utf8'));
 
   // If we are running inside a docker container, our spawned docker chrome instance will be a sibling on the default
   // bridge, which means we can talk directly to it via its IP address.
