@@ -20,7 +20,8 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/integration-core": "^0.32.0"
+    "@loki/integration-core": "^0.32.0",
+    "hoist-non-react-statics": "*"
   },
   "peerDependencies": {
     "@storybook/addons": "^5 || ^6",
