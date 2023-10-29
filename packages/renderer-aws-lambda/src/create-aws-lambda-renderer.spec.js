@@ -14,7 +14,7 @@ const executeLambda = (event) =>
     dockerArgs: ['-m', '1024M'].concat(DEBUG ? ['-e', 'DEBUG=*'] : []),
     dockerImage: 'amazon/aws-lambda-nodejs:16',
     taskDir: PROJECT_ROOT,
-    handler: 'examples/renderer-aws-lambda/index.handler',
+    handler: '--entrypoint ["examples/renderer-aws-lambda/index.handler"]',
     returnSpawnResult: DEBUG,
   });
 
