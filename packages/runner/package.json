@@ -1,6 +1,6 @@
 {
   "name": "@loki/runner",
-  "version": "0.32.0",
+  "version": "0.33.0",
   "description": "Loki test runner",
   "bin": {
     "loki": "bin/loki"
@@ -26,15 +26,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@loki/core": "^0.32.0",
-    "@loki/diff-graphics-magick": "^0.32.0",
-    "@loki/diff-looks-same": "^0.32.0",
-    "@loki/diff-pixelmatch": "^0.32.0",
-    "@loki/target-chrome-app": "^0.32.0",
-    "@loki/target-chrome-aws-lambda": "^0.32.0",
-    "@loki/target-chrome-docker": "^0.32.0",
-    "@loki/target-native-android-emulator": "^0.32.0",
-    "@loki/target-native-ios-simulator": "^0.32.0",
+    "@loki/core": "^0.33.0",
+    "@loki/diff-graphics-magick": "^0.33.0",
+    "@loki/diff-looks-same": "^0.33.0",
+    "@loki/diff-pixelmatch": "^0.33.0",
+    "@loki/target-chrome-app": "^0.33.0",
+    "@loki/target-chrome-aws-lambda": "^0.33.0",
+    "@loki/target-chrome-docker": "^0.33.0",
+    "@loki/target-native-android-emulator": "^0.33.0",
+    "@loki/target-native-ios-simulator": "^0.33.0",
     "async": "^3.2.0",
     "chalk": "^4.1.0",
     "ci-info": "^2.0.0",
