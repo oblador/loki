@@ -43,7 +43,7 @@ const waitOnCDPAvailable = (host, port) =>
 
 function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
-  chromeDockerImage = 'yukinying/chrome-headless-browser-stable',
+  chromeDockerImage = 'yukinying/chrome-headless-browser-stable:100.0.4896.127',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
   dockerNet = null,
   dockerWithSudo = false,
@@ -180,7 +180,13 @@ function createChromeDockerTarget({
   async function stop() {
     if (dockerId) {
       debug(`Killing chrome docker instance with id ${dockerId}`);
-      await execute(dockerPath, ['kill', dockerId]);
+      try {
+        await execute(dockerPath, ['kill', dockerId]);
+      } catch (e) {
+        if (e.toString().indexOf('No such container') === -1) {
+          throw e;
+        }
+      }
     } else {
       debug('No chrome docker instance to kill');
     }
