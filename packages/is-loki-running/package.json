@@ -1,6 +1,6 @@
 {
   "name": "@loki/is-loki-running",
-  "version": "0.31.1",
+  "version": "0.32.0",
   "description": "Loki test indicator",
   "keywords": [
     "loki"

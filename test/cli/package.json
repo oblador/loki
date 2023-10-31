@@ -1,12 +1,12 @@
 {
   "name": "@loki/test-cli",
-  "version": "0.31.2",
+  "version": "0.32.0",
   "private": true,
   "scripts": {
     "test": "bash ./test-cra-init.sh"
   },
   "devDependencies": {
     "execa": "^5.0.0",
-    "loki": "^0.31.2"
+    "loki": "^0.32.0"
   }
 }

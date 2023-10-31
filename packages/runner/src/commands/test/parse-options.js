@@ -56,7 +56,6 @@ function parseOptions(args, config) {
     targetFilter: argv.targetFilter,
     configurationFilter: argv.configurationFilter || argv._[1],
     dockerWithSudo: $('dockerWithSudo'),
-    chromeDockerUseCopy: $('chromeDockerUseCopy'),
     chromeDockerWithoutSeccomp: $('chromeDockerWithoutSeccomp'),
     passWithNoStories: $('passWithNoStories'),
     device: $('device'),

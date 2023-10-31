@@ -38,7 +38,7 @@ Example `package.json`:
 }
 ```
 
-You may also use a file named `.lokirc`, `.lokirc.json` or `loki.config.js` (see the react example) if you don't want to pollute your `package.json`.
+You may also use a file named `.lokirc`, `.lokirc.json` or `loki.config.js` ([see the react example](https://github.com/oblador/loki/tree/master/examples/react)) if you don't want to pollute your `package.json`.
 
 ## `chromeSelector`
 
@@ -127,3 +127,4 @@ module.exports = {
 | **`mobile`**                         | _boolean_ | Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.                                                                                                                                                   | `chrome.*`   |
 | **`media`**                          | _string_  | Emulates the given media for CSS media queries.                                                                                                                                                                                                                    | _None_       |
 | **`features`**                       | _array_   | Emulates the given features for CSS media queries. See [setEmulatedMedia docs](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedMedia)                                                                                          | `chrome.*`   |
+| **`diffOnly`**                       | boolean   | Changes the mode of `loki approve` if set to `true`, only the images which failed `loki test` beforehand will be updated. This configuration can be overwritten on demand using the cli flag `--diffOnly`.                                                         | All          |

@@ -3,15 +3,16 @@ const { execSync } = require('child_process');
 const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
-const getRandomPort = require('get-port');
+const getRandomPort = require('find-free-port-sync');
 const semver = require('semver');
 const {
   ChromeError,
   ensureDependencyAvailable,
   getAbsoluteURL,
+  getLocalIPAddress,
+  createStaticServer,
 } = require('@loki/core');
 const { createChromeTarget } = require('@loki/target-chrome-core');
-const { getLocalIPAddress } = require('./get-local-ip-address');
 const { getNetworkHost } = require('./get-network-host');
 
 const getExecutor = (dockerWithSudo) => (dockerPath, args) => {
@@ -43,20 +44,20 @@ const waitOnCDPAvailable = (host, port) =>
 
 function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
-  chromeDockerImage = 'yukinying/chrome-headless-browser-stable',
+  chromeDockerImage = 'yukinying/chrome-headless-browser-stable:100.0.4896.127',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
   dockerNet = null,
   dockerWithSudo = false,
-  chromeDockerUseCopy = false,
   chromeDockerWithoutSeccomp = false,
 }) {
-  let port;
+  let debuggerPort;
+  let staticServer;
+  let staticServerPath;
+  let staticServerPort;
   let dockerId;
   let host;
-  let localPath;
   let dockerUrl = getAbsoluteURL(baseUrl);
   const isLocalFile = dockerUrl.indexOf('file:') === 0;
-  const staticMountPath = '/var/loki';
   const dockerPath = 'docker';
   const runArgs = ['run', '--rm', '-d', '-P'];
   const execute = getExecutor(dockerWithSudo);
@@ -65,21 +66,19 @@ function createChromeDockerTarget({
     runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
   }
 
-  if (dockerUrl.indexOf('http://localhost') === 0) {
+  if (dockerUrl.indexOf('http://localhost') === 0 || isLocalFile) {
     const ip = getLocalIPAddress();
     if (!ip) {
       throw new Error(
         'Unable to detect local IP address, try passing --host argument'
       );
     }
-    dockerUrl = dockerUrl.replace('localhost', ip);
-  } else if (isLocalFile) {
-    localPath = dockerUrl.substr('file:'.length);
-    dockerUrl = `file://${staticMountPath}`;
-    if (!chromeDockerUseCopy) {
-      // setup volume mount if we're not using copy
-      runArgs.push('-v');
-      runArgs.push(`${localPath}:${staticMountPath}`);
+    if (isLocalFile) {
+      staticServerPort = getRandomPort();
+      staticServerPath = dockerUrl.substr('file:'.length);
+      dockerUrl = `http://${ip}:${staticServerPort}`;
+    } else {
+      dockerUrl = dockerUrl.replace('localhost', ip);
     }
   }
 
@@ -96,19 +95,6 @@ function createChromeDockerTarget({
     return stdout.trim().length !== 0;
   }
 
-  async function copyFiles() {
-    const { exitCode, stdout, stderr } = await execute(dockerPath, [
-      'cp',
-      localPath,
-      `${dockerId}:${staticMountPath}`,
-    ]);
-
-    if (exitCode !== 0) {
-      throw new Error(`Failed to copy files, ${stderr}`);
-    }
-    return stdout.trim().length !== 0;
-  }
-
   async function ensureImageDownloaded() {
     ensureDependencyAvailable('docker');
 
@@ -119,13 +105,19 @@ function createChromeDockerTarget({
   }
 
   async function start() {
-    port = await getRandomPort();
-
     ensureDependencyAvailable('docker');
+
+    debuggerPort = getRandomPort();
+    if (isLocalFile) {
+      staticServer = createStaticServer(staticServerPath);
+      staticServer.listen(staticServerPort);
+      debug(`Starting static file server at ${dockerUrl}`);
+    }
+
     const dockerArgs = runArgs.concat([
       '--shm-size=1g',
       '-p',
-      `${port}:${port}`,
+      `${debuggerPort}:${debuggerPort}`,
     ]);
 
     if (dockerNet) {
@@ -139,7 +131,7 @@ function createChromeDockerTarget({
         '--no-first-run',
         '--disable-extensions',
         '--remote-debugging-address=0.0.0.0',
-        `--remote-debugging-port=${port}`,
+        `--remote-debugging-port=${debuggerPort}`,
       ])
       .concat(chromeFlags);
 
@@ -162,9 +154,6 @@ function createChromeDockerTarget({
     const { exitCode, stdout, stderr } = await execute(dockerPath, args);
     if (exitCode === 0) {
       dockerId = stdout;
-      if (chromeDockerUseCopy) {
-        await copyFiles();
-      }
       const logs = execute(dockerPath, ['logs', dockerId, '--follow']);
       const errorLogs = [];
       logs.stderr.on('data', (chunk) => {
@@ -173,7 +162,7 @@ function createChromeDockerTarget({
 
       host = await getNetworkHost(execute, dockerId);
       try {
-        await waitOnCDPAvailable(host, port);
+        await waitOnCDPAvailable(host, debuggerPort);
       } catch (error) {
         if (
           error.message.startsWith('Timed out waiting for') &&
@@ -202,21 +191,30 @@ function createChromeDockerTarget({
   async function stop() {
     if (dockerId) {
       debug(`Killing chrome docker instance with id ${dockerId}`);
-      await execute(dockerPath, ['kill', dockerId]);
+      try {
+        await execute(dockerPath, ['kill', dockerId]);
+      } catch (e) {
+        if (e.toString().indexOf('No such container') === -1) {
+          throw e;
+        }
+      }
     } else {
       debug('No chrome docker instance to kill');
+    }
+    if (staticServer) {
+      staticServer.close();
     }
   }
 
   async function createNewDebuggerInstance() {
-    debug(`Launching new tab with debugger at port ${host}:${port}`);
-    const target = await CDP.New({ host, port });
+    debug(`Launching new tab with debugger at port ${host}:${debuggerPort}`);
+    const target = await CDP.New({ host, port: debuggerPort });
     debug(`Launched with target id ${target.id}`);
-    const client = await CDP({ host, port, target });
+    const client = await CDP({ host, port: debuggerPort, target });
 
     client.close = () => {
       debug('Closing tab');
-      return CDP.Close({ host, port, id: target.id });
+      return CDP.Close({ host, port: debuggerPort, id: target.id });
     };
 
     return client;

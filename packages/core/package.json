@@ -1,6 +1,6 @@
 {
   "name": "@loki/core",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "description": "Loki Chrome target core lib",
   "keywords": [
     "loki"
@@ -23,6 +23,7 @@
     "access": "public"
   },
   "dependencies": {
+    "mime-types": "^2.1.35",
     "shelljs": "^0.8.3"
   }
 }
