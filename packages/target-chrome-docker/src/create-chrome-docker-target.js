@@ -8,11 +8,11 @@ const {
   ChromeError,
   ensureDependencyAvailable,
   getAbsoluteURL,
+  getLocalIPAddress,
+  createStaticServer,
 } = require('@loki/core');
 const { createChromeTarget } = require('@loki/target-chrome-core');
-const { getLocalIPAddress } = require('./get-local-ip-address');
 const { getNetworkHost } = require('./get-network-host');
-const { createStaticServer } = require('./create-static-server');
 
 const getExecutor = (dockerWithSudo) => (dockerPath, args) => {
   if (dockerWithSudo) {
