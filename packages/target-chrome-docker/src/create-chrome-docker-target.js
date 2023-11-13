@@ -43,7 +43,7 @@ const waitOnCDPAvailable = (host, port) =>
 
 function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
-  chromeDockerImage = 'yukinying/chrome-headless-browser-stable:100.0.4896.127',
+  chromeDockerImage = 'yukinying/chrome-headless-browser-stable:118.0.5993.117',
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
   dockerNet = null,
   dockerWithSudo = false,
@@ -62,7 +62,7 @@ function createChromeDockerTarget({
   const execute = getExecutor(dockerWithSudo);
 
   if (!chromeDockerWithoutSeccomp) {
-    runArgs.push(`--security-opt=seccomp=${__dirname}/docker-seccomp.json`);
+    runArgs.push('--security-opt=seccomp=unconfined');
   }
   runArgs.push('--add-host=host.docker.internal:host-gateway');
 
