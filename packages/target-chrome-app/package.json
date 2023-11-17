@@ -1,6 +1,6 @@
 {
   "name": "@loki/target-chrome-app",
-  "version": "0.33.0",
+  "version": "0.33.1",
   "description": "Loki Chrome app target",
   "keywords": [
     "loki"
