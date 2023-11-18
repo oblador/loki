@@ -4,6 +4,7 @@ const execa = require('execa');
 const waitOn = require('wait-on');
 const CDP = require('chrome-remote-interface');
 const getRandomPort = require('find-free-port-sync');
+const semver = require('semver');
 const {
   ChromeError,
   ensureDependencyAvailable,
@@ -64,7 +65,6 @@ function createChromeDockerTarget({
   if (!chromeDockerWithoutSeccomp) {
     runArgs.push('--security-opt=seccomp=unconfined');
   }
-  runArgs.push('--add-host=host.docker.internal:host-gateway');
 
   if (dockerUrl.indexOf('http://localhost') === 0 || isLocalFile) {
     const ip = getLocalIPAddress();
@@ -134,6 +134,17 @@ function createChromeDockerTarget({
         `--remote-debugging-port=${debuggerPort}`,
       ])
       .concat(chromeFlags);
+
+    const { stdout: rawDockerVersion } = await execa('docker', [
+      'version',
+      '--format',
+      "'{{.Server.Version}}'",
+    ]);
+    const parsedDockerVersion = rawDockerVersion.replace(/'/g, '');
+
+    if (semver.satisfies(parsedDockerVersion, '>=20')) {
+      dockerArgs.push('--add-host=host.docker.internal:host-gateway');
+    }
 
     debug(
       `Launching chrome in docker with command "${dockerPath} ${args.join(
