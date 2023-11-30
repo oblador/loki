@@ -1,0 +1,20 @@
+{
+  "name": "@loki/example-running-renderer-aws-lambda",
+  "version": "0.33.1",
+  "private": true,
+  "scripts": {
+    "build": "sh build.sh",
+    "start": "docker run -d -p 8080:8080 -t example-renderer-aws-lambda:latest"
+  },
+  "dependencies": {
+    "@loki/renderer-aws-lambda": "file:../../packages/renderer-aws-lambda",
+    "@sparticuz/chromium": "118.0.0"
+  },
+  "resolutions": {
+    "@loki/target-chrome-app": "file:../../packages/target-chrome-app",
+    "@loki/target-chrome-core": "file:../../packages/target-chrome-core",
+    "@loki/browser": "file:../../packages/browser",
+    "@loki/core": "file:../../packages/core",
+    "@loki/integration-core": "file:../../packages/integration-core"
+  }
+}
