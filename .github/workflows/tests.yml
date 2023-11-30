@@ -25,7 +25,7 @@ jobs:
       - name: Prepare docker
         run: docker pull yukinying/chrome-headless-browser-stable:118.0.5993.117
       - name: Prepare docker lambda
-        run: yarn prepare:lambda:test
+        run: yarn pretest
       - name: Run unit tests
         run: yarn test-ci
 
