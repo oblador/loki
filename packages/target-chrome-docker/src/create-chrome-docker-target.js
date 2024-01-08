@@ -67,7 +67,7 @@ function createChromeDockerTarget({
   runArgs.push('--add-host=host.docker.internal:host-gateway');
 
   if (isLocalFile) {
-    let ip = 'host.docker.internal';
+    const ip = 'host.docker.internal';
     staticServerPort = getRandomPort();
     staticServerPath = dockerUrl.substr('file:'.length);
     dockerUrl = `http://${ip}:${staticServerPort}`;
