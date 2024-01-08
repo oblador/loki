@@ -72,7 +72,7 @@ function createChromeDockerTarget({
     staticServerPath = dockerUrl.substr('file:'.length);
     dockerUrl = `http://${ip}:${staticServerPort}`;
   } else if(dockerUrl.indexOf('http://localhost') === 0) {
-    let ip = getLocalIPAddress();
+    const ip = getLocalIPAddress();
     if (!ip) {
       throw new Error(
         'Unable to detect local IP address, try passing --host argument'
