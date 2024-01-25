@@ -23,6 +23,10 @@ yarn
 
 cp -R ../../fixtures fixtures
 
+# it is needed to resolve the symlinks that are create by nohoist
+cp -RL node_modules docker_node_modules
+
 docker build . -t example-renderer-aws-lambda:latest
 
 rm -rf fixtures
+rm -rf docker_node_modules
