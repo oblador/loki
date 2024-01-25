@@ -1,6 +1,6 @@
 {
   "name": "@loki/target-native-ios-simulator",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "description": "Loki iOS simulator target",
   "keywords": [
     "loki"
@@ -21,8 +21,8 @@
   "main": "src/index.js",
   "dependencies": {
     "@ferocia-oss/osnap": "^1.3.5",
-    "@loki/core": "^0.33.0",
-    "@loki/target-native-core": "^0.33.0",
+    "@loki/core": "^0.34.0",
+    "@loki/target-native-core": "^0.34.0",
     "fs-extra": "^9.1.0",
     "tempy": "^1.0.0"
   },

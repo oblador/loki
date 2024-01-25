@@ -1,5 +1,5 @@
 {
-  "version": "0.33.1",
+  "version": "0.34.0",
   "useWorkspaces": true,
   "registry": "https://registry.npmjs.org",
   "npmClient": "yarn"

@@ -1,6 +1,6 @@
 {
   "name": "@loki/target-chrome-core",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "description": "Loki Chrome target core lib",
   "keywords": [
     "loki"
@@ -20,9 +20,9 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@loki/browser": "^0.33.0",
-    "@loki/core": "^0.33.0",
-    "@loki/integration-core": "^0.33.0",
+    "@loki/browser": "^0.34.0",
+    "@loki/core": "^0.34.0",
+    "@loki/integration-core": "^0.34.0",
     "debug": "^4.1.1"
   },
   "publishConfig": {
