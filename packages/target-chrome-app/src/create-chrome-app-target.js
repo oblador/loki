@@ -63,7 +63,7 @@ function createChromeAppTarget({
     const launchOptions = Object.assign(
       {
         chromeFlags,
-        logLevel: 'silent',
+        logLevel: debug.enabled ? 'verbose' : 'silent',
       },
       options
     );

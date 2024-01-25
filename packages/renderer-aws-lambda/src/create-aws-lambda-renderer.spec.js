@@ -3,6 +3,7 @@ const fs = require('fs');
 const got = require('got');
 
 const DOCKER_TEST_TIMEOUT = 60000;
+const DOCKER_TEST_TIMEOUT_NOT_RUNNING = 120000;
 // https://docs.aws.amazon.com/lambda/latest/dg/images-test.html#images-test-AWSbase
 const DOCKER_LAMBDA_URL =
   'http://localhost:8080/2015-03-31/functions/function/invocations';
@@ -145,7 +146,7 @@ describe('createChromeAWSLambdaRenderer', () => {
           trace: [],
         });
       },
-      DOCKER_TEST_TIMEOUT
+      DOCKER_TEST_TIMEOUT_NOT_RUNNING
     );
   });
 
