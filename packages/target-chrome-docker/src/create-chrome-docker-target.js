@@ -74,7 +74,7 @@ function createChromeDockerTarget({
       );
     }
     if (isLocalFile) {
-      staticServerPort = getRandomPort();
+      staticServerPort = getRandomPort({ start: 1025 });
       staticServerPath = dockerUrl.substr('file:'.length);
       dockerUrl = `http://${ip}:${staticServerPort}`;
     } else {
