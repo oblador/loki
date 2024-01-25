@@ -1,7 +1,7 @@
 const debug = require('debug')('loki:chrome:docker');
 const { execSync } = require('child_process');
 const execa = require('execa');
-const waitOn = require('wait-on');
+const waitPort = require('wait-port');
 const CDP = require('chrome-remote-interface');
 const getRandomPort = require('find-free-port-sync');
 const {
@@ -21,25 +21,6 @@ const getExecutor = (dockerWithSudo) => (dockerPath, args) => {
 
   return execa(dockerPath, args);
 };
-
-const waitOnCDPAvailable = (host, port) =>
-  new Promise((resolve, reject) => {
-    waitOn(
-      {
-        resources: [`tcp:${host}:${port}`],
-        delay: 50,
-        interval: 100,
-        timeout: 5000,
-      },
-      (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      }
-    );
-  });
 
 function createChromeDockerTarget({
   baseUrl = 'http://localhost:6006',
@@ -151,7 +132,12 @@ function createChromeDockerTarget({
 
       host = await getNetworkHost(execute, dockerId);
       try {
-        await waitOnCDPAvailable(host, debuggerPort);
+        await waitPort({
+          host,
+          port: debuggerPort,
+          interval: 100,
+          timeout: 5000,
+        });
       } catch (error) {
         if (
           error.message.startsWith('Timed out waiting for') &&
