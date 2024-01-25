@@ -1,4 +1,4 @@
-const chromium = require('chrome-aws-lambda');
+const chromium = require('@sparticuz/chromium');
 const mapLimit = require('async/mapLimit');
 const { createChromeAppTarget } = require('@loki/target-chrome-app');
 const { serializeError, unwrapError } = require('@loki/core');
@@ -55,11 +55,13 @@ const createChromeAWSLambdaRenderer = () => async (event) => {
   const target = createChromeAppTarget({
     baseUrl: event.baseUrl,
     useStaticServer: false,
+    cdpOptions: { local: true },
   });
+
   try {
     await target.start({
       chromeFlags: chromium.args,
-      chromePath: await chromium.executablePath,
+      chromePath: await chromium.executablePath(),
     });
     return await command(target, event);
   } catch (error) {

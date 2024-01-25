@@ -24,7 +24,7 @@ yarn init -y
 ### 2. Add loki renderer and Chrome binary
 
 ```sh
-yarn add @loki/renderer-aws-lambda chrome-aws-lambda
+yarn add @loki/renderer-aws-lambda @sparticuz/chromium
 ```
 
 ### 3. Expose loki in lambda handler

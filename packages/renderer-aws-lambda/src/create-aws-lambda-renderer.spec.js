@@ -1,22 +1,24 @@
-const dockerLambda = require('docker-lambda');
 const path = require('path');
 const fs = require('fs');
+const got = require('got');
 
 const DOCKER_TEST_TIMEOUT = 60000;
+const DOCKER_TEST_TIMEOUT_NOT_RUNNING = 120000;
+// https://docs.aws.amazon.com/lambda/latest/dg/images-test.html#images-test-AWSbase
+const DOCKER_LAMBDA_URL =
+  'http://localhost:8080/2015-03-31/functions/function/invocations';
 
-const PROJECT_ROOT = path.dirname(path.dirname(path.dirname(__dirname)));
+const executeLambda = async (event) => {
+  const url = DOCKER_LAMBDA_URL;
 
-const DEBUG = false;
+  const result = await got
+    .post(url, {
+      json: event,
+    })
+    .json();
 
-const executeLambda = (event) =>
-  dockerLambda({
-    event,
-    dockerArgs: ['-m', '1024M'].concat(DEBUG ? ['-e', 'DEBUG=*'] : []),
-    dockerImage: 'lambci/lambda:nodejs12.x',
-    taskDir: PROJECT_ROOT,
-    handler: 'examples/renderer-aws-lambda/index.handler',
-    returnSpawnResult: DEBUG,
-  });
+  return result;
+};
 
 const fetchStorybookUrl = async (baseUrl) =>
   executeLambda({
@@ -124,9 +126,12 @@ describe('createChromeAWSLambdaRenderer', () => {
     it(
       'throws if not configured',
       async () => {
-        await expect(fetchStorybookFixture('unconfigured')).rejects.toThrow(
-          "Unable to get stories. Try adding `import 'loki/configure-react'` to your .storybook/preview.js file."
-        );
+        expect(await fetchStorybookFixture('unconfigured')).toEqual({
+          errorMessage:
+            '{"isSerializedError":true,"type":"Error","args":["Unable to get stories. Try adding `import \'loki/configure-react\'` to your .storybook/preview.js file."]}',
+          errorType: 'string',
+          trace: [],
+        });
       },
       DOCKER_TEST_TIMEOUT
     );
@@ -134,11 +139,14 @@ describe('createChromeAWSLambdaRenderer', () => {
     it(
       'throws if not running',
       async () => {
-        await expect(
-          fetchStorybookUrl('http://localhost:23456')
-        ).rejects.toThrow('Failed fetching stories because the server is down');
+        expect(await fetchStorybookUrl('http://localhost:23456')).toEqual({
+          errorMessage:
+            '{"isSerializedError":true,"type":"ServerError","args":["Failed fetching stories because the server is down","Try starting it with \\"yarn storybook\\" or pass the --port or --host arguments if it\'s not running at http://localhost:23456"]}',
+          errorType: 'string',
+          trace: [],
+        });
       },
-      DOCKER_TEST_TIMEOUT
+      DOCKER_TEST_TIMEOUT_NOT_RUNNING
     );
   });
 

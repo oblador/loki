@@ -4,6 +4,6 @@
   "private": true,
   "dependencies": {
     "@loki/renderer-aws-lambda": "^0.33.1",
-    "chrome-aws-lambda": "^2.0.1"
+    "@sparticuz/chromium": "118.0.0"
   }
 }

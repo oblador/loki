@@ -46,6 +46,7 @@ function createChromeAppTarget({
   baseUrl = 'http://localhost:6006',
   useStaticServer = true,
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
+  cdpOptions = {},
 }) {
   let instance;
   let staticServer;
@@ -62,7 +63,7 @@ function createChromeAppTarget({
     const launchOptions = Object.assign(
       {
         chromeFlags,
-        logLevel: 'silent',
+        logLevel: debug.enabled ? 'verbose' : 'silent',
       },
       options
     );
@@ -90,7 +91,7 @@ function createChromeAppTarget({
     debug(`Launching new tab with debugger at port ${port}`);
     const target = await CDP.New({ port });
     debug(`Launched with target id ${target.id}`);
-    const client = await CDP({ port, target });
+    const client = await CDP({ port, target, ...cdpOptions });
 
     client.close = () => {
       debug('Closing tab');

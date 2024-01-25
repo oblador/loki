@@ -1,0 +1,16 @@
+{
+  "name": "@loki/example-running-renderer-aws-lambda",
+  "version": "0.33.1",
+  "private": true,
+  "scripts": {
+    "build": "sh build.sh",
+    "start": "docker run -d -p 8080:8080 -t example-renderer-aws-lambda:latest"
+  },
+  "workspaces": {
+    "nohoist": ["**"]
+  },
+  "dependencies": {
+    "@loki/renderer-aws-lambda": "0.33.1",
+    "@sparticuz/chromium": "118.0.0"
+  }
+}

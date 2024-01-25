@@ -25,10 +25,10 @@
     "async": "^3.2.0"
   },
   "devDependencies": {
-    "docker-lambda": "^0.15.3"
+    "got": "11.8.6"
   },
   "peerDependencies": {
-    "chrome-aws-lambda": ">=2"
+    "@sparticuz/chromium": ">=110"
   },
   "publishConfig": {
     "access": "public"

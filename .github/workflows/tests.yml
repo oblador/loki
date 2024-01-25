@@ -24,6 +24,8 @@ jobs:
         run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
       - name: Prepare docker
         run: docker pull yukinying/chrome-headless-browser-stable:118.0.5993.117
+      - name: Prepare docker lambda
+        run: yarn pretest
       - name: Run unit tests
         run: yarn test-ci
 
