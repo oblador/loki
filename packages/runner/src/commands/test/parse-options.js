@@ -45,6 +45,7 @@ function parseOptions(args, config) {
     skipStoriesPattern: $('skipStories'),
     storiesFilter: $('storiesFilter'),
     diffingEngine: $('diffingEngine') || 'pixelmatch',
+    includeReferenceOnDiff: $('includeReferenceOnDiff'),
     fetchFailIgnore: $('fetchFailIgnore'),
     'looks-same': $('looks-same'),
     gm: $('gm'),

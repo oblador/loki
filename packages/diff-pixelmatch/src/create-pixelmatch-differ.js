@@ -20,7 +20,7 @@ const resizeImage = (original, width, height) => {
   return resized;
 };
 
-function createPixelmatchDiffer(config) {
+function createPixelmatchDiffer(config, includeReferenceOnDiff = false) {
   return async function getImageDiff(path1, path2, diffPath, tolerance) {
     let [reference, current] = await Promise.all([
       fs.readFile(path1),
@@ -62,7 +62,15 @@ function createPixelmatchDiffer(config) {
     );
     const isEqual = numDiffPixels === 0;
     if (!isEqual) {
-      await fs.outputFile(diffPath, PNG.sync.write(diff));
+      if (!includeReferenceOnDiff) {
+        await fs.outputFile(diffPath, PNG.sync.write(diff));
+      } else {
+        const diffCombined = new PNG({ width: width * 3, height });
+        PNG.bitblt(reference, diffCombined, 0, 0, width, height, width * 0);
+        PNG.bitblt(current, diffCombined, 0, 0, width, height, width * 1);
+        diff.bitblt(diffCombined, 0, 0, width, height, width * 2);
+        await fs.outputFile(diffPath, PNG.sync.write(diffCombined));
+      }
     }
     return isEqual;
   };
