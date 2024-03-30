@@ -1,6 +1,6 @@
 {
   "name": "@loki/example-running-renderer-aws-lambda",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "private": true,
   "scripts": {
     "build": "sh build.sh",
@@ -12,7 +12,7 @@
     ]
   },
   "dependencies": {
-    "@loki/renderer-aws-lambda": "^0.34.0",
+    "@loki/renderer-aws-lambda": "^0.35.0",
     "@sparticuz/chromium": "118.0.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@loki/create-async-callback",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "description": "Loki async story management helper",
   "keywords": [
     "loki"
@@ -24,7 +24,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@loki/integration-react-native": "^0.34.0"
+    "@loki/integration-react-native": "^0.35.0"
   },
   "types": "./index.d.ts"
 }
