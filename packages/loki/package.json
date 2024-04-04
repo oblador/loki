@@ -54,7 +54,7 @@
     "@loki/target-native-ios-simulator": "^0.35.0"
   },
   "peerDependencies": {
-    "@storybook/react": "^5 || ^6 || ^7"
+    "@storybook/react": "^5 || ^6 || ^7 || ^8"
   },
   "peerDependenciesMeta": {
     "@storybook/react": {
