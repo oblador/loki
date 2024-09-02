@@ -47,20 +47,19 @@ function createChromeDockerTarget({
   }
   runArgs.push('--add-host=host.docker.internal:host-gateway');
 
-  if (dockerUrl.indexOf('http://localhost') === 0 || isLocalFile) {
+  if (isLocalFile) {
+    const ip = 'host.docker.internal';
+    staticServerPort = getRandomPort();
+    staticServerPath = dockerUrl.substr('file:'.length);
+    dockerUrl = `http://${ip}:${staticServerPort}`;
+  } else if (dockerUrl.indexOf('http://localhost') === 0) {
     const ip = getLocalIPAddress();
     if (!ip) {
       throw new Error(
         'Unable to detect local IP address, try passing --host argument'
       );
     }
-    if (isLocalFile) {
-      staticServerPort = getRandomPort({ start: 1025 });
-      staticServerPath = dockerUrl.substr('file:'.length);
-      dockerUrl = `http://${ip}:${staticServerPort}`;
-    } else {
-      dockerUrl = dockerUrl.replace('localhost', ip);
-    }
+    dockerUrl = dockerUrl.replace('localhost', ip);
   }
 
   async function getIsImageDownloaded(imageName) {
