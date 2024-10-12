@@ -62,7 +62,7 @@ jobs:
         run: yarn workspace @loki/test-cli test
       - name: Archive screenshots
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: cra-integration-screenshots
           path: test/cli/generated/create-react-app/.loki
@@ -84,7 +84,7 @@ jobs:
         run: yarn workspace @loki/example-react test-ci
       - name: Archive screenshots
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: react-example-screenshots
           path: examples/react/.loki
