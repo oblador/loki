@@ -41,10 +41,10 @@
     "cosmiconfig": "^7.0.0",
     "fs-extra": "^9.1.0",
     "import-jsx": "^4.0.1",
-    "ink": "^3.2.0",
+    "ink": "^5.0.1",
     "minimist": "^1.2.0",
     "ramda": "^0.27.1",
-    "react": "^17.0.2",
+    "react": "^18.3.1",
     "transliteration": "^2.2.0"
   }
 }
