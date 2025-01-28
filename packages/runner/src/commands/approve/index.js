@@ -8,6 +8,17 @@ const getConfig = require('../../config');
 
 const isPNG = (file) => file.substr(-4) === '.png';
 
+function getFiles(dir, subdir = '') {
+  const parentDir = path.resolve(dir, subdir);
+  const files = fs.readdirSync(parentDir);
+
+  return files.flatMap((file) => {
+    const res = path.resolve(parentDir, file);
+    const filePath = path.join(subdir, file);
+    return fs.statSync(res).isDirectory() ? getFiles(dir, filePath) : filePath;
+  })
+}
+
 function approve(args) {
   const config = getConfig();
   const { outputDir, differenceDir, referenceDir, diffOnly } = parseOptions(
@@ -17,7 +28,7 @@ function approve(args) {
 
   // If diff only is active, only copy over the files that were changed
   const inputDir = diffOnly ? differenceDir : outputDir;
-  const files = fs.readdirSync(inputDir).filter(isPNG);
+  const files = getFiles(inputDir).filter(isPNG);
 
   if (!files.length) {
     die(
