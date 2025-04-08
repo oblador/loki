@@ -12,3 +12,15 @@ build-storybook && loki --requireReference --reactUri file:./storybook-static
 ```
 
 See the [loki react example project](https://github.com/oblador/loki/tree/master/examples/react) for a reference implementation of this approach.
+
+## JUnit Reporting
+
+For better integration with CI/CD systems, Loki supports generating JUnit XML reports of test results. This is particularly useful for visualizing test results in CI systems like Jenkins, CircleCI, or GitHub Actions.
+
+To enable JUnit reporting, add the `--junitRenderer` flag:
+
+```
+build-storybook && loki --requireReference --reactUri file:./storybook-static --junitRenderer --junitOutputFile=./test-results/loki-report.xml
+```
+
+For more details about the JUnit reporter, see the [JUnit Reporter](junit-reporter.md) documentation.

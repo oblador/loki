@@ -12,6 +12,10 @@ function parseOptions(args, config) {
       'dockerWithSudo',
       'chromeDockerWithoutSeccomp',
       'passWithNoStories',
+      'junitRenderer',
+    ],
+    string: [
+      'junitOutputFile',
     ],
   });
 
@@ -50,13 +54,16 @@ function parseOptions(args, config) {
     gm: $('gm'),
     pixelmatch: $('pixelmatch'),
     verboseRenderer: $('verboseRenderer'),
-    silent: $('silent'),
+    junitRenderer: $('junitRenderer'),
+    junitOutputFile: $('junitOutputFile'),
     requireReference: $('requireReference') || ciInfo.isCI,
     updateReference: argv._[0] === 'update',
-    targetFilter: argv.targetFilter,
-    configurationFilter: argv.configurationFilter || argv._[1],
+    targetFilter: $('targetFilter'),
+    configurationFilter: $('configurationFilter'),
     dockerWithSudo: $('dockerWithSudo'),
     chromeDockerWithoutSeccomp: $('chromeDockerWithoutSeccomp'),
+    chromeDockerUseCopy: $('chromeDockerUseCopy'),
+    silent: $('silent'),
     passWithNoStories: $('passWithNoStories'),
     device: $('device'),
   };
