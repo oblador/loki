@@ -42,6 +42,7 @@
     "fs-extra": "^9.1.0",
     "import-jsx": "^4.0.1",
     "ink": "^3.2.0",
+    "junit-report-builder": "^3.0.0",
     "minimist": "^1.2.0",
     "ramda": "^0.27.1",
     "react": "^17.0.2",

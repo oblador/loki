@@ -2,6 +2,7 @@ const importJsx = require('import-jsx');
 const { renderVerbose } = require('./verbose');
 const { renderNonInteractive } = require('./non-interactive');
 const { renderSilent } = require('./silent');
+const { renderJUnit } = require('./junit');
 
 const { renderInteractive } = importJsx('./interactive');
 
@@ -10,4 +11,5 @@ module.exports = {
   renderVerbose,
   renderSilent,
   renderNonInteractive,
+  renderJUnit,
 };

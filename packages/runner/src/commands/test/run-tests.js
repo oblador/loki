@@ -26,6 +26,7 @@ const {
   renderVerbose,
   renderNonInteractive,
   renderSilent,
+  renderJUnit,
 } = require('./renderers');
 const {
   TASK_TYPE_TARGET,
@@ -297,11 +298,24 @@ async function runTests(flatConfigurations, options) {
   const render = getRendererForOptions(options);
   const stopRendering = render(tasks);
 
+  let stopJUnitRendering = null;
+  if (options.junitRenderer) {
+    stopJUnitRendering = renderJUnit(tasks, {
+      junitOutputFile: options.junitOutputFile,
+    });
+  }
+
   try {
     await tasks.run(context);
     stopRendering();
+    if (stopJUnitRendering) {
+      stopJUnitRendering();
+    }
   } catch (err) {
     stopRendering();
+    if (stopJUnitRendering) {
+      stopJUnitRendering();
+    }
     await Promise.all(context.activeTargets.map((target) => target.stop()));
     throw err;
   }

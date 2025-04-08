@@ -19,5 +19,7 @@
   "reactNativePort": "7007",
   "pixelmatch": {},
   "looksSame": {},
-  "gm": {}
+  "gm": {},
+  "junitRenderer": false,
+  "junitOutputFile": "./.loki/junit-report.xml"
 }
