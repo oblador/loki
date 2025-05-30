@@ -6,6 +6,9 @@ const getStories = async (window) => {
     (window.__STORYBOOK_PREVIEW__ &&
       window.__STORYBOOK_PREVIEW__.extract &&
       window.__STORYBOOK_PREVIEW__.storyStore.raw) ||
+    (window.__STORYBOOK_PREVIEW__ &&
+      window.__STORYBOOK_PREVIEW__.extract &&
+      window.__STORYBOOK_PREVIEW__.ready) ||
     (window.loki && window.loki.getStorybook);
   if (!getStorybook) {
     throw new Error(
@@ -30,6 +33,32 @@ const getStories = async (window) => {
       return false;
     }
   };
+
+  if (
+    window.__STORYBOOK_PREVIEW__ &&
+    window.__STORYBOOK_PREVIEW__.extract &&
+    window.__STORYBOOK_PREVIEW__.ready
+  ) {
+    await window.__STORYBOOK_PREVIEW__.ready();
+
+    const stories = await window.__STORYBOOK_PREVIEW__.extract();
+
+    return Object.values(stories)
+      .map((component) => ({
+        id: component.id,
+        kind: component.kind,
+        story: component.story,
+        parameters: Object.fromEntries(
+          Object.entries(component.parameters || {}).filter(
+            ([key, value]) =>
+              !key.startsWith('__') &&
+              !blockedParams.includes(key) &&
+              isSerializable(value)
+          )
+        ),
+      }))
+      .filter(({ parameters }) => !parameters.loki || !parameters.loki.skip);
+  }
 
   if (window.__STORYBOOK_PREVIEW__ && window.__STORYBOOK_PREVIEW__.extract) {
     // New official API to extract stories from preview
