@@ -9,6 +9,12 @@ const {
 } = require('@loki/core');
 const { createChromeTarget } = require('@loki/target-chrome-core');
 
+const isLambdaEnvironment = () => {
+  return process.env.AWS_LAMBDA_FUNCTION_NAME ||
+         process.env.AWS_EXECUTION_ENV ||
+         process.env.LAMBDA_TASK_ROOT;
+};
+
 function getStaticServerConfig(baseUrl) {
   let staticServerPath;
   let staticServerPort;
@@ -26,7 +32,7 @@ function getStaticServerConfig(baseUrl) {
     }
 
     if (isLocalFile) {
-      staticServerPort = getRandomPort();
+      staticServerPort = isLambdaEnvironment() ? 6006 : getRandomPort();
       staticServerPath = chromeUrl.substr('file:'.length);
       chromeUrl = `http://${ip}:${staticServerPort}`;
     } else {

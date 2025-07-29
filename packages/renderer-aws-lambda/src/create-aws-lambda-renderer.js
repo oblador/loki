@@ -54,7 +54,7 @@ const createChromeAWSLambdaRenderer = () => async (event) => {
   }
   const target = createChromeAppTarget({
     baseUrl: event.baseUrl,
-    useStaticServer: false,
+    useStaticServer: true,
     cdpOptions: { local: true },
   });
 
