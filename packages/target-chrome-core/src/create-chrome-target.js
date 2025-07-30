@@ -11,7 +11,9 @@ const {
   setLokiIsRunning,
   setLokiTestAttribute,
   populateLokiHelpers,
+  handleStoriesFetch,
 } = require('@loki/browser');
+const { getStoriesFromIndex } = require('@loki/core');
 const { createReadyStateManager } = require('@loki/integration-core');
 
 const {
@@ -43,6 +45,7 @@ function createChromeTarget(
   prepare
 ) {
   const resolvedBaseUrl = getAbsoluteURL(baseUrl);
+  const storiesJson = getStoriesFromIndex(baseUrl);
 
   function getDeviceMetrics(options) {
     return {
@@ -65,6 +68,15 @@ function createChromeTarget(
     await Network.enable();
     await DOM.enable();
     await Page.enable();
+
+    if (debug.enabled) {
+      const { Console } = client;
+      await Console.enable();
+      Console.messageAdded(({ message }) => {
+        debug('Console message:', message);
+      });
+    }
+
     if (options.userAgent) {
       await Network.setUserAgentOverride({
         userAgent: options.userAgent,
@@ -201,6 +213,9 @@ function createChromeTarget(
       await evaluateOnNewDocument(`(${disablePointerEvents})(window);`);
       await evaluateOnNewDocument(`(${disableInputCaret})(window);`);
       await evaluateOnNewDocument(`(${setLokiIsRunning})(window);`);
+      await evaluateOnNewDocument(
+        `(${handleStoriesFetch})(window, ${JSON.stringify(storiesJson)});`
+      );
 
       debug(`Navigating to ${url}`);
       startObservingRequests();
