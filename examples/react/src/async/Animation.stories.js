@@ -52,7 +52,10 @@ export const ReactMotion = withAlternatingState(({ on }) => (
     {(value) => (
       <div
         className="AnimatedComponent"
-        style={{ transform: `rotate(${value.rotate}deg)` }}
+        style={{
+          // Clear the completed transform to avoid residual edge antialiasing.
+          transform: value.rotate === 0 ? 'none' : `rotate(${value.rotate}deg)`,
+        }}
       />
     )}
   </Motion>
