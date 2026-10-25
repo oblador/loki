@@ -21,10 +21,9 @@ pushd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null
 mkdir -p generated
 cd generated
 rm -rf create-react-app || true
-yarn create react-app create-react-app
+yarn create react-app create-react-app --template cra-template@1.1.2
 cd create-react-app
-npx -p @storybook/cli sb init
-yarn add loki
+CI=true npx --yes storybook@8.6.14 init --yes --no-dev
 ../../../../node_modules/.bin/loki init
 
 # Ensure modifications has been made
@@ -50,12 +49,12 @@ END
 # Ensure we can snap stories
 yarn build-storybook --quiet
 mkdir -p .loki/reference
-cp ../../fixtures/chrome_laptop_Welcome_to_Storybook.png ./.loki/reference
+cp ../../fixtures/chrome_laptop_Example_Button_Primary.png ./.loki/reference
 
 yarn storybook --no-open 2> error.log > output.log &
 STORYBOOK_PID=$!
 
-yarn loki test laptop --requireReference --storiesFilter Welcome --reactUri http://localhost:6006
+../../../../node_modules/.bin/loki test laptop --requireReference --storiesFilter '^Example/Button Primary$' --reactUri http://localhost:6006
 
 kill $STORYBOOK_PID
 
