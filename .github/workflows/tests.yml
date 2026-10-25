@@ -64,6 +64,7 @@ jobs:
         with:
           name: cra-integration-screenshots
           path: test/cli/generated/create-react-app/.loki
+          include-hidden-files: true
 
   visual-react-dom:
     name: 'Visual tests: React DOM'
@@ -86,3 +87,4 @@ jobs:
         with:
           name: react-example-screenshots
           path: examples/react/.loki
+          include-hidden-files: true
