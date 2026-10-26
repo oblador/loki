@@ -4,18 +4,12 @@ const DOCKER_TEST_TIMEOUT = 120000;
 
 const fetchStorybookUrl = async (baseUrl) => {
   const target = createChromeDockerTarget({ baseUrl });
-  await target.start();
-  let result;
   try {
-    result = await target.getStorybook({ baseUrl });
-  } catch (err) {
-    result = err;
+    await target.start();
+    return await target.getStorybook({ baseUrl });
+  } finally {
+    await target.stop();
   }
-  await target.stop();
-  if (result instanceof Error) {
-    throw result;
-  }
-  return result;
 };
 
 const fetchStorybookFixture = async (fixture) =>

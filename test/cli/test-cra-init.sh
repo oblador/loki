@@ -51,12 +51,11 @@ yarn build-storybook --quiet
 mkdir -p .loki/reference
 cp ../../fixtures/chrome_laptop_Example_Button_Primary.png ./.loki/reference
 
-yarn storybook --no-open 2> error.log > output.log &
+./node_modules/.bin/storybook dev -p 6006 --no-open 2> error.log > output.log &
 STORYBOOK_PID=$!
+trap 'kill "$STORYBOOK_PID" 2>/dev/null || true' EXIT
 
 ../../../../node_modules/.bin/loki test laptop --requireReference --storiesFilter '^Example/Button Primary$' --reactUri http://localhost:6006
-
-kill $STORYBOOK_PID
 
 # Peace out
 popd > /dev/null
