@@ -47,14 +47,15 @@ const commands = {
   captureScreenshotsForStories,
 };
 
-const createChromeAWSLambdaRenderer = () => async (event) => {
+const createChromeAWSLambdaRenderer = (options) => async (event) => {
   const command = commands[event.command];
   if (!command) {
     throw serializeError(new Error(`Unknown command "${event.command}"`));
   }
   const target = createChromeAppTarget({
     baseUrl: event.baseUrl,
-    useStaticServer: false,
+    useStaticServer: (event.baseUrl || '').startsWith('file:'),
+    staticServerPort: (options && options.staticServerPort) || 6006,
     cdpOptions: { local: true },
   });
 

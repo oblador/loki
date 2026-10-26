@@ -39,6 +39,8 @@ module.exports = {
 
 In this step you might add any pre-processing that you like, for example you might want to cache the storybook build to disk for faster executions or have some kind of locking mechanism.
 
+To change the local server port (default: 6006), use `createChromeAWSLambdaRenderer({ staticServerPort: 6007 })`.
+
 ## Deploy
 
 ### 1. Create a zip
