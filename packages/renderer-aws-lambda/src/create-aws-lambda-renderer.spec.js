@@ -162,7 +162,6 @@ describe('createChromeAWSLambdaRenderer', () => {
           __dirname,
           '../__snapshots__/example-button-large.png'
         );
-        fs.writeFileSync(referencePath, Buffer.from(screenshot, 'base64'));
         const reference = fs.readFileSync(referencePath);
         expect(screenshot).toEqual(reference.toString('base64'));
       },
