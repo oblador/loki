@@ -9,7 +9,7 @@ const {
 } = require('@loki/core');
 const { createChromeTarget } = require('@loki/target-chrome-core');
 
-function getStaticServerConfig(baseUrl) {
+function getStaticServerConfig(baseUrl, port) {
   let staticServerPath;
   let staticServerPort;
 
@@ -26,7 +26,7 @@ function getStaticServerConfig(baseUrl) {
     }
 
     if (isLocalFile) {
-      staticServerPort = getRandomPort();
+      staticServerPort = port || getRandomPort();
       staticServerPath = chromeUrl.substr('file:'.length);
       chromeUrl = `http://${ip}:${staticServerPort}`;
     } else {
@@ -45,6 +45,7 @@ function getStaticServerConfig(baseUrl) {
 function createChromeAppTarget({
   baseUrl = 'http://localhost:6006',
   useStaticServer = true,
+  staticServerPort: configuredPort,
   chromeFlags = ['--headless', '--disable-gpu', '--hide-scrollbars'],
   cdpOptions = {},
 }) {
@@ -52,7 +53,7 @@ function createChromeAppTarget({
   let staticServer;
 
   const { chromeUrl, isLocalFile, staticServerPath, staticServerPort } =
-    getStaticServerConfig(baseUrl);
+    getStaticServerConfig(baseUrl, configuredPort);
 
   async function start(options = {}) {
     if (useStaticServer && isLocalFile) {
