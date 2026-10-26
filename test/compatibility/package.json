@@ -1,0 +1,17 @@
+{
+  "name": "@loki/test-compatibility",
+  "version": "0.35.1",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "test": "bash run.sh"
+  },
+  "devDependencies": {
+    "@loki/runner": "^0.35.0",
+    "@loki/target-chrome-app": "^0.35.0",
+    "@loki/target-chrome-aws-lambda": "^0.35.0",
+    "@loki/target-chrome-docker": "^0.35.0",
+    "aws-sdk": "^2.840.0",
+    "pngjs": "^4.0.1"
+  }
+}
