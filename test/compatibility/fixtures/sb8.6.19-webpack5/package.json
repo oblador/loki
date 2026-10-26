@@ -1,0 +1,13 @@
+{
+  "name": "sb8-6-19-webpack5",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "18.2.0",
+    "@storybook/react": "8.6.19",
+    "react-dom": "18.2.0",
+    "storybook": "8.6.19",
+    "@storybook/react-webpack5": "8.6.19",
+    "typescript": "5.9.3"
+  }
+}

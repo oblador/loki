@@ -1,0 +1,13 @@
+{
+  "name": "sb6-5-16-webpack4",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "17.0.2",
+    "@storybook/react": "6.5.16",
+    "react-dom": "17.0.2",
+    "@babel/core": "7.24.5",
+    "babel-loader": "8.3.0",
+    "webpack": "4.47.0"
+  }
+}

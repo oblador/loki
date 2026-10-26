@@ -1,0 +1,78 @@
+name: Storybook compatibility
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  compatibility:
+    name: '${{ matrix.fixture }} / ${{ matrix.target }} / ${{ matrix.mode }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - fixture: sb5.3.21-webpack4
+            target: docker
+            mode: static
+          - fixture: sb6.5.16-webpack4
+            target: docker
+            mode: static
+          - fixture: sb7.6.24-vite
+            target: docker
+            mode: static
+          - fixture: sb8.6.19-webpack5
+            target: docker
+            mode: static
+          - fixture: sb8.6.19-vite
+            target: app
+            mode: static
+          - fixture: sb8.6.19-vite
+            target: docker
+            mode: static
+          - fixture: sb8.6.19-vite
+            target: lambda
+            mode: static
+          - fixture: sb8.6.19-vite
+            target: docker
+            mode: dev
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+          cache-dependency-path: test/compatibility/fixtures/${{ matrix.fixture }}/package-lock.json
+      - name: Install Loki dependencies
+        run: yarn --frozen-lockfile --non-interactive --silent --ignore-scripts
+      - name: Build Storybook fixture
+        run: yarn workspace @loki/test-compatibility build "$FIXTURE"
+        env:
+          FIXTURE: ${{ matrix.fixture }}
+      - name: Install Chrome
+        if: matrix.target == 'app'
+        uses: browser-actions/setup-chrome@v2
+        id: chrome
+        with:
+          chrome-version: 118.0.5993.70
+          install-dependencies: true
+      - name: Build Lambda renderer
+        if: matrix.target == 'lambda'
+        run: yarn workspace @loki/example-running-renderer-aws-lambda build
+      - name: Run compatibility smoke test
+        run: yarn workspace @loki/test-compatibility test "$FIXTURE" "$TARGET" "$MODE"
+        env:
+          FIXTURE: ${{ matrix.fixture }}
+          TARGET: ${{ matrix.target }}
+          MODE: ${{ matrix.mode }}
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+      - name: Archive failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compatibility-${{ matrix.fixture }}-${{ matrix.target }}-${{ matrix.mode }}
+          path: test/compatibility/results
