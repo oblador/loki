@@ -6,6 +6,7 @@ title: Getting started
 ## Prerequisites
 
 - [Node 16+](https://nodejs.org/)
+- An existing Storybook project. Loki's React integration supports Storybook 5–8.
 
 ### Optional dependencies
 
@@ -29,15 +30,15 @@ Optionally add [loki configuration](/configuration.html) and integrate as follow
 
 Add `import 'loki/configure-react-native'` to `storybook/storybook.js`.
 
-#### Others
+#### React
 
-When running a recent version of Storybook, no further integration should be needed. If you are running an old version, you might need to add `import 'loki/configure-react'` to `.storybook/preview.js` (create it if it doesn't exist already).
+When running a recent version of Storybook, no further integration should be needed. If you are running an old version or Loki reports "Unable to get stories", you might need to add `import 'loki/configure-react'` to `.storybook/preview.js` (create it if it doesn't exist already).
 
 ## Running your first tests
 
 ### 1. Review configuration
 
-The `loki init` command will detect what type of project it is and add default configurations to your `package.json` file under the key `loki`. For web this is testing laptop and iPhone configurations using local Chrome app. You can change this at any time.
+The `loki init` command will detect what type of project it is and add default configurations to your `package.json` file under the key `loki`. For web this is testing laptop and iPhone configurations using Docker (`chrome.docker`) when the Docker executable is available, or local Chrome (`chrome.app`) otherwise. You can change this at any time.
 
 ### 2. Start Storybook
 
@@ -45,7 +46,7 @@ For loki to be able to access your stories you must start the storybook server. 
 
 ### 3. Create reference images
 
-If it's your first time using loki you need to create the reference images to test your stories against. This is done with `yarn loki update` which by default will create a `loki` folder to store them in. These images should be checked into your git repository, optionally stored using [`git-lfs`](https://git-lfs.github.com).
+If it's your first time using loki you need to create the reference images to test your stories against. This is done with `yarn loki update` which by default will store them in `.loki/reference`. These images should be checked into your git repository, optionally stored using [`git-lfs`](https://git-lfs.github.com).
 
 ### 4. Make changes
 
@@ -57,7 +58,7 @@ Run loki again but this time in test mode with `yarn loki test`. You can test a 
 
 ### 6. Review changes
 
-Loki will create screenshots of all the tested stories in the `loki/current` folder in addition to a visual diff placed in the `loki/difference` folder. You can also use a specialized diffing tool such as [Kaleidoscope](https://www.kaleidoscopeapp.com). Make sure the changes are correct before you continue.
+Loki will create screenshots of all the tested stories in the `.loki/current` folder in addition to a visual diff placed in the `.loki/difference` folder. You can also use a specialized diffing tool such as [Kaleidoscope](https://www.kaleidoscopeapp.com). Make sure the changes are correct before you continue.
 
 ### 7. Approve changes
 
