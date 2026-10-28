@@ -5,7 +5,7 @@ title: Handling Flaky Tests
 
 ## Skipping Tests
 
-In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by passing setting `skip: true` in the `loki` parameter:
+In some cases having a story of a component is useful for development purposes, but might be acceptable not to be covered by visual regression tests such as an animated GIF that cannot accurately be covered with a single screenshot. In those cases you can opt out by passing setting `skip: true` in the [`loki` parameter](story-parameters.md#skip):
 
 ```js
 storiesOf('MyComponent', module)
@@ -18,10 +18,8 @@ If you are using Component Story Format (CSF), passing the parameter would look 
 ```js
 export const SkippedStory = () => <MyComponent />;
 
-SkippedStory.story = {
-  parameters: {
-    loki: { skip: true },
-  },
+SkippedStory.parameters = {
+  loki: { skip: true },
 };
 ```
 

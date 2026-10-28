@@ -22,6 +22,9 @@
       },
       "serverless": {
         "title": "Serverless renderer"
+      },
+      "story-parameters": {
+        "title": "Story parameters"
       }
     },
     "links": {

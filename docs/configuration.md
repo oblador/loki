@@ -108,7 +108,7 @@ Top-level setting for `loki approve`. When `true`, approve only images listed in
 
 ~~This setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out.~~
 
-This setting is deprecated. Use [`parameters.loki.skip`](flaky-tests.md#skipping-tests) to skip individual stories.
+This setting is deprecated. Use [`parameters.loki.skip`](story-parameters.md#skip) to skip individual stories.
 
 ## `storiesFilter`
 
@@ -135,6 +135,8 @@ module.exports = {
 ## `configurations`
 
 Each key names a configuration, with its own target and options.
+
+Use [story parameters](story-parameters.md) to override supported options for individual stories.
 
 | Name                                 | Type      | Description                                                                                                                                                                                                                                                        | Targets    |
 | ------------------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |

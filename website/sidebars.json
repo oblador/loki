@@ -1,7 +1,11 @@
 {
   "docs": {
     "Introduction": ["getting-started"],
-    "API Reference": ["configuration", "command-line-arguments"],
+    "API Reference": [
+      "configuration",
+      "command-line-arguments",
+      "story-parameters"
+    ],
     "Guides": ["continuous-integration", "serverless", "flaky-tests"]
   }
 }
