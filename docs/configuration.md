@@ -3,7 +3,7 @@ id: configuration
 title: Configuration
 ---
 
-The init command will add a `loki` section to your `package.json`, but you can edit it to your wishes. _NOTE_: Any command line argument that `loki test` accepts can also be added to the `loki` config object.
+The init command will add a `loki` section to your `package.json`, but you can edit it to your wishes. _NOTE_: Most [command line arguments](command-line-arguments.md#loki-test) that `loki test` accepts can also be added to the `loki` config object. `port`, `targetFilter`, and `configurationFilter` are CLI-only.
 
 Example `package.json`:
 
@@ -38,7 +38,25 @@ Example `package.json`:
 }
 ```
 
+## Configuration files
+
 You may also use a file named `.lokirc`, `.lokirc.json` or `loki.config.js` ([see the react example](https://github.com/oblador/loki/tree/master/examples/react)) if you don't want to pollute your `package.json`.
+
+Loki searches the current directory, then parent directories up to your home directory. In each directory, it checks these locations in order:
+
+1. `package.json` (`loki` property)
+2. `.lokirc`
+3. `.lokirc.json`
+4. `.lokirc.yaml`
+5. `.lokirc.yml`
+6. `.lokirc.js`
+7. `.lokirc.cjs`
+8. `loki.config.js`
+9. `loki.config.cjs`
+
+The first non-empty configuration wins; files are not merged. If none is found, Loki uses its built-in defaults.
+
+A `-p` or `--port` value in the `scripts.storybook` command overrides `reactPort` (or `reactNativePort` for React Native). Use CLI `--port` to override that value.
 
 ## `chromeSelector`
 
@@ -82,15 +100,19 @@ A JavaScript only solution that will work out of the box on every machine, howev
 
 Plain text output, useful for debugging CI.
 
+## `diffOnly`
+
+Top-level setting for `loki approve`. When `true`, approve only images listed in the difference directory. Default: `false`; override with `--diffOnly`.
+
 ## ~~`skipStories`~~ **DEPRECATED**
 
 ~~This setting is a regular expression matched against the concatenated kind and story name (`${kind} ${story}`), case insensitive. It's useful if some story breaks the tests or contains animations as an alternative to comment it out.~~
 
-This setting is deprecated, use `storiesOf().add.skip()` instead on the stories you want to skip.
+This setting is deprecated. Use [`parameters.loki.skip`](flaky-tests.md#skipping-tests) to skip individual stories.
 
 ## `storiesFilter`
 
-Opposite to `skipStories`.
+A case-insensitive regular expression matched against `${kind} ${story}`. Only matching stories are tested.
 
 ## `fetchFailIgnore`
 
@@ -98,9 +120,9 @@ The default behaviour of Loki is to fail a test if the story makes a network req
 
 ## `fileNameFormatter`
 
-By default loki will produce a flat file structure, but if you want to have hiearchy or make all names lower case you can pass a custom formatter function. It should return a string _without_ an extension and takes an object with these properties: `configurationName, kind, story`.
+By default loki will produce a flat file structure, but if you want to have hierarchy or make all names lower case you can pass a custom formatter function. It should return a string _without_ an extension and takes an object with these properties: `configurationName, kind, story, parameters`.
 
-Since JSON doesn't support functions, you need to be using the `loki.config.js` to configure your project, like so:
+Since JSON doesn't support functions, you need to be using a JavaScript configuration file, such as `loki.config.js`, to configure your project, like so:
 
 ```js
 module.exports = {
@@ -112,19 +134,24 @@ module.exports = {
 
 ## `configurations`
 
-| Name                                 | Type      | Description                                                                                                                                                                                                                                                        | Targets      |
-| ------------------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
-| **`target`**                         | _string_  | Target platform, possible values are `chrome.app`, `chrome.docker`, `chrome.aws-lambda`, `ios.simulator`, `android.emulator`.                                                                                                                                      | All          |
-| **`skipStories`**                    | _string_  | **DEPRECATED** Same as `loki.skipStories`, but applied to only this configuration.                                                                                                                                                                                 | All          |
-| **`storiesFilter`**                  | _string_  | Same as `loki.storiesFilter`, but applied to only this configuration.                                                                                                                                                                                              | All          |
-| **`chromeSelector`**                 | _string_  | Same as `loki.chromeSelector`, but applied to only this configuration.                                                                                                                                                                                             | `chrome.*`   |
-| **`preset`**                         | _string_  | Predefined bundled configuration, possible values are `Retina Macbook Pro 15`, `Retina Macbook Pro 15 Dark Mode`, `iPhone 7`, `iPhone 7 Dark Mode`, `iPhone 5`, `iPhone 5 Dark Mode`, `Google Pixel`, `Google Pixel Dark Mode`, `A4 Paper`, and `US Letter Paper`. | `chrome.*`   |
-| **`userAgent`**                      | _string_  | Custom user agent.                                                                                                                                                                                                                                                 | `chrome.*`   |
-| **`width`**                          | _integer_ | Browser viewport width.                                                                                                                                                                                                                                            | `chrome.*`   |
-| **`height`**                         | _integer_ | Browser viewport height.                                                                                                                                                                                                                                           | `chrome.*`   |
-| **`disableAutomaticViewportHeight`** | _boolean_ | If the content goes below the viewport do not increase the height so that it fits.                                                                                                                                                                                 | `chrome.*`   |
-| **`deviceScaleFactor`**              | _integer_ | Browser pixel density multiple, use `2` for retina, not supported in docker.                                                                                                                                                                                       | `chrome.app` |
-| **`mobile`**                         | _boolean_ | Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.                                                                                                                                                   | `chrome.*`   |
-| **`media`**                          | _string_  | Emulates the given media for CSS media queries.                                                                                                                                                                                                                    | _None_       |
-| **`features`**                       | _array_   | Emulates the given features for CSS media queries. See [setEmulatedMedia docs](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedMedia)                                                                                          | `chrome.*`   |
-| **`diffOnly`**                       | boolean   | Changes the mode of `loki approve` if set to `true`, only the images which failed `loki test` beforehand will be updated. This configuration can be overwritten on demand using the cli flag `--diffOnly`.                                                         | All          |
+Each key names a configuration, with its own target and options.
+
+| Name                                 | Type      | Description                                                                                                                                                                                                                                                        | Targets    |
+| ------------------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **`target`**                         | _string_  | Target platform, possible values are `chrome.app`, `chrome.docker`, `chrome.aws-lambda`, `ios.simulator`, `android.emulator`.                                                                                                                                      | All        |
+| **`skipStories`**                    | _string_  | **DEPRECATED** Same as `loki.skipStories`, but applied to only this configuration.                                                                                                                                                                                 | All        |
+| **`storiesFilter`**                  | _string_  | Same as `loki.storiesFilter`, but applied to only this configuration.                                                                                                                                                                                              | All        |
+| **`chromeSelector`**                 | _string_  | Same as `loki.chromeSelector`, but applied to only this configuration.                                                                                                                                                                                             | `chrome.*` |
+| **`clearBrowserCookies`**            | _boolean_ | Clear browser cookies before loading each story.                                                                                                                                                                                                                   | `chrome.*` |
+| **`chromeEnableAnimations`**         | _boolean_ | Enable CSS transitions and animations for this configuration.                                                                                                                                                                                                      | `chrome.*` |
+| **`chromeRetries`**                  | _integer_ | Number of retries when capturing a screenshot fails.                                                                                                                                                                                                               | `chrome.*` |
+| **`fetchFailIgnore`**                | _string_  | Case-insensitive regular expression matching failed request URLs to ignore.                                                                                                                                                                                        | `chrome.*` |
+| **`preset`**                         | _string_  | Predefined bundled configuration, possible values are `Retina Macbook Pro 15`, `Retina Macbook Pro 15 Dark Mode`, `iPhone 7`, `iPhone 7 Dark Mode`, `iPhone 5`, `iPhone 5 Dark Mode`, `Google Pixel`, `Google Pixel Dark Mode`, `A4 Paper`, and `US Letter Paper`. | `chrome.*` |
+| **`userAgent`**                      | _string_  | Custom user agent.                                                                                                                                                                                                                                                 | `chrome.*` |
+| **`width`**                          | _integer_ | Browser viewport width.                                                                                                                                                                                                                                            | `chrome.*` |
+| **`height`**                         | _integer_ | Browser viewport height.                                                                                                                                                                                                                                           | `chrome.*` |
+| **`disableAutomaticViewportHeight`** | _boolean_ | If the content goes below the viewport do not increase the height so that it fits.                                                                                                                                                                                 | `chrome.*` |
+| **`deviceScaleFactor`**              | _integer_ | Browser pixel density multiple, use `2` for retina.                                                                                                                                                                                                                | `chrome.*` |
+| **`mobile`**                         | _boolean_ | Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.                                                                                                                                                   | `chrome.*` |
+| **`media`**                          | _string_  | Emulates the given media for CSS media queries.                                                                                                                                                                                                                    | `chrome.*` |
+| **`features`**                       | _array_   | Emulates the given features for CSS media queries. See [setEmulatedMedia docs](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedMedia)                                                                                          | `chrome.*` |
