@@ -44,34 +44,61 @@ However known limitations include:
 - Native Lottie animations
 - React Native `Animated` library
 
-It's up to you to disable these kind of animations. A simple way would be to use context:
+It's up to you to disable these kind of animations. A simple way would be to use context. First install the helper:
+
+```sh
+yarn add --dev @loki/is-loki-running
+```
+
+Define a shared context:
+
+```js
+// DisableAnimationsContext.js
+import React from 'react';
+
+export default React.createContext(false);
+```
+
+Then provide its value from a decorator:
 
 ```js
 // .storybook/config.js or storybook/storybook.js
 import React from 'react';
 import { addDecorator } from '@storybook/react';
 import isLokiRunning from '@loki/is-loki-running';
+import DisableAnimationsContext from '../DisableAnimationsContext';
 
-const DisableAnimationsContext = React.createContext(false);
-
-const withDisabledAnimations = getStory => (
+const withDisabledAnimations = (getStory) => (
   <DisableAnimationsContext.Provider value={isLokiRunning()}>
     {getStory()}
   </DisableAnimationsContext.Provider>
 );
 
 addDecorator(withDisabledAnimations);
+```
 
+For `.storybook/preview.js`, omit the `addDecorator` import and replace the `addDecorator(withDisabledAnimations)` call with:
+
+```js
+export const decorators = [withDisabledAnimations];
+```
+
+The component can then use the same context to choose which version to render:
+
+```js
 // MyComponent.js
+import React from 'react';
+import DisableAnimationsContext from './DisableAnimationsContext';
+
 const MyComponent = (props) => {
   const disableAnimations = React.useContext(DisableAnimationsContext);
 
-  return (
-    disableAnimations
-    ? /* Something without animations */
-    : /* Something with animations */
-  )
-}
+  return disableAnimations ? (
+    <div>Something without animations</div>
+  ) : (
+    <div>Something with animations</div>
+  );
+};
 ```
 
 It's also possible to do target loki with CSS:
