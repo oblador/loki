@@ -27,10 +27,18 @@ SkippedStory.parameters = {
 
 Some components will do some computing or loading data over the network and then re-render. This can cause flaky tests and incorrect screenshots. Loki handles most cases of network traffic and loading images, but for other cases you can mark your story as async and tell loki when you're done via the async callback pattern:
 
+Install the helper in the project containing your stories:
+
+```sh
+yarn add --dev @loki/create-async-callback
+```
+
 ```js
 import createAsyncCallback from '@loki/create-async-callback';
 export const AsyncStory = () => <MyComponent onDone={createAsyncCallback()} />;
 ```
+
+`createAsyncCallback()` registers pending work and returns a callback. Create it during the story's render, before its asynchronous work starts. Have `MyComponent` call its `onDone` prop after the final state has rendered. Loki waits for that callback before taking the screenshot; leaving it uncalled causes a timeout.
 
 ## Transitions and Animations
 
