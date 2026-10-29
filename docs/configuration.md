@@ -76,19 +76,23 @@ There are three currently available options to choose from when comparing images
 }
 ```
 
+The top-level `chromeTolerance` setting defaults to `0` and has a different meaning for each engine. Engine-specific `pixelmatch.threshold`, `gm.tolerance`, and `looks-same.tolerance` options override it in the engine's native units.
+
 ### [`pixelmatch`](https://github.com/mapbox/pixelmatch)
 
 The default engine and is JavaScript only. It's more sensitive to changes on large images and is less susceptible to anti alias flakiness.
 
+`chromeTolerance / 100` sets Pixelmatch's per-pixel color threshold (`threshold`). The comparison passes when Pixelmatch reports no differing pixels. Detected antialiasing is ignored by default (`includeAA: false`), even with a tolerance of `0`.
+
 ### [`gm`](https://github.com/aheckmann/gm)
 
-Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. `chromeTolerance` percentage is based on overall image, meaning you'd likely want a low threshold.
+Uses the GraphicsMagick library to create diffs, this is generally faster but requires to have the library installed. You can install it with homebrew using `brew install graphicsmagick`. `chromeTolerance / 100` sets the allowed normalized mean squared error across the whole image (`tolerance`). The comparison passes when the error is less than or equal to that value.
 
 The configuration is parsed to the `options` argument in `gm.compare`
 
 ### [`looks-same`](https://github.com/gemini-testing/looks-same)
 
-A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. `chromeTolerance` percentage is based on neighboring pixels which makes it ideal when you have different pixel densities.
+A JavaScript only solution that will work out of the box on every machine, however it is slower and will produce a different diff image. `chromeTolerance` is passed directly as `tolerance`, a perceptual color-distance threshold in CIEDE2000 ΔE units. Detected antialiasing is ignored by default (`ignoreAntialiasing: true`), even with a tolerance of `0`.
 
 |                | `pixelmatch`                  | `gm`                                            | `looks-same`                  |
 | -------------- | ----------------------------- | ----------------------------------------------- | ----------------------------- |
