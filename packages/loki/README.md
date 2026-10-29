@@ -28,7 +28,7 @@ Loki aims to have easy setup, no to low maintenance cost, reproducible tests ind
 
 - [GraphicsMagick](http://www.graphicsmagick.org) for gm diffing engine, `brew install graphicsmagick`
 - [Docker](https://www.docker.com/community-edition#/download) for the `chrome.docker` target.
-- [Chrome 59+](https://www.google.se/chrome/browser/desktop/) for the `chrome.app` target, `brew cask install google-chrome-canary`.
+- [Chrome 59+](https://www.google.se/chrome/browser/desktop/) for the `chrome.app` target, `brew install --cask google-chrome-canary`.
 
 ## Installation
 
@@ -58,6 +58,10 @@ Loki will not start any servers for you, so ensure storybook and any simulator/e
 - [Getting started](https://loki.js.org/getting-started.html)
 - [Configuration](https://loki.js.org/configuration.html)
 - [Command line arguments](https://loki.js.org/command-line-arguments.html)
+- [Story parameters](https://loki.js.org/story-parameters.html)
+- [Continuous Integration](https://loki.js.org/continuous-integration.html)
+- [Serverless renderer](https://loki.js.org/serverless.html)
+- [Handling Flaky Tests](https://loki.js.org/flaky-tests.html)
 
 ## Examples
 
